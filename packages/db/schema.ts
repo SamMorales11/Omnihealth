@@ -1,25 +1,7 @@
-import { pgTable, serial, varchar, text, timestamp, integer, pgEnum, date } from 'drizzle-orm/pg-core';
-import { relations } from 'drizzle-orm';
+// apps/db/src/schema.ts
+import { pgTable, serial, varchar, date, text, timestamp, integer } from 'drizzle-orm/pg-core';
 
-export const roleEnum = pgEnum('role', ['admin', 'doctor', 'receptionist']);
-export const appointmentStatusEnum = pgEnum('appointment_status', ['pending', 'in_progress', 'completed', 'cancelled']);
-
-export const users = pgTable('users', {
-  id: serial('id').primaryKey(),
-  email: varchar('email', { length: 255 }).notNull().unique(),
-  passwordHash: text('password_hash').notNull(),
-  role: roleEnum('role').notNull(),
-  name: varchar('name', { length: 255 }).notNull(),
-  createdAt: timestamp('created_at').defaultNow(),
-});
-
-export const doctors = pgTable('doctors', {
-  id: serial('id').primaryKey(),
-  userId: integer('user_id').references(() => users.id).notNull().unique(),
-  specialization: varchar('specialization', { length: 255 }).notNull(),
-  licenseNumber: varchar('license_number', { length: 100 }).notNull().unique(),
-});
-
+// 1. Tabel Pasien (Tetap dipertahankan)
 export const patients = pgTable('patients', {
   id: serial('id').primaryKey(),
   nik: varchar('nik', { length: 16 }).notNull().unique(),
@@ -30,26 +12,19 @@ export const patients = pgTable('patients', {
   createdAt: timestamp('created_at').defaultNow(),
 });
 
+// 2. Tabel Dokter (Versi Baru)
+export const doctors = pgTable('doctors', {
+  id: serial('id').primaryKey(),
+  name: varchar('name', { length: 255 }).notNull(),
+  specialist: varchar('specialist', { length: 255 }).notNull(),
+  phone: varchar('phone', { length: 20 }),
+});
+
+// 3. Tabel Antrean (Versi Baru)
 export const appointments = pgTable('appointments', {
   id: serial('id').primaryKey(),
   patientId: integer('patient_id').references(() => patients.id).notNull(),
   doctorId: integer('doctor_id').references(() => doctors.id).notNull(),
-  scheduledAt: timestamp('scheduled_at').notNull(),
-  status: appointmentStatusEnum('status').default('pending'),
+  date: date('date').notNull(),
+  status: varchar('status', { length: 50 }).default('Menunggu'),
 });
-
-export const medicalRecords = pgTable('medical_records', {
-  id: serial('id').primaryKey(),
-  patientId: integer('patient_id').references(() => patients.id).notNull(),
-  doctorId: integer('doctor_id').references(() => doctors.id).notNull(),
-  appointmentId: integer('appointment_id').references(() => appointments.id).notNull(),
-  diagnosis: text('diagnosis').notNull(),
-  prescription: text('prescription'),
-  notes: text('notes'),
-  createdAt: timestamp('created_at').defaultNow(),
-});
-
-export const patientsRelations = relations(patients, ({ many }) => ({
-  appointments: many(appointments),
-  medicalRecords: many(medicalRecords),
-}));

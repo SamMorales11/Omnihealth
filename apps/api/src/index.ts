@@ -1,38 +1,24 @@
+// apps/api/src/index.ts
 import { serve } from '@hono/node-server';
 import { Hono } from 'hono';
 import { logger } from 'hono/logger';
 import { cors } from 'hono/cors';
 
-// Import Route Pasien (Pastikan menggunakan ekstensi .js untuk ESM Node)
-import { patientRoutes } from './routes/patient.routes.js';
+// PERBAIKAN: Impor default tanpa kurung kurawal {}
+import patientRoutes from './routes/patient.routes.js';
+import doctorRoutes from './routes/doctor.routes.js';
+import appointmentRoutes from './routes/appointment.routes.js';
 
 const app = new Hono();
 
+// Middleware
 app.use('*', logger());
-app.use('*', cors({
-  origin: 'http://localhost:3000',
-  credentials: true,
-}));
+app.use('/*', cors()); // Memberikan izin (CORS) untuk Next.js
 
-app.get('/', (c) => {
-  return c.json({
-    status: 'OK',
-    message: 'OmniHealth API is running smoothly 🚀',
-    timestamp: new Date().toISOString()
-  });
-});
-
-// MOUNT ROUTE PASIEN DI SINI
+// Menyambungkan rute pasien ke prefix /api/patients
 app.route('/api/patients', patientRoutes);
-
-app.onError((err, c) => {
-  console.error(`[SERVER ERROR]: ${err.message}`);
-  return c.json({ success: false, message: 'Internal Server Error' }, 500);
-});
-
-app.notFound((c) => {
-  return c.json({ success: false, message: 'Endpoint not found' }, 404);
-});
+app.route('/api/doctors', doctorRoutes); // <-- Tambahkan ini
+app.route('/api/appointments', appointmentRoutes); // <-- Tambahkan ini
 
 const port = 3001;
 console.log(`Server is running on http://localhost:${port}`);

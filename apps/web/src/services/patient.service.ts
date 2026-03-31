@@ -30,5 +30,31 @@ export const PatientService = {
       console.error('Error creating patient:', error);
       return false;
     }
+  },
+  async updatePatient(id: number, data: Partial<CreatePatientInput>): Promise<boolean> {
+    try {
+      const response = await fetch(`${API_URL}/patients/${id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+      });
+      return response.ok;
+    } catch (error) {
+      console.error('Error updating patient:', error);
+      return false;
+    }
+  },
+
+  // FUNGSI HAPUS PASIEN
+  async deletePatient(id: number): Promise<boolean> {
+    try {
+      const response = await fetch(`${API_URL}/patients/${id}`, { 
+        method: 'DELETE' 
+      });
+      return response.ok;
+    } catch (error) {
+      console.error('Error deleting patient:', error);
+      return false;
+    }
   }
 };
