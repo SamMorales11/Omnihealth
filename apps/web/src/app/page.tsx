@@ -2,6 +2,10 @@
 import PatientTable from '@/components/PatientTable';
 import AddPatientModal from '@/components/AddPatientModal';
 import Link from 'next/link';
+// 1. Import Komponen Grafik Baru
+import DashboardCharts from '@/components/DashboardCharts';
+// 2. Import LogoutButton
+import LogoutButton from '@/components/LogoutButton';
 
 export const dynamic = 'force-dynamic';
 
@@ -21,6 +25,7 @@ async function getDashboardData() {
 
     return {
       patients: patJson.data || [],
+      appointments: apptJson.data || [], // 2. Pastikan kita mengembalikan full data antrean
       stats: {
         totalPatients: patJson.data?.length || 0,
         totalDoctors: docJson.data?.length || 0,
@@ -28,12 +33,13 @@ async function getDashboardData() {
       }
     };
   } catch (error) {
-    return { patients: [], stats: { totalPatients: 0, totalDoctors: 0, waitingAppointments: 0 } };
+    return { patients: [], appointments: [], stats: { totalPatients: 0, totalDoctors: 0, waitingAppointments: 0 } };
   }
 }
 
 export default async function Home() {
-  const { patients, stats } = await getDashboardData();
+  // 3. Tarik data appointments dari fungsi di atas
+  const { patients, appointments, stats } = await getDashboardData();
 
   return (
     <main className="p-8 md:p-12 w-full min-h-screen bg-[#F8FAFC]">
@@ -50,9 +56,17 @@ export default async function Home() {
               <p className="text-sm text-slate-500 mt-1 font-medium">Ringkasan sistem & manajemen data klinik terpadu.</p>
             </div>
           </div>
-          <div className="flex gap-4 bg-white p-1.5 rounded-xl border border-slate-200 shadow-sm">
+          
+          {/* BAGIAN NAVIGASI DAN TOMBOL LOGOUT */}
+          <div className="flex gap-4 bg-white p-1.5 rounded-xl border border-slate-200 shadow-sm items-center">
             <Link href="/doctors" className="px-5 py-2 text-sm font-bold text-slate-600 hover:text-teal-600 hover:bg-teal-50 rounded-lg transition-all">Data Dokter</Link>
             <Link href="/appointments" className="px-5 py-2 text-sm font-bold text-indigo-600 hover:text-indigo-700 bg-indigo-50 rounded-lg transition-all">Jadwal Antrean ➔</Link>
+            
+            {/* Garis Pemisah */}
+            <div className="w-px h-6 bg-slate-200 mx-1"></div> 
+            
+            {/* Tombol Logout Kita */}
+            <LogoutButton />
           </div>
         </div>
 
@@ -102,6 +116,9 @@ export default async function Home() {
           </div>
 
         </div>
+
+        {/* 4. TAMPILKAN GRAFIK DI SINI (Di Bawah Kartu, Di Atas Tabel) */}
+        <DashboardCharts appointments={appointments} />
 
         {/* CONTAINER TABEL PASIEN */}
         <div className="bg-white rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-slate-100 p-8">

@@ -1,105 +1,151 @@
 // apps/web/src/components/AddPatientModal.tsx
-"use client"; 
-
+"use client";
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { PatientService, CreatePatientInput } from '../services/patient.service';
+import toast from 'react-hot-toast';
 
 export default function AddPatientModal() {
-  const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const router = useRouter();
 
-  const [formData, setFormData] = useState<CreatePatientInput>({
-    nik: '', name: '', dob: '', phone: '', address: ''
+  // State untuk form
+  const [formData, setFormData] = useState({
+    nik: '',
+    name: '',
+    dob: '',
+    phone: '',
+    address: ''
   });
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setIsLoading(true);
+    setIsSubmitting(true);
 
-    const success = await PatientService.createPatient(formData);
-    
-    if (success) {
-      setIsOpen(false); 
-      setFormData({ nik: '', name: '', dob: '', phone: '', address: '' }); 
-      router.refresh(); // Menyuruh Next.js me-refresh tabel secara otomatis
-    } else {
-      alert('Gagal menambahkan pasien. Periksa kembali data atau koneksi Anda.');
+    try {
+      const res = await fetch('http://localhost:3001/api/patients', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData)
+      });
+
+      if (!res.ok) throw new Error('Gagal menyimpan data');
+
+      toast.success('Pasien baru berhasil didaftarkan!');
+      
+      // Reset form dan tutup modal
+      setFormData({ nik: '', name: '', dob: '', phone: '', address: '' });
+      setIsOpen(false);
+      
+      // Refresh halaman agar data terbaru muncul di tabel
+      router.refresh();
+    } catch (error) {
+      toast.error('Terjadi kesalahan saat menyimpan data.');
+    } finally {
+      setIsSubmitting(false);
     }
-    
-    setIsLoading(false);
   };
 
   return (
     <>
-      {/* Tombol Pemicu */}
+      {/* TOMBOL PEMICU (Trigger Button) */}
       <button 
         onClick={() => setIsOpen(true)}
-        className="px-4 py-2 text-sm font-medium text-white transition-colors bg-blue-600 rounded-md hover:bg-blue-700"
+        className="bg-blue-600 text-white px-5 py-2.5 rounded-xl font-bold hover:bg-blue-700 hover:shadow-lg hover:shadow-blue-200 transition-all flex items-center gap-2"
       >
-        + Tambah Pasien
+        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"></path></svg>
+        Tambah Pasien
       </button>
 
-      {/* Latar Belakang Modal (Gelap) */}
+      {/* MODAL OVERLAY */}
       {isOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-sm transition-opacity animate-in fade-in duration-200">
           
-          {/* Kotak Form */}
-          <div className="w-full max-w-md p-6 bg-white rounded-lg shadow-xl">
-            <h2 className="mb-4 text-xl font-bold text-gray-900">Tambah Pasien Baru</h2>
+          {/* MODAL BOX */}
+          <div className="bg-white rounded-3xl shadow-2xl w-full max-w-lg overflow-hidden transform transition-all animate-in zoom-in-95 duration-200">
             
-            <form onSubmit={handleSubmit} className="space-y-4">
+            {/* HEADER MODAL */}
+            <div className="bg-slate-50 px-8 py-6 border-b border-slate-100 flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className="p-2 bg-blue-100 text-blue-600 rounded-lg">
+                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 6H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V8a2 2 0 00-2-2h-5m-4 0V5a2 2 0 114 0v1m-4 0a2 2 0 104 0m-5 8a2 2 0 100-4 2 2 0 000 4zm0 0c1.306 0 2.417.835 2.83 2M9 14a3.001 3.001 0 00-2.83 2M15 11h3m-3 4h2"></path></svg>
+                </div>
+                <div>
+                  <h2 className="text-xl font-extrabold text-slate-800">Registrasi Pasien Baru</h2>
+                  <p className="text-xs font-medium text-slate-500 mt-0.5">Masukkan data identitas pasien dengan benar.</p>
+                </div>
+              </div>
+              <button onClick={() => setIsOpen(false)} className="text-slate-400 hover:text-slate-600 hover:bg-slate-200 p-2 rounded-full transition-colors">
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+              </button>
+            </div>
+
+            {/* BODY MODAL (FORM) */}
+            <form onSubmit={handleSubmit} className="p-8 space-y-5">
+              
               <div>
-                <label className="block text-sm font-medium text-gray-700">NIK (16 Digit)</label>
-                <input required type="text" maxLength={16} minLength={16}
-                  value={formData.nik} onChange={(e) => setFormData({...formData, nik: e.target.value})}
-                  className="w-full px-3 py-2 mt-1 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 text-black" 
-                  placeholder="Contoh: 3201012345678901" />
+                <label className="text-xs font-bold text-slate-500 mb-2 block uppercase tracking-wider">Nomor Induk Kependudukan (NIK)</label>
+                <input 
+                  required 
+                  type="text" 
+                  name="nik" 
+                  maxLength={16} 
+                  minLength={16} 
+                  value={formData.nik} 
+                  onChange={handleChange} 
+                  placeholder="Contoh: 3201012345678901" 
+                  className="w-full bg-slate-50 border border-slate-200 text-slate-900 text-sm rounded-xl focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 block p-3 transition-all" 
+                />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700">Nama Lengkap</label>
-                <input required type="text" 
-                  value={formData.name} onChange={(e) => setFormData({...formData, name: e.target.value})}
-                  className="w-full px-3 py-2 mt-1 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 text-black" />
+                <label className="text-xs font-bold text-slate-500 mb-2 block uppercase tracking-wider">Nama Lengkap Pasien</label>
+                <input required type="text" name="name" value={formData.name} onChange={handleChange} placeholder="Sesuai KTP..." className="w-full bg-slate-50 border border-slate-200 text-slate-900 text-sm rounded-xl focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 block p-3 transition-all" />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700">Tanggal Lahir</label>
-                <input required type="date" 
-                  value={formData.dob} onChange={(e) => setFormData({...formData, dob: e.target.value})}
-                  className="w-full px-3 py-2 mt-1 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 text-black" />
+                <label className="text-xs font-bold text-slate-500 mb-2 block uppercase tracking-wider">Tanggal Lahir</label>
+                <input required type="date" name="dob" value={formData.dob} onChange={handleChange} className="w-full bg-slate-50 border border-slate-200 text-slate-900 text-sm rounded-xl focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 block p-3 transition-all cursor-pointer" />
               </div>
 
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700">No. HP</label>
-                  <input type="tel" 
-                    value={formData.phone || ''} onChange={(e) => setFormData({...formData, phone: e.target.value})}
-                    className="w-full px-3 py-2 mt-1 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 text-black" />
+                  <label className="text-xs font-bold text-slate-500 mb-2 block uppercase tracking-wider">No. HP / Whatsapp</label>
+                  <input required type="text" name="phone" value={formData.phone} onChange={handleChange} placeholder="0812..." className="w-full bg-slate-50 border border-slate-200 text-slate-900 text-sm rounded-xl focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 block p-3 transition-all" />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700">Kota/Alamat</label>
-                  <input type="text" 
-                    value={formData.address || ''} onChange={(e) => setFormData({...formData, address: e.target.value})}
-                    className="w-full px-3 py-2 mt-1 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 text-black" />
+                  <label className="text-xs font-bold text-slate-500 mb-2 block uppercase tracking-wider">Kota / Domisili</label>
+                  <input required type="text" name="address" value={formData.address} onChange={handleChange} placeholder="Contoh: Jakarta Selatan" className="w-full bg-slate-50 border border-slate-200 text-slate-900 text-sm rounded-xl focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 block p-3 transition-all" />
                 </div>
               </div>
 
-              {/* Tombol Aksi */}
-              <div className="flex justify-end gap-3 mt-6">
-                <button type="button" onClick={() => setIsOpen(false)}
-                  className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200">
+              {/* FOOTER MODAL (TOMBOL) */}
+              <div className="pt-4 flex items-center justify-end gap-3 mt-6 border-t border-slate-100">
+                <button 
+                  type="button" 
+                  onClick={() => setIsOpen(false)}
+                  className="px-6 py-2.5 text-sm font-bold text-slate-600 bg-white border border-slate-200 hover:bg-slate-50 hover:text-slate-900 rounded-xl transition-all"
+                >
                   Batal
                 </button>
-                <button type="submit" disabled={isLoading}
-                  className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 disabled:opacity-50">
-                  {isLoading ? 'Menyimpan...' : 'Simpan Data'}
+                <button 
+                  type="submit" 
+                  disabled={isSubmitting}
+                  className="px-6 py-2.5 text-sm font-bold text-white bg-blue-600 hover:bg-blue-700 rounded-xl shadow-md hover:shadow-lg hover:shadow-blue-200 transition-all disabled:opacity-70 flex items-center gap-2"
+                >
+                  {isSubmitting ? (
+                    <span className="animate-pulse">Menyimpan...</span>
+                  ) : (
+                    'Simpan Data'
+                  )}
                 </button>
               </div>
-            </form>
 
+            </form>
           </div>
         </div>
       )}
