@@ -1,84 +1,213 @@
 // apps/web/src/app/doctors/page.tsx
 "use client";
 import { useState, useEffect } from 'react';
+import toast from 'react-hot-toast';
+
+const specializationList = [
+  { label: "Dokter Umum", prefix: "dr.", suffix: "" },
+  { label: "Dokter Gigi", prefix: "drg.", suffix: "" },
+  { label: "Penyakit Dalam", prefix: "dr.", suffix: "Sp.PD" },
+  { label: "Kandungan & Ginekologi", prefix: "dr.", suffix: "Sp.OG" },
+  { label: "Anak", prefix: "dr.", suffix: "Sp.A" },
+  { label: "Bedah Umum", prefix: "dr.", suffix: "Sp.B" },
+  { label: "Jantung & Pembuluh Darah", prefix: "dr.", suffix: "Sp.JP" },
+  { label: "Saraf (Neurologi)", prefix: "dr.", suffix: "Sp.N" },
+  { label: "Mata", prefix: "dr.", suffix: "Sp.M" },
+  { label: "THT-KL", prefix: "dr.", suffix: "Sp.THT-KL" },
+  { label: "Kulit dan Kelamin", prefix: "dr.", suffix: "Sp.KK" },
+  { label: "Kesehatan Jiwa (Psikiatri)", prefix: "dr.", suffix: "Sp.KJ" },
+  { label: "Paru", prefix: "dr.", suffix: "Sp.P" },
+  { label: "Orthopaedi & Traumatologi", prefix: "dr.", suffix: "Sp.OT" }
+];
 
 export default function DoctorsPage() {
   const [doctors, setDoctors] = useState<any[]>([]);
   const [name, setName] = useState('');
   const [specialist, setSpecialist] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const fetchDoctors = async () => {
-    const res = await fetch('http://localhost:3001/api/doctors');
-    const json = await res.json();
-    setDoctors(json.data);
+    try {
+      const res = await fetch('http://localhost:3001/api/doctors');
+      const json = await res.json();
+      setDoctors(json.data || []);
+    } catch (error) {
+      toast.error('Gagal memuat data dokter.');
+    }
   };
 
   useEffect(() => { fetchDoctors(); }, []);
 
-  const handleAdd = async (e: React.FormEvent) => {
-    e.preventDefault();
-    await fetch('http://localhost:3001/api/doctors', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ name, specialist })
-    });
-    setName(''); setSpecialist('');
-    fetchDoctors();
+  const handleSpecialistChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const selectedLabel = e.target.value;
+    setSpecialist(selectedLabel);
+
+    const specObj = specializationList.find(s => s.label === selectedLabel);
+    
+    if (specObj) {
+      let cleanName = name
+        .replace(/^(dr\.|drg\.)\s*/i, '')
+        .replace(/,\s*Sp\.[a-zA-Z\-]+$/i, '')
+        .trim();
+
+      if (cleanName === '') {
+        setName(`${specObj.prefix} `); 
+      } else {
+        let formattedName = `${specObj.prefix} ${cleanName}`;
+        if (specObj.suffix) {
+          formattedName += `, ${specObj.suffix}`;
+        }
+        setName(formattedName);
+      }
+    }
   };
 
-  // TAMBAHAN BARU: Fungsi Hapus Dokter
-  const handleDelete = async (id: number, docName: string) => {
-    if (window.confirm(`Yakin ingin menghapus ${docName}?`)) {
-      await fetch(`http://localhost:3001/api/doctors/${id}`, {
-        method: 'DELETE'
+  const handleAdd = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    
+    try {
+      await fetch('http://localhost:3001/api/doctors', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, specialist })
       });
-      fetchDoctors(); // Refresh tabel setelah dihapus
+      setName(''); setSpecialist('');
+      fetchDoctors();
+      toast.success('Tenaga medis berhasil ditambahkan!');
+    } catch (error) {
+      toast.error('Gagal menghubungi server.');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const handleDelete = async (id: number, docName: string) => {
+    if (window.confirm(`Yakin ingin memberhentikan ${docName} dari sistem?`)) {
+      const deletePromise = fetch(`http://localhost:3001/api/doctors/${id}`, { method: 'DELETE' })
+        .then(async (res) => {
+          if (!res.ok) throw new Error('Tertaut dengan jadwal');
+          fetchDoctors();
+        });
+
+      toast.promise(deletePromise, {
+        loading: 'Menghapus data...',
+        success: `${docName} berhasil dihapus!`,
+        error: `Gagal. ${docName} masih memiliki antrean aktif.`,
+      });
     }
   };
 
   return (
-    <main className="p-8 max-w-4xl mx-auto min-h-screen bg-gray-50">
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-3xl font-bold text-gray-900">Manajemen Dokter</h1>
-        <div className="space-x-4">
-          <a href="/" className="text-blue-600 hover:underline">Data Pasien</a>
-          <a href="/appointments" className="text-indigo-600 hover:underline font-bold">Jadwal Antrean ➔</a>
+    <main className="p-8 md:p-12 w-full min-h-screen bg-[#F8FAFC]">
+      <div className="max-w-6xl mx-auto">
+        
+        {/* HEADER */}
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
+          <div className="flex items-center gap-3">
+            <div className="p-3 bg-teal-600 text-white rounded-xl shadow-lg shadow-teal-200">
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+            </div>
+            <div>
+              <h1 className="text-3xl font-extrabold text-slate-900 tracking-tight">Tenaga Medis</h1>
+              <p className="text-sm text-slate-500 mt-1 font-medium">Kelola daftar dokter dan spesialisasi klinik.</p>
+            </div>
+          </div>
+          <div className="flex gap-4 bg-white p-1.5 rounded-lg border border-slate-200 shadow-sm">
+            <a href="/" className="px-4 py-2 text-sm font-semibold text-slate-600 hover:text-blue-600 hover:bg-blue-50 rounded-md transition-all">Dashboard</a>
+            <a href="/appointments" className="px-4 py-2 text-sm font-semibold text-slate-600 hover:text-indigo-600 hover:bg-indigo-50 rounded-md transition-all">Jadwal Antrean ➔</a>
+          </div>
         </div>
-      </div>
 
-      <form onSubmit={handleAdd} className="bg-white p-4 rounded-lg shadow-sm mb-6 flex gap-4 border border-gray-200">
-        <input required placeholder="Nama Dokter (Cth: Dr. Tirta)" value={name} onChange={e => setName(e.target.value)} className="border border-gray-300 p-2 rounded flex-1 text-black focus:ring-blue-500 focus:border-blue-500" />
-        <input required placeholder="Spesialisasi (Cth: Umum)" value={specialist} onChange={e => setSpecialist(e.target.value)} className="border border-gray-300 p-2 rounded flex-1 text-black focus:ring-blue-500 focus:border-blue-500" />
-        <button type="submit" className="bg-blue-600 text-white px-6 py-2 rounded font-medium hover:bg-blue-700 transition-colors">+ Tambah Dokter</button>
-      </form>
+        {/* FORM INPUT */}
+        <form onSubmit={handleAdd} className="bg-white p-6 md:p-8 rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-slate-100 mb-8 flex flex-col md:flex-row gap-6 items-end relative overflow-hidden">
+          <div className="absolute top-0 left-0 w-1 h-full bg-teal-500"></div>
+          
+          <div className="flex-1 w-full">
+            <label className="text-xs font-bold text-slate-500 mb-2 block uppercase tracking-wider">Spesialisasi</label>
+            <div className="relative">
+              <select required value={specialist} onChange={handleSpecialistChange} className="w-full appearance-none bg-slate-50 border border-slate-200 text-slate-900 text-sm rounded-xl focus:ring-4 focus:ring-teal-500/10 focus:border-teal-500 block p-3 transition-all cursor-pointer font-medium">
+                <option value="">-- Pilih Spesialisasi Dokter --</option>
+                {specializationList.map((spec) => (
+                  <option key={spec.label} value={spec.label}>
+                    {spec.label} {spec.suffix && `(${spec.suffix})`}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
 
-      <div className="bg-white rounded-lg shadow-sm overflow-hidden border border-gray-200">
-        <table className="min-w-full divide-y divide-gray-200">
-          <thead className="bg-gray-50">
-            <tr>
-              <th className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Nama Dokter</th>
-              <th className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Spesialisasi</th>
-              <th className="text-right px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Aksi</th>
-            </tr>
-          </thead>
-          <tbody className="bg-white divide-y divide-gray-200">
-            {doctors.map(d => (
-              <tr key={d.id} className="hover:bg-gray-50">
-                <td className="px-6 py-4 text-sm font-medium text-gray-900">{d.name}</td>
-                <td className="px-6 py-4 text-sm text-gray-500">{d.specialist}</td>
-                {/* TAMBAHAN BARU: Tombol Hapus */}
-                <td className="px-6 py-4 text-sm text-right whitespace-nowrap">
-                  <button 
-                    onClick={() => handleDelete(d.id, d.name)}
-                    className="text-red-600 hover:text-red-900 font-medium"
-                  >
-                    Hapus
-                  </button>
-                </td>
+          <div className="flex-1 w-full">
+            <label className="text-xs font-bold text-slate-500 mb-2 block uppercase tracking-wider">Nama Dokter (Otomatis)</label>
+            <input 
+              required 
+              placeholder="Ketik nama dokter di sini..." 
+              value={name} 
+              onChange={e => setName(e.target.value)} 
+              className="w-full bg-slate-50 border border-slate-200 text-slate-900 text-sm rounded-xl focus:ring-4 focus:ring-teal-500/10 focus:border-teal-500 block p-3 transition-all font-medium" 
+            />
+          </div>
+          
+          <button type="submit" disabled={isSubmitting} className="w-full md:w-auto bg-teal-600 text-white px-8 py-3 rounded-xl font-semibold hover:bg-teal-700 hover:shadow-lg hover:shadow-teal-200 transition-all disabled:opacity-70 flex items-center justify-center gap-2">
+            {isSubmitting ? (
+              <span className="animate-pulse">Menyimpan...</span>
+            ) : (
+              <>
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg>
+                Simpan
+              </>
+            )}
+          </button>
+        </form>
+
+        {/* TABEL DOKTER */}
+        <div className="bg-white rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-slate-100 overflow-hidden">
+          <table className="min-w-full divide-y divide-slate-200">
+            <thead className="bg-slate-50/80 backdrop-blur-sm">
+              <tr>
+                <th className="px-8 py-5 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">Profil Dokter</th>
+                <th className="px-8 py-5 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">Spesialisasi</th>
+                <th className="px-8 py-5 text-right text-xs font-bold text-slate-500 uppercase tracking-wider">Tindakan</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody className="bg-white divide-y divide-slate-100">
+              {doctors.length === 0 ? (
+                <tr>
+                  <td colSpan={3} className="px-8 py-12 text-center text-slate-500 font-medium">Belum ada data tenaga medis.</td>
+                </tr>
+              ) : doctors.map(d => (
+                <tr key={d.id} className="hover:bg-slate-50/80 transition-colors group">
+                  <td className="px-8 py-5 whitespace-nowrap">
+                    <div className="flex items-center gap-4">
+                      <div className="w-10 h-10 rounded-full bg-teal-100 text-teal-700 flex items-center justify-center font-bold text-sm">
+                        {d.name.replace(/^(dr\.|drg\.)\s*/i, '').charAt(0).toUpperCase()}
+                      </div>
+                      <div>
+                        <p className="text-sm font-bold text-slate-900">{d.name}</p>
+                        <p className="text-xs text-slate-500 mt-0.5">ID: DOC-{d.id.toString().padStart(4, '0')}</p>
+                      </div>
+                    </div>
+                  </td>
+                  <td className="px-8 py-5 whitespace-nowrap">
+                    <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-slate-100 text-slate-700 border border-slate-200">
+                      {d.specialist}
+                    </span>
+                  </td>
+                  <td className="px-8 py-5 text-right whitespace-nowrap">
+                    <button 
+                      onClick={() => handleDelete(d.id, d.name)} 
+                      className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold text-rose-600 bg-rose-50 hover:bg-rose-100 rounded-lg transition-colors opacity-0 group-hover:opacity-100 focus:opacity-100"
+                    >
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                      Hapus
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        
       </div>
     </main>
   );
