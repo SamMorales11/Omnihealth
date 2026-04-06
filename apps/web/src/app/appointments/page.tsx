@@ -2,6 +2,7 @@
 "use client";
 import { useState, useEffect } from 'react';
 import toast from 'react-hot-toast';
+import Link from 'next/link';
 
 export default function AppointmentsPage() {
   const [appointments, setAppointments] = useState<any[]>([]);
@@ -71,7 +72,6 @@ export default function AppointmentsPage() {
     }
   };
 
-  // Badge Status Premium (Dengan Border & Warna Soft)
   const getStatusBadge = (status: string) => {
     switch (status) {
       case 'Selesai': 
@@ -79,11 +79,10 @@ export default function AppointmentsPage() {
       case 'Dibatalkan': 
         return 'bg-rose-50 text-rose-700 border-rose-200';
       default: 
-        return 'bg-amber-50 text-amber-700 border-amber-200'; // Menunggu
+        return 'bg-amber-50 text-amber-700 border-amber-200';
     }
   };
 
-  // Format Tanggal Premium (Contoh: 15 April 2026)
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString('id-ID', {
       day: 'numeric',
@@ -96,7 +95,7 @@ export default function AppointmentsPage() {
     <main className="p-8 md:p-12 w-full min-h-screen bg-[#F8FAFC]">
       <div className="max-w-7xl mx-auto">
         
-        {/* HEADER PREMIUM */}
+        {/* HEADER */}
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
           <div className="flex items-center gap-3">
             <div className="p-3 bg-indigo-600 text-white rounded-xl shadow-lg shadow-indigo-200">
@@ -107,15 +106,16 @@ export default function AppointmentsPage() {
               <p className="text-sm text-slate-500 mt-1 font-medium">Atur jadwal pemeriksaan pasien dan dokter dengan mudah.</p>
             </div>
           </div>
+          
+          {/* BAGIAN REVISI: Link kembali ke /dashboard */}
           <div className="flex gap-4 bg-white p-1.5 rounded-lg border border-slate-200 shadow-sm">
-            <a href="/" className="px-4 py-2 text-sm font-semibold text-slate-600 hover:text-indigo-600 hover:bg-indigo-50 rounded-md transition-all">Dashboard</a>
-            <a href="/doctors" className="px-4 py-2 text-sm font-semibold text-slate-600 hover:text-indigo-600 hover:bg-indigo-50 rounded-md transition-all">Data Dokter</a>
+            <Link href="/dashboard" className="px-4 py-2 text-sm font-semibold text-slate-600 hover:text-indigo-600 hover:bg-indigo-50 rounded-md transition-all">Dashboard</Link>
+            <Link href="/doctors" className="px-4 py-2 text-sm font-semibold text-slate-600 hover:text-indigo-600 hover:bg-indigo-50 rounded-md transition-all">Data Dokter</Link>
           </div>
         </div>
 
-        {/* FORM AREA PREMIUM */}
+        {/* FORM AREA */}
         <form onSubmit={handleAdd} className="bg-white p-6 md:p-8 rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-slate-100 mb-8 flex flex-col md:flex-row gap-6 items-end relative overflow-hidden">
-          {/* Aksen Biru di Form */}
           <div className="absolute top-0 left-0 w-1 h-full bg-indigo-600"></div>
           
           <div className="flex-1 w-full">
@@ -153,7 +153,7 @@ export default function AppointmentsPage() {
           </button>
         </form>
 
-        {/* TABEL PREMIUM */}
+        {/* TABEL */}
         <div className="bg-white rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-slate-100 overflow-hidden">
           <div className="overflow-x-auto">
             <table className="min-w-full divide-y divide-slate-200">
@@ -177,7 +177,6 @@ export default function AppointmentsPage() {
                       {formatDate(a.date)}
                     </td>
                     
-                    {/* Ikon Pasien */}
                     <td className="px-8 py-5 whitespace-nowrap">
                       <div className="flex items-center gap-3">
                         <div className="w-8 h-8 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center font-bold text-xs">
@@ -187,7 +186,6 @@ export default function AppointmentsPage() {
                       </div>
                     </td>
 
-                    {/* Ikon Dokter */}
                     <td className="px-8 py-5 whitespace-nowrap">
                       <div className="flex items-center gap-3">
                         <div className="p-1.5 bg-teal-50 text-teal-600 rounded-md">

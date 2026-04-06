@@ -1,21 +1,18 @@
 // apps/web/src/components/LogoutButton.tsx
 "use client";
 import Cookies from 'js-cookie';
-import { useRouter } from 'next/navigation';
 import toast from 'react-hot-toast';
 
 export default function LogoutButton() {
-  const router = useRouter();
-
   const handleLogout = () => {
     // 1. Hapus Kunci (Cookie) dari browser
-    Cookies.remove('auth-token');
+    Cookies.remove('auth-token', { path: '/' }); // Tambahkan path '/' agar lebih aman terhapus
     
     // 2. Tampilkan notifikasi
     toast.success('Berhasil keluar dari sistem.');
     
-    // 3. Tendang kembali ke halaman Login
-    router.push('/login');
+    // 3. Paksa browser untuk memuat ulang dan pindah ke halaman Login (Hard Navigation)
+    window.location.href = '/login';
   };
 
   return (

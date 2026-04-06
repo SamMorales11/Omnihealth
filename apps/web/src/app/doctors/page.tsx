@@ -2,6 +2,7 @@
 "use client";
 import { useState, useEffect } from 'react';
 import toast from 'react-hot-toast';
+import Link from 'next/link';
 
 const specializationList = [
   { label: "Dokter Umum", prefix: "dr.", suffix: "" },
@@ -113,9 +114,11 @@ export default function DoctorsPage() {
               <p className="text-sm text-slate-500 mt-1 font-medium">Kelola daftar dokter dan spesialisasi klinik.</p>
             </div>
           </div>
+          
+          {/* BAGIAN REVISI: Link kembali ke /dashboard */}
           <div className="flex gap-4 bg-white p-1.5 rounded-lg border border-slate-200 shadow-sm">
-            <a href="/" className="px-4 py-2 text-sm font-semibold text-slate-600 hover:text-blue-600 hover:bg-blue-50 rounded-md transition-all">Dashboard</a>
-            <a href="/appointments" className="px-4 py-2 text-sm font-semibold text-slate-600 hover:text-indigo-600 hover:bg-indigo-50 rounded-md transition-all">Jadwal Antrean ➔</a>
+            <Link href="/dashboard" className="px-4 py-2 text-sm font-semibold text-slate-600 hover:text-blue-600 hover:bg-blue-50 rounded-md transition-all">Dashboard</Link>
+            <Link href="/appointments" className="px-4 py-2 text-sm font-semibold text-slate-600 hover:text-indigo-600 hover:bg-indigo-50 rounded-md transition-all">Jadwal Antrean ➔</Link>
           </div>
         </div>
 

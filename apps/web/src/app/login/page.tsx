@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Cookies from 'js-cookie';
 import toast from 'react-hot-toast';
+import Link from 'next/link';
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
@@ -18,15 +19,13 @@ export default function LoginPage() {
     // Simulasi proses pengecekan ke server (jeda 1 detik)
     await new Promise(resolve => setTimeout(resolve, 1000));
 
-    // Kredensial Admin Utama (Hardcoded untuk contoh)
+    // Kredensial Admin Utama
     if (email === 'admin@omnihealth.com' && password === 'admin123') {
-      // 1. Berikan "Kunci Masuk" (Cookie) yang berlaku selama 1 hari
       Cookies.set('auth-token', 'super-secret-admin-token', { expires: 1 });
-      
       toast.success('Login berhasil! Selamat datang, Admin.');
       
-      // 2. Buka gerbang menuju Dashboard
-      router.push('/');
+      // Arahkan ke rute Dashboard yang baru
+      router.push('/dashboard');
     } else {
       toast.error('Akses Ditolak! Email atau Password salah.');
       setIsLoading(false);
@@ -34,7 +33,19 @@ export default function LoginPage() {
   };
 
   return (
-    <main className="min-h-screen bg-slate-50 flex flex-col justify-center items-center p-4">
+    <main className="min-h-screen bg-slate-50 flex flex-col justify-center items-center p-4 relative">
+      
+      {/* TOMBOL KEMBALI KE BERANDA (Tambahan Baru) */}
+      <Link 
+        href="/" 
+        className="absolute top-6 left-6 md:top-8 md:left-8 flex items-center gap-2 text-sm font-bold text-indigo-100 hover:text-white bg-indigo-600 hover:bg-indigo-700 px-4 py-2.5 rounded-xl backdrop-blur-md transition-all border border-indigo-500/30 z-20 group"
+      >
+        <svg className="w-5 h-5 transform group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+        </svg>
+        Kembali
+      </Link>
+
       {/* Ornamen Latar Belakang */}
       <div className="absolute top-0 w-full h-1/2 bg-indigo-600 rounded-b-[100px] shadow-2xl overflow-hidden -z-10">
         <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10"></div>
@@ -99,7 +110,7 @@ export default function LoginPage() {
         </div>
       </div>
       
-      <p className="mt-8 text-xs font-medium text-slate-400">© 2026 OmniHealth System. All rights reserved.</p>
+      <p className="mt-8 text-xs font-medium text-slate-400 z-10">© 2026 OmniHealth System. All rights reserved.</p>
     </main>
   );
 }
