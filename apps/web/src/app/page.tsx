@@ -1,9 +1,12 @@
 // apps/web/src/app/page.tsx
+"use client";
+
 import Link from 'next/link';
 
-export default function Page() {
+export default function Home() {
   return (
     <main className="min-h-screen bg-slate-50 overflow-hidden relative selection:bg-indigo-500 selection:text-white">
+      
       {/* ORNAMEN BACKGROUND */}
       <div className="absolute top-0 left-1/2 w-full -translate-x-1/2 h-full overflow-hidden -z-10 pointer-events-none">
         <div className="absolute -top-40 -right-40 w-[40rem] h-[40rem] bg-indigo-400/20 rounded-full blur-[100px]"></div>
@@ -27,6 +30,7 @@ export default function Page() {
       <div className="max-w-7xl mx-auto px-6 pt-12 md:pt-20 lg:pt-24 pb-20 relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
           
+          {/* TEKS SEBELAH KIRI */}
           <div className="text-center lg:text-left relative z-20">
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-indigo-50 border border-indigo-100 text-indigo-700 text-xs font-bold uppercase tracking-wider mb-6">
               <span className="flex h-2 w-2 rounded-full bg-indigo-600 animate-pulse"></span>
@@ -52,10 +56,13 @@ export default function Page() {
             </div>
           </div>
 
+          {/* MOCKUP SCREENSHOT SEBELAH KANAN */}
           <div className="relative lg:h-[600px] w-full flex items-center justify-center lg:justify-end">
             <div className="relative w-full max-w-2xl">
               <div className="absolute -inset-4 bg-gradient-to-br from-indigo-500/30 to-teal-400/30 rounded-[2.5rem] blur-2xl opacity-70"></div>
+              
               <div className="relative bg-white/60 backdrop-blur-xl rounded-2xl shadow-2xl border border-slate-200/50 overflow-hidden transform hover:scale-[1.02] transition-transform duration-500">
+                
                 <div className="bg-slate-100/80 px-4 py-3 flex items-center gap-2 border-b border-slate-200/50">
                   <div className="w-3 h-3 rounded-full bg-rose-400"></div>
                   <div className="w-3 h-3 rounded-full bg-amber-400"></div>
@@ -66,13 +73,16 @@ export default function Page() {
                     </div>
                   </div>
                 </div>
-
-                {/* Tag Image Sudah Bersih dari Event Handler */}
+                
+                {/* KUNCI DI SINI:
+                  Saya telah mengubah src menjadi /dashboard.png 
+                  Pastikan nama file di folder public persis 'dashboard' (dengan ekstensi .png)
+                */}
                 <img 
-                  src="/hero-mockup.png" 
-                  alt="OmniHealth Dashboard Preview" 
-                  className="w-full h-auto object-cover"
-                />
+                 src="/dashboard.jpeg" 
+  alt="OmniHealth Dashboard Preview" 
+  className="w-full h-auto object-cover"
+                />     
               </div>
             </div>
           </div>
