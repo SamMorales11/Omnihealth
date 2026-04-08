@@ -6,7 +6,7 @@ import toast from 'react-hot-toast';
 export default function LogoutButton() {
   const handleLogout = () => {
     // 1. Hapus Kunci (Cookie) dari browser
-    Cookies.remove('auth-token', { path: '/' }); // Tambahkan path '/' agar lebih aman terhapus
+    Cookies.remove('auth-token', { path: '/' }); 
     
     // 2. Tampilkan notifikasi
     toast.success('Berhasil keluar dari sistem.');
@@ -18,7 +18,7 @@ export default function LogoutButton() {
   return (
     <button 
       onClick={handleLogout} 
-      className="px-5 py-2 text-sm font-bold text-rose-600 hover:text-white bg-rose-50 hover:bg-rose-600 rounded-lg transition-all border border-rose-100 hover:border-rose-600"
+      className="px-5 py-2 text-sm font-bold text-rose-600 dark:text-rose-400 hover:text-white dark:hover:text-white bg-rose-50 dark:bg-rose-500/10 hover:bg-rose-600 dark:hover:bg-rose-600 rounded-lg transition-all border border-rose-100 dark:border-rose-500/20 hover:border-rose-600 dark:hover:border-rose-600"
     >
       Keluar (Logout)
     </button>
