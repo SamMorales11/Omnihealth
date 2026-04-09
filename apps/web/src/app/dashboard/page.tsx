@@ -42,7 +42,7 @@ export default async function DashboardPage() {
     <main className="p-8 md:p-12 w-full min-h-screen bg-slate-50 dark:bg-slate-950 transition-colors duration-500">
       <div className="max-w-7xl mx-auto">
         
-        {/* HEADER DASHBOARD - REVISI TATA LETAK */}
+        {/* HEADER DASHBOARD */}
         <div className="flex flex-col gap-8 mb-12">
           {/* Baris Atas: Judul dan Tombol Keluar */}
           <div className="flex justify-between items-center">
@@ -58,11 +58,10 @@ export default async function DashboardPage() {
             <LogoutButton />
           </div>
 
-          {/* Baris Bawah: Navigasi Menu yang Teratur */}
+          {/* Baris Bawah: Navigasi Menu Tanpa Stok Obat */}
           <div className="flex flex-wrap gap-3 bg-white dark:bg-slate-900 p-2 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm transition-colors duration-500">
             <Link href="/patients/history" className="px-5 py-2.5 text-sm font-bold text-slate-600 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-xl transition-all">Riwayat</Link>
             <Link href="/pharmacy" className="px-5 py-2.5 text-sm font-bold text-slate-600 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-xl transition-all">Apotek</Link>
-            <Link href="/inventory" className="px-5 py-2.5 text-sm font-bold text-slate-600 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-xl transition-all">Stok Obat</Link>
             <Link href="/billing" className="px-5 py-2.5 text-sm font-bold text-slate-600 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-xl transition-all">Kasir</Link>
             <Link href="/doctors" className="px-5 py-2.5 text-sm font-bold text-slate-600 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-xl transition-all">Dokter</Link>
             <Link href="/appointments" className="px-6 py-2.5 text-sm font-bold text-white bg-indigo-600 dark:bg-indigo-500 rounded-xl hover:bg-indigo-700 transition-all shadow-md">Antrean ➔</Link>
