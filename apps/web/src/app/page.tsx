@@ -75,12 +75,11 @@ export default function Page() {
               Tinggalkan cara lama. OmniHealth mengintegrasikan pendaftaran pasien, jadwal dokter, dan analitik dalam satu platform cerdas yang aman dan secepat kilat.
             </p>
             
-            {/* PORTAL SELECTION - FIXED & ENHANCED VISUALS */}
+            {/* PORTAL SELECTION */}
             <div className="grid grid-cols-2 gap-4 md:gap-6 mt-10 w-full max-w-2xl mx-auto lg:mx-0">
               
-              {/* Portal Pasien (REVISED VISUALS) */}
+              {/* Portal Pasien */}
               <Link href="/pendaftaran" className="group relative overflow-hidden bg-white dark:bg-slate-900/50 backdrop-blur-xl p-8 rounded-[2.5rem] border border-slate-200/60 dark:border-slate-800/60 shadow-md hover:shadow-[0_20px_50px_rgba(79,70,229,0.15)] hover:border-indigo-500/50 transition-all duration-500 flex flex-col justify-between h-full min-h-[280px] hover:-translate-y-1">
-                {/* Subtle Hover Gradient Overlay */}
                 <div className="absolute top-0 right-0 -mr-16 -mt-16 w-32 h-32 bg-indigo-500/10 rounded-full blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
                 
                 <div>
@@ -101,9 +100,8 @@ export default function Page() {
                 </div>
               </Link>
 
-              {/* Portal Staf (REVISED VISUALS) */}
+              {/* Portal Staf */}
               <Link href="/dashboard" className="group relative overflow-hidden bg-white dark:bg-slate-900/50 backdrop-blur-xl p-8 rounded-[2.5rem] border border-slate-200/60 dark:border-slate-800/60 shadow-md hover:shadow-[0_20px_50px_rgba(20,184,166,0.15)] hover:border-teal-500/50 transition-all duration-500 flex flex-col justify-between h-full min-h-[280px] hover:-translate-y-1">
-                {/* Subtle Hover Gradient Overlay */}
                 <div className="absolute top-0 right-0 -mr-16 -mt-16 w-32 h-32 bg-teal-500/10 rounded-full blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
 
                 <div>
@@ -127,7 +125,7 @@ export default function Page() {
             </div>
           </div>
 
-          {/* BAGIAN GAMBAR / MOCKUP TIDAK DISENTUH */}
+          {/* BAGIAN GAMBAR / MOCKUP */}
           <div className="relative w-full flex justify-center lg:justify-end lg:pt-20">
             <div className="relative w-full max-w-2xl">
               <div className="absolute -inset-4 bg-gradient-to-br from-indigo-500/30 to-teal-400/30 dark:from-indigo-600/20 dark:to-teal-500/20 rounded-[2.5rem] blur-2xl opacity-70 transition-colors duration-500"></div>
@@ -157,13 +155,13 @@ export default function Page() {
         </div>
       </div>
 
-      {/* FOOTER - TIDAK DISENTUH */}
+      {/* FOOTER - FIXED: LOGO KIRI, LINKS KANAN */}
       <footer className="relative z-20 border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 transition-colors duration-500 mt-auto w-full">
         <div className="max-w-7xl mx-auto px-6 py-12 md:py-16">
-          <div className="flex flex-col md:flex-row justify-between items-center gap-10">
+          <div className="flex flex-col md:flex-row justify-between items-start gap-12">
             
-            {/* Logo & Copyright */}
-            <div className="flex flex-col items-center md:items-start text-center md:text-left">
+            {/* Bagian Kiri: Logo & Copyright */}
+            <div className="flex flex-col items-start text-left">
               <div className="flex items-center gap-3 mb-4">
                 <div className="w-10 h-10 bg-indigo-600 text-white rounded-xl flex items-center justify-center shadow-md">
                   <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
@@ -174,30 +172,29 @@ export default function Page() {
                 Sistem Manajemen Klinik Terpadu.
               </p>
               <p className="text-sm font-medium text-slate-400 dark:text-slate-500 mt-1">
-                &copy; {new Date().getFullYear()} OmniHealth Systems. Hak Cipta Dilindungi.
+                &copy; 2026 OmniHealth Systems. Hak Cipta Dilindungi.
               </p>
             </div>
 
-            {/* Links & Socials */}
-            <div className="flex flex-col items-center md:items-end gap-6">
-              <div className="flex flex-wrap justify-center md:justify-end gap-6 md:gap-8">
+            {/* Bagian Kanan: Links & Socials (Rata Kanan di layar Desktop) */}
+            <div className="flex flex-col items-start md:items-end gap-8 w-full md:w-auto">
+              <div className="flex flex-wrap items-center justify-start md:justify-end gap-6 sm:gap-8">
                 <Link href="#" className="text-sm font-bold text-slate-600 hover:text-indigo-600 dark:text-slate-300 dark:hover:text-indigo-400 transition-colors">Kebijakan Privasi</Link>
                 <Link href="#" className="text-sm font-bold text-slate-600 hover:text-indigo-600 dark:text-slate-300 dark:hover:text-indigo-400 transition-colors">Syarat & Ketentuan</Link>
                 <Link href="#" className="text-sm font-bold text-slate-600 hover:text-indigo-600 dark:text-slate-300 dark:hover:text-indigo-400 transition-colors">Bantuan Support</Link>
               </div>
               
-              <div className="flex items-center gap-5">
-              <Link href="#" className="text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">
-                <span className="sr-only">Twitter</span>
-                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.29 20.251c7.547 0 11.675-6.253 11.675-11.675 0-.178 0-.355-.012-.53A8.348 8.348 0 0022 5.92a8.19 8.19 0 01-2.357.646 4.118 4.118 0 001.804-2.27 8.224 8.224 0 01-2.605.996 4.107 4.107 0 00-6.993 3.743 11.65 11.65 0 01-8.457-4.287 4.106 4.106 0 001.27 5.477A4.072 4.072 0 012.8 9.713v.052a4.105 4.105 0 003.292 4.022 4.095 4.095 0 01-1.853.07 4.108 4.108 0 003.834 2.85A8.233 8.233 0 012 18.407a11.616 11.616 0 006.29 1.84"></path></svg>
-              </Link>
-              <Link href="#" className="text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">
-                <span className="sr-only">LinkedIn</span>
-                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path fillRule="evenodd" d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z" clipRule="evenodd"></path></svg>
-              </Link>
+              <div className="flex items-center gap-8">
+                <Link href="#" className="group flex flex-col items-start md:items-end gap-1.5">
+                  <span className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 group-hover:text-indigo-500 transition-colors">Twitter</span>
+                  <svg className="w-5 h-5 text-slate-400 group-hover:text-indigo-500 transition-all" fill="currentColor" viewBox="0 0 24 24"><path d="M8.29 20.251c7.547 0 11.675-6.253 11.675-11.675 0-.178 0-.355-.012-.53A8.348 8.348 0 0022 5.92a8.19 8.19 0 01-2.357.646 4.118 4.118 0 001.804-2.27 8.224 8.224 0 01-2.605.996 4.107 4.107 0 00-6.993 3.743 11.65 11.65 0 01-8.457-4.287 4.106 4.106 0 001.27 5.477A4.072 4.072 0 012.8 9.713v.052a4.105 4.105 0 003.292 4.022 4.095 4.095 0 01-1.853.07 4.108 4.108 0 003.834 2.85A8.233 8.233 0 012 18.407a11.616 11.616 0 006.29 1.84"></path></svg>
+                </Link>
+                <Link href="#" className="group flex flex-col items-start md:items-end gap-1.5">
+                  <span className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 group-hover:text-indigo-500 transition-colors">LinkedIn</span>
+                  <svg className="w-5 h-5 text-slate-400 group-hover:text-indigo-500 transition-all" fill="currentColor" viewBox="0 0 24 24"><path fillRule="evenodd" d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z" clipRule="evenodd"></path></svg>
+                </Link>
+              </div>
             </div>
-
-          </div>
 
           </div>
         </div>
