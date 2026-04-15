@@ -15,10 +15,10 @@ export default function Page() {
   const currentTheme = theme === 'system' ? systemTheme : theme;
 
   return (
-    <main className="min-h-screen overflow-hidden relative selection:bg-indigo-500 selection:text-white">
+    <main className="min-h-screen overflow-hidden relative selection:bg-indigo-500 selection:text-white bg-slate-50 dark:bg-slate-950 transition-colors duration-500">
       
       {/* ORNAMEN BACKGROUND */}
-      <div className="absolute top-0 left-1/2 w-full -translate-x-1/2 h-full overflow-hidden -z-10 pointer-events-none">
+      <div className="absolute top-0 left-1/2 w-full -translate-x-1/2 h-screen overflow-hidden -z-10 pointer-events-none">
         <div className="absolute -top-40 -right-40 w-[40rem] h-[40rem] bg-indigo-400/20 dark:bg-indigo-600/20 rounded-full blur-[100px] transition-colors duration-500"></div>
         <div className="absolute top-60 -left-20 w-[30rem] h-[30rem] bg-teal-400/20 dark:bg-teal-600/20 rounded-full blur-[100px] transition-colors duration-500"></div>
       </div>
@@ -55,7 +55,7 @@ export default function Page() {
       </nav>
 
       {/* HERO SECTION */}
-      <div className="max-w-7xl mx-auto px-6 pt-12 md:pt-20 lg:pt-24 pb-20 relative z-10">
+      <div className="max-w-7xl mx-auto px-6 pt-12 md:pt-20 lg:pt-24 pb-32 relative z-10 min-h-[85vh]">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:items-start">
           
           <div className="text-center lg:text-left relative z-20">
@@ -75,59 +75,53 @@ export default function Page() {
               Tinggalkan cara lama. OmniHealth mengintegrasikan pendaftaran pasien, jadwal dokter, dan analitik dalam satu platform cerdas yang aman dan secepat kilat.
             </p>
             
-            {/* PORTAL SELECTION */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mt-8 max-w-2xl mx-auto lg:mx-0">
+            {/* PORTAL SELECTION DENGAN IKON SESUAI CORETAN ANDA */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-8 w-full max-w-2xl mx-auto lg:mx-0">
               
-              {/* Portal Pasien */}
-              <Link href="/pendaftaran" className="group bg-white dark:bg-slate-900 p-8 rounded-[2rem] border border-slate-200 dark:border-slate-800 shadow-lg hover:shadow-2xl hover:border-indigo-500/50 transition-all duration-300 relative overflow-hidden text-left flex flex-col h-full min-h-[280px]">
-                <div className="absolute -right-6 -bottom-6 opacity-[0.03] group-hover:opacity-10 group-hover:scale-110 transition-all duration-500 text-indigo-500 pointer-events-none">
-                  <svg className="w-48 h-48" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="1.5"><path strokeLinecap="round" strokeLinejoin="round" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg>
-                </div>
-                
+              {/* Portal Pasien (Ikon HP) */}
+              <Link href="/pendaftaran" className="group bg-white dark:bg-slate-900 p-5 md:p-6 rounded-[1.5rem] border border-slate-200 dark:border-slate-800 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between h-full">
                 <div>
-                  <div className="w-16 h-16 bg-indigo-50 dark:bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 rounded-2xl flex items-center justify-center mb-6 border border-indigo-100 dark:border-indigo-500/20 shadow-sm shrink-0 relative z-10">
-                    <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+                  <div className="flex flex-col xl:flex-row xl:items-center gap-4 mb-4">
+                    <div className="w-12 h-12 bg-indigo-50 dark:bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 rounded-xl flex items-center justify-center shrink-0 border border-indigo-100 dark:border-indigo-500/20">
+                      {/* IKON SMARTPHONE */}
+                      <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg>
+                    </div>
+                    <h3 className="text-lg md:text-xl font-black text-slate-900 dark:text-white leading-tight">Portal Pasien</h3>
                   </div>
+                  <p className="text-xs md:text-sm font-medium text-slate-500 dark:text-slate-400 mb-6 leading-relaxed">
+                    Ambil antrean mandiri secara online langsung dari HP Anda.
+                  </p>
                 </div>
-                
-                <h3 className="text-2xl font-black text-slate-900 dark:text-white mb-3 relative z-10">Portal Pasien</h3>
-                <p className="text-sm font-medium text-slate-500 dark:text-slate-400 mb-8 relative z-10 leading-relaxed">
-                  Ambil nomor antrean mandiri secara online langsung dari HP Anda tanpa ribet.
-                </p>
-                
-                <div className="mt-auto pt-6 border-t border-slate-100 dark:border-slate-800 w-full relative z-10 flex items-center text-sm font-bold text-indigo-600 dark:text-indigo-400 group-hover:translate-x-2 transition-transform">
+                <div className="pt-4 border-t border-slate-100 dark:border-slate-800 w-full flex items-center text-xs md:text-sm font-bold text-indigo-600 dark:text-indigo-400 group-hover:translate-x-1 transition-transform">
                   Daftar Sekarang
-                  <svg className="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+                  <svg className="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
                 </div>
               </Link>
 
-              {/* Portal Staf */}
-              <Link href="/dashboard" className="group bg-white dark:bg-slate-900 p-8 rounded-[2rem] border border-slate-200 dark:border-slate-800 shadow-lg hover:shadow-2xl hover:border-teal-500/50 transition-all duration-300 relative overflow-hidden text-left flex flex-col h-full min-h-[280px]">
-                <div className="absolute -right-6 -bottom-6 opacity-[0.03] group-hover:opacity-10 group-hover:scale-110 transition-all duration-500 text-teal-500 pointer-events-none">
-                  <svg className="w-48 h-48" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="1.5"><path strokeLinecap="round" strokeLinejoin="round" d="M9 17V7m0 10a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h2a2 2 0 012 2m0 10a2 2 0 002 2h2a2 2 0 002-2M9 7a2 2 0 012-2h2a2 2 0 012 2m0 10V7m0 10a2 2 0 002 2h2a2 2 0 002-2V7a2 2 0 00-2-2h-2a2 2 0 00-2 2"></path></svg>
-                </div>
-                
+              {/* Portal Staf (Ikon Kolom Dashboard) */}
+              <Link href="/dashboard" className="group bg-white dark:bg-slate-900 p-5 md:p-6 rounded-[1.5rem] border border-slate-200 dark:border-slate-800 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between h-full">
                 <div>
-                  <div className="w-16 h-16 bg-teal-50 dark:bg-teal-500/10 text-teal-600 dark:text-teal-400 rounded-2xl flex items-center justify-center mb-6 border border-teal-100 dark:border-teal-500/20 shadow-sm shrink-0 relative z-10">
-                    <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
+                  <div className="flex flex-col xl:flex-row xl:items-center gap-4 mb-4">
+                    <div className="w-12 h-12 bg-teal-50 dark:bg-teal-500/10 text-teal-600 dark:text-teal-400 rounded-xl flex items-center justify-center shrink-0 border border-teal-100 dark:border-teal-500/20">
+                      {/* IKON KOLOM/DASHBOARD */}
+                      <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 17V7m0 10a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h2a2 2 0 012 2m0 10a2 2 0 002 2h2a2 2 0 002-2M9 7a2 2 0 012-2h2a2 2 0 012 2m0 10V7m0 10a2 2 0 002 2h2a2 2 0 002-2V7a2 2 0 00-2-2h-2a2 2 0 00-2 2"></path></svg>
+                    </div>
+                    <h3 className="text-lg md:text-xl font-black text-slate-900 dark:text-white leading-tight">Portal Staf</h3>
                   </div>
+                  <p className="text-xs md:text-sm font-medium text-slate-500 dark:text-slate-400 mb-6 leading-relaxed">
+                    Akses sistem khusus untuk operasional internal klinik.
+                  </p>
                 </div>
-                
-                <h3 className="text-2xl font-black text-slate-900 dark:text-white mb-3 relative z-10">Portal Staf</h3>
-                <p className="text-sm font-medium text-slate-500 dark:text-slate-400 mb-8 relative z-10 leading-relaxed">
-                  Akses sistem khusus untuk manajemen dan operasional internal klinik.
-                </p>
-                
-                <div className="mt-auto pt-6 border-t border-slate-100 dark:border-slate-800 w-full relative z-10 flex items-center text-sm font-bold text-teal-600 dark:text-teal-400 group-hover:translate-x-2 transition-transform">
+                <div className="pt-4 border-t border-slate-100 dark:border-slate-800 w-full flex items-center text-xs md:text-sm font-bold text-teal-600 dark:text-teal-400 group-hover:translate-x-1 transition-transform">
                   Masuk Sistem
-                  <svg className="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+                  <svg className="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
                 </div>
               </Link>
 
             </div>
           </div>
 
-          {/* BAGIAN GAMBAR / MOCKUP - POSISI DITURUNKAN SEDIKIT LAGI (lg:pt-20) */}
+          {/* BAGIAN GAMBAR / MOCKUP TIDAK DISENTUH */}
           <div className="relative w-full flex justify-center lg:justify-end lg:pt-20">
             <div className="relative w-full max-w-2xl">
               <div className="absolute -inset-4 bg-gradient-to-br from-indigo-500/30 to-teal-400/30 dark:from-indigo-600/20 dark:to-teal-500/20 rounded-[2.5rem] blur-2xl opacity-70 transition-colors duration-500"></div>
@@ -156,6 +150,89 @@ export default function Page() {
 
         </div>
       </div>
+
+      {/* FOOTER ENTERPRISE SEJATI - ANTI PATAH DENGAN FLEXBOX */}
+      <footer className="relative z-20 border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 w-full overflow-hidden transition-colors duration-500">
+        <div className="max-w-7xl mx-auto px-6 py-12 lg:py-16 w-full">
+          
+          {/* Pembungkus Induk Flexbox: Pasti menyamping di layar sedang ke atas */}
+          <div className="flex flex-col lg:flex-row justify-between gap-12 w-full">
+            
+            {/* Bagian Kiri: Brand & Deskripsi */}
+            <div className="w-full lg:w-1/3 shrink-0">
+              <div className="flex items-center gap-3 mb-6">
+                <div className="w-8 h-8 bg-indigo-600 text-white rounded-lg flex items-center justify-center shadow-md">
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
+                </div>
+                <span className="text-lg font-black text-slate-900 dark:text-white tracking-tight">OmniHealth</span>
+              </div>
+              <p className="text-sm text-slate-500 dark:text-slate-400 leading-relaxed font-medium">
+                Sistem Manajemen Klinik Terpadu. Menghadirkan efisiensi operasional dan pengalaman pasien yang modern dan tak tertandingi.
+              </p>
+            </div>
+
+            {/* Bagian Kanan: Wadah 3 Kolom Menu yang sejajar paksa */}
+            <div className="w-full lg:w-2/3 flex flex-col sm:flex-row sm:flex-wrap md:flex-nowrap justify-between gap-10 sm:gap-6">
+              
+              {/* Kolom Menu 1 */}
+              <div className="flex-1 min-w-[140px]">
+                <h4 className="font-bold text-slate-900 dark:text-white mb-6 uppercase tracking-wider text-xs">Produk Utama</h4>
+                <ul className="space-y-4 text-sm font-medium text-slate-500 dark:text-slate-400">
+                  <li><Link href="#" className="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">Rekam Medis (EMR)</Link></li>
+                  <li><Link href="#" className="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">Manajemen Antrean</Link></li>
+                  <li><Link href="#" className="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">Apotek & Farmasi</Link></li>
+                  <li><Link href="#" className="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">Integrasi Kasir</Link></li>
+                </ul>
+              </div>
+
+              {/* Kolom Menu 2 */}
+              <div className="flex-1 min-w-[140px]">
+                <h4 className="font-bold text-slate-900 dark:text-white mb-6 uppercase tracking-wider text-xs">Perusahaan</h4>
+                <ul className="space-y-4 text-sm font-medium text-slate-500 dark:text-slate-400">
+                  <li><Link href="#" className="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">Tentang Kami</Link></li>
+                  <li><Link href="#" className="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">Hubungi Tim Sales</Link></li>
+                  <li><Link href="#" className="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">Karir & Peluang</Link></li>
+                  <li><Link href="#" className="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">Blog & Edukasi</Link></li>
+                </ul>
+              </div>
+
+              {/* Kolom Menu 3 */}
+              <div className="flex-1 min-w-[140px]">
+                <h4 className="font-bold text-slate-900 dark:text-white mb-6 uppercase tracking-wider text-xs">Informasi Legal</h4>
+                <ul className="space-y-4 text-sm font-medium text-slate-500 dark:text-slate-400">
+                  <li><Link href="#" className="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">Kebijakan Privasi</Link></li>
+                  <li><Link href="#" className="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">Syarat & Ketentuan</Link></li>
+                  <li>
+                    <Link href="#" className="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors flex items-center gap-2">
+                      Keamanan Data 
+                      <span className="bg-emerald-100 dark:bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 text-[10px] font-bold px-2 py-0.5 rounded-md border border-emerald-200 dark:border-emerald-500/20 shadow-sm">HIPAA</span>
+                    </Link>
+                  </li>
+                </ul>
+              </div>
+
+            </div>
+          </div>
+
+          {/* Garis Bawah Copyright */}
+          <div className="mt-16 pt-8 border-t border-slate-200 dark:border-slate-800 flex flex-col md:flex-row items-center justify-between gap-6 w-full">
+            <p className="text-sm font-medium text-slate-500 dark:text-slate-400 text-center md:text-left">
+              &copy; {new Date().getFullYear()} OmniHealth Systems. Hak Cipta Dilindungi.
+            </p>
+            <div className="flex justify-center gap-6">
+              <Link href="#" className="text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">
+                <span className="sr-only">Twitter</span>
+                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.29 20.251c7.547 0 11.675-6.253 11.675-11.675 0-.178 0-.355-.012-.53A8.348 8.348 0 0022 5.92a8.19 8.19 0 01-2.357.646 4.118 4.118 0 001.804-2.27 8.224 8.224 0 01-2.605.996 4.107 4.107 0 00-6.993 3.743 11.65 11.65 0 01-8.457-4.287 4.106 4.106 0 001.27 5.477A4.072 4.072 0 012.8 9.713v.052a4.105 4.105 0 003.292 4.022 4.095 4.095 0 01-1.853.07 4.108 4.108 0 003.834 2.85A8.233 8.233 0 012 18.407a11.616 11.616 0 006.29 1.84"></path></svg>
+              </Link>
+              <Link href="#" className="text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">
+                <span className="sr-only">LinkedIn</span>
+                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path fillRule="evenodd" d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z" clipRule="evenodd"></path></svg>
+              </Link>
+            </div>
+          </div>
+        </div>
+      </footer>
+
     </main>
   );
 }
