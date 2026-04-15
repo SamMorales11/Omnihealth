@@ -75,48 +75,52 @@ export default function Page() {
               Tinggalkan cara lama. OmniHealth mengintegrasikan pendaftaran pasien, jadwal dokter, dan analitik dalam satu platform cerdas yang aman dan secepat kilat.
             </p>
             
-            {/* PORTAL SELECTION - FIXED: PASTI KIRI-KANAN (grid-cols-2) & ANTI MELAR */}
+            {/* PORTAL SELECTION - FIXED & ENHANCED VISUALS */}
             <div className="grid grid-cols-2 gap-4 md:gap-6 mt-10 w-full max-w-2xl mx-auto lg:mx-0">
               
-              {/* Portal Pasien */}
-              <Link href="/pendaftaran" className="group bg-white dark:bg-slate-900 p-6 md:p-8 rounded-[2rem] border border-slate-200 dark:border-slate-800 shadow-md hover:shadow-xl hover:border-indigo-500/50 transition-all duration-300 flex flex-col justify-between h-full min-h-[260px]">
+              {/* Portal Pasien (REVISED VISUALS) */}
+              <Link href="/pendaftaran" className="group relative overflow-hidden bg-white dark:bg-slate-900/50 backdrop-blur-xl p-8 rounded-[2.5rem] border border-slate-200/60 dark:border-slate-800/60 shadow-md hover:shadow-[0_20px_50px_rgba(79,70,229,0.15)] hover:border-indigo-500/50 transition-all duration-500 flex flex-col justify-between h-full min-h-[280px] hover:-translate-y-1">
+                {/* Subtle Hover Gradient Overlay */}
+                <div className="absolute top-0 right-0 -mr-16 -mt-16 w-32 h-32 bg-indigo-500/10 rounded-full blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                
                 <div>
-                  {/* WADAH PELINDUNG IKON AGAR TIDAK MELAR */}
-                  <div className="flex items-start mb-6 relative z-10">
-                    <div className="w-14 h-14 bg-indigo-50 dark:bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 rounded-2xl flex items-center justify-center shrink-0 border border-indigo-100 dark:border-indigo-500/20 shadow-sm">
-                      <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg>
+                  <div className="flex items-start mb-8 relative z-10">
+                    <div className="w-16 h-16 bg-gradient-to-br from-indigo-50 to-indigo-100/50 dark:from-indigo-500/10 dark:to-indigo-500/5 text-indigo-600 dark:text-indigo-400 rounded-2xl flex items-center justify-center shrink-0 border border-indigo-100/50 dark:border-indigo-500/20 shadow-sm group-hover:scale-110 group-hover:rotate-3 transition-transform duration-500">
+                      <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg>
                     </div>
                   </div>
                   
-                  <h3 className="text-xl font-black text-slate-900 dark:text-white mb-3 relative z-10">Portal Pasien</h3>
+                  <h3 className="text-2xl font-black text-slate-900 dark:text-white mb-3 relative z-10 tracking-tight">Portal Pasien</h3>
                   <p className="text-sm font-medium text-slate-500 dark:text-slate-400 mb-6 leading-relaxed relative z-10">
-                    Ambil antrean mandiri secara online langsung dari HP Anda.
+                    Ambil antrean mandiri secara online langsung dari HP Anda. Cepat dan tanpa kertas.
                   </p>
                 </div>
-                <div className="pt-5 border-t border-slate-100 dark:border-slate-800 w-full flex items-center text-sm font-bold text-indigo-600 dark:text-indigo-400 group-hover:translate-x-1 transition-transform relative z-10">
+                <div className="pt-6 border-t border-slate-100 dark:border-slate-800/50 w-full flex items-center text-sm font-bold text-indigo-600 dark:text-indigo-400 group-hover:gap-2 transition-all relative z-10">
                   Daftar Sekarang
-                  <svg className="w-5 h-5 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+                  <svg className="w-5 h-5 ml-1 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
                 </div>
               </Link>
 
-              {/* Portal Staf */}
-              <Link href="/dashboard" className="group bg-white dark:bg-slate-900 p-6 md:p-8 rounded-[2rem] border border-slate-200 dark:border-slate-800 shadow-md hover:shadow-xl hover:border-teal-500/50 transition-all duration-300 flex flex-col justify-between h-full min-h-[260px]">
+              {/* Portal Staf (REVISED VISUALS) */}
+              <Link href="/dashboard" className="group relative overflow-hidden bg-white dark:bg-slate-900/50 backdrop-blur-xl p-8 rounded-[2.5rem] border border-slate-200/60 dark:border-slate-800/60 shadow-md hover:shadow-[0_20px_50px_rgba(20,184,166,0.15)] hover:border-teal-500/50 transition-all duration-500 flex flex-col justify-between h-full min-h-[280px] hover:-translate-y-1">
+                {/* Subtle Hover Gradient Overlay */}
+                <div className="absolute top-0 right-0 -mr-16 -mt-16 w-32 h-32 bg-teal-500/10 rounded-full blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+
                 <div>
-                  {/* WADAH PELINDUNG IKON AGAR TIDAK MELAR */}
-                  <div className="flex items-start mb-6 relative z-10">
-                    <div className="w-14 h-14 bg-teal-50 dark:bg-teal-500/10 text-teal-600 dark:text-teal-400 rounded-2xl flex items-center justify-center shrink-0 border border-teal-100 dark:border-teal-500/20 shadow-sm">
-                      <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 17V7m0 10a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h2a2 2 0 012 2m0 10a2 2 0 002 2h2a2 2 0 002-2M9 7a2 2 0 012-2h2a2 2 0 012 2m0 10V7m0 10a2 2 0 002 2h2a2 2 0 002-2V7a2 2 0 00-2-2h-2a2 2 0 00-2 2"></path></svg>
+                  <div className="flex items-start mb-8 relative z-10">
+                    <div className="w-16 h-16 bg-gradient-to-br from-teal-50 to-teal-100/50 dark:from-teal-500/10 dark:to-teal-500/5 text-teal-600 dark:text-teal-400 rounded-2xl flex items-center justify-center shrink-0 border border-teal-100/50 dark:border-teal-500/20 shadow-sm group-hover:scale-110 group-hover:rotate-3 transition-transform duration-500">
+                      <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 17V7m0 10a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h2a2 2 0 012 2m0 10a2 2 0 002 2h2a2 2 0 002-2M9 7a2 2 0 012-2h2a2 2 0 012 2m0 10V7m0 10a2 2 0 002 2h2a2 2 0 002-2V7a2 2 0 00-2-2h-2a2 2 0 00-2 2"></path></svg>
                     </div>
                   </div>
                   
-                  <h3 className="text-xl font-black text-slate-900 dark:text-white mb-3 relative z-10">Portal Staf</h3>
+                  <h3 className="text-2xl font-black text-slate-900 dark:text-white mb-3 relative z-10 tracking-tight">Portal Staf</h3>
                   <p className="text-sm font-medium text-slate-500 dark:text-slate-400 mb-6 leading-relaxed relative z-10">
-                    Akses sistem khusus untuk operasional internal klinik.
+                    Akses sistem khusus untuk operasional internal klinik. Kelola data pasien secara real-time.
                   </p>
                 </div>
-                <div className="pt-5 border-t border-slate-100 dark:border-slate-800 w-full flex items-center text-sm font-bold text-teal-600 dark:text-teal-400 group-hover:translate-x-1 transition-transform relative z-10">
+                <div className="pt-6 border-t border-slate-100 dark:border-slate-800/50 w-full flex items-center text-sm font-bold text-teal-600 dark:text-teal-400 group-hover:gap-2 transition-all relative z-10">
                   Masuk Sistem
-                  <svg className="w-5 h-5 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+                  <svg className="w-5 h-5 ml-1 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
                 </div>
               </Link>
 
@@ -153,7 +157,7 @@ export default function Page() {
         </div>
       </div>
 
-      {/* FOOTER - FIXED: BESAR TAPI SIMPLE */}
+      {/* FOOTER - TIDAK DISENTUH */}
       <footer className="relative z-20 border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 transition-colors duration-500 mt-auto w-full">
         <div className="max-w-7xl mx-auto px-6 py-12 md:py-16">
           <div className="flex flex-col md:flex-row justify-between items-center gap-10">
