@@ -6,11 +6,13 @@
   },
   "dependencies": {
     "@hono/node-server": "^1.11.1",
-    "hono": "^4.3.11",
     "@omnihealth/db": "*",
-    "@omnihealth/shared": "*"
+    "@omnihealth/shared": "*",
+    "bcryptjs": "^3.0.3",
+    "hono": "^4.12.14"
   },
   "devDependencies": {
+    "@types/bcryptjs": "^2.4.6",
     "tsx": "^4.7.1"
   }
 }

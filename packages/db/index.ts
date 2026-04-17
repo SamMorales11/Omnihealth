@@ -1,6 +1,6 @@
 import { drizzle } from 'drizzle-orm/postgres-js';
 import postgres from 'postgres';
-import * as schema from './schema'; // Kita sudah punya objek ini
+import * as schema from './schema.js'; // Kita sudah punya objek ini
 import * as dotenv from 'dotenv';
 
 dotenv.config();
