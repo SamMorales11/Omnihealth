@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from 'react';
 import toast from 'react-hot-toast';
 import Link from 'next/link';
+import Cookies from 'js-cookie'; // REVISI: Impor Cookies untuk mengambil token
 
 export default function AppointmentsPage() {
   const [appointments, setAppointments] = useState<any[]>([]);
@@ -37,10 +38,14 @@ export default function AppointmentsPage() {
 
   const fetchData = async () => {
     try {
+      // REVISI: Ambil token dan sertakan di header Authorization
+      const token = Cookies.get('auth-token');
+      const headers = { 'Authorization': `Bearer ${token}` };
+
       const [apptRes, patRes, docRes] = await Promise.all([
-        fetch('http://localhost:3001/api/appointments'),
-        fetch('http://localhost:3001/api/patients'),
-        fetch('http://localhost:3001/api/doctors')
+        fetch('http://127.0.0.1:3001/api/appointments', { headers }),
+        fetch('http://127.0.0.1:3001/api/patients', { headers }),
+        fetch('http://127.0.0.1:3001/api/doctors', { headers })
       ]);
       
       setAppointments((await apptRes.json()).data || []);
@@ -59,9 +64,14 @@ export default function AppointmentsPage() {
     setIsSubmitting(true);
     
     try {
-      await fetch('http://localhost:3001/api/appointments', {
+      // REVISI: Ambil token dan sertakan di header Authorization
+      const token = Cookies.get('auth-token');
+      await fetch('http://127.0.0.1:3001/api/appointments', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
         body: JSON.stringify({ patientId: parseInt(patientId), doctorId: parseInt(doctorId), date })
       });
       setPatientId(''); setDoctorId(''); setDate('');
@@ -76,9 +86,14 @@ export default function AppointmentsPage() {
 
   const handleUpdateStatus = async (id: number, newStatus: string) => {
     if (window.confirm(`Ubah status antrean menjadi ${newStatus}?`)) {
-      const updatePromise = fetch(`http://localhost:3001/api/appointments/${id}/status`, {
+      // REVISI: Ambil token dan sertakan di header Authorization
+      const token = Cookies.get('auth-token');
+      const updatePromise = fetch(`http://127.0.0.1:3001/api/appointments/${id}/status`, {
         method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
         body: JSON.stringify({ status: newStatus })
       }).then((res) => {
         if (!res.ok) throw new Error();
@@ -134,11 +149,10 @@ export default function AppointmentsPage() {
           </div>
         </div>
 
-        {/* FORM AREA - FIXED: Overflow-visible & z-index agar dropdown muncul sempurna */}
+        {/* FORM AREA */}
         <form onSubmit={handleAdd} className="bg-white dark:bg-slate-800 p-6 md:p-8 rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] dark:shadow-lg dark:shadow-slate-900/20 border border-slate-100 dark:border-slate-700 mb-8 flex flex-col md:flex-row gap-6 items-end relative z-20 transition-colors duration-500">
           <div className="absolute top-0 left-0 w-1 h-full bg-indigo-600 dark:bg-indigo-500 rounded-l-2xl transition-colors duration-500"></div>
           
-          {/* CUSTOM DROPDOWN PASIEN */}
           <div className="flex-1 w-full" ref={patientRef}>
             <label className="text-xs font-bold text-slate-500 dark:text-slate-400 mb-2 block uppercase tracking-wider transition-colors duration-500">Pilih Pasien</label>
             <div className="relative">
@@ -177,7 +191,6 @@ export default function AppointmentsPage() {
             </div>
           </div>
 
-          {/* CUSTOM DROPDOWN DOKTER */}
           <div className="flex-1 w-full" ref={doctorRef}>
             <label className="text-xs font-bold text-slate-500 dark:text-slate-400 mb-2 block uppercase tracking-wider transition-colors duration-500">Dokter Pemeriksa</label>
             <div className="relative">
@@ -226,7 +239,7 @@ export default function AppointmentsPage() {
           </button>
         </form>
 
-        {/* TABEL AREA - FIXED: relative z-10 agar tidak menghalangi dropdown */}
+        {/* TABEL AREA */}
         <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] dark:shadow-lg dark:shadow-slate-900/20 border border-slate-100 dark:border-slate-700 overflow-hidden relative z-10 transition-colors duration-500">
           <div className="overflow-x-auto">
             <table className="min-w-full divide-y divide-slate-200 dark:divide-slate-700 transition-colors duration-500">
