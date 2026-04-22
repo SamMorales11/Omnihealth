@@ -5,16 +5,30 @@ import Link from 'next/link';
 import DashboardCharts from '@/components/DashboardCharts';
 import LogoutButton from '@/components/LogoutButton';
 import NotificationBell from '@/components/NotificationBell';
+import { cookies } from 'next/headers'; 
 
 export const dynamic = 'force-dynamic';
 
 async function getDashboardData() {
   try {
+    // PERBAIKAN: Tambahkan 'await' sebelum cookies() karena sekarang bersifat async
+    const cookieStore = await cookies();
+    const token = cookieStore.get('auth-token')?.value;
+
+    const headers = {
+      'Authorization': `Bearer ${token}`
+    };
+
     const [patRes, docRes, apptRes] = await Promise.all([
-      fetch('http://localhost:3001/api/patients', { cache: 'no-store' }),
-      fetch('http://localhost:3001/api/doctors', { cache: 'no-store' }),
-      fetch('http://localhost:3001/api/appointments', { cache: 'no-store' })
+      fetch('http://127.0.0.1:3001/api/patients', { headers, cache: 'no-store' }),
+      fetch('http://127.0.0.1:3001/api/doctors', { headers, cache: 'no-store' }),
+      fetch('http://127.0.0.1:3001/api/appointments', { headers, cache: 'no-store' })
     ]);
+
+    if (patRes.status === 401 || docRes.status === 401 || apptRes.status === 401) {
+      console.error("Akses ditolak: Token tidak valid atau kadaluarsa.");
+      return { patients: [], appointments: [], stats: { totalPatients: 0, totalDoctors: 0, waitingAppointments: 0 } };
+    }
 
     const patJson = await patRes.json();
     const docJson = await docRes.json();
@@ -32,6 +46,7 @@ async function getDashboardData() {
       }
     };
   } catch (error) {
+    console.error("Gagal mengambil data dashboard:", error);
     return { patients: [], appointments: [], stats: { totalPatients: 0, totalDoctors: 0, waitingAppointments: 0 } };
   }
 }
@@ -43,7 +58,7 @@ export default async function DashboardPage() {
     <main className="p-8 md:p-12 w-full min-h-screen bg-slate-50 dark:bg-slate-950 transition-colors duration-500">
       <div className="max-w-7xl mx-auto">
         
-        {/* HEADER DASHBOARD - FIXED: Ditambahkan relative z-50 agar notifikasi muncul di depan */}
+        {/* HEADER DASHBOARD */}
         <div className="flex flex-col gap-8 relative z-50">
           <div className="flex justify-between items-center">
             <div className="flex items-center gap-4">
@@ -74,72 +89,35 @@ export default async function DashboardPage() {
 
         {/* KARTU STATISTIK */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10 relative z-10">
-          
           <div className="bg-white dark:bg-slate-900 p-8 rounded-[2rem] border border-slate-200 dark:border-slate-800 shadow-sm transition-all duration-300 hover:border-blue-500/30 group relative overflow-hidden">
-            <div className="absolute -right-6 -bottom-6 text-blue-500/10 group-hover:text-blue-500/20 transition-all duration-500 group-hover:scale-110 pointer-events-none">
-              <svg className="w-36 h-36" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="1.5">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
-              </svg>
-            </div>
-            
             <div className="relative z-10">
               <p className="text-[11px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest mb-3">Total Pasien</p>
               <div className="flex items-center gap-4 mb-2">
                 <h3 className="text-5xl font-black text-slate-900 dark:text-white">{stats.totalPatients}</h3>
-                <span className="flex items-center gap-1.5 text-sm font-bold text-emerald-700 dark:text-emerald-400 bg-emerald-100 dark:bg-emerald-500/10 px-3 py-1.5 rounded-full border border-emerald-300 dark:border-emerald-500/20 shadow-sm">
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="3"><path strokeLinecap="round" strokeLinejoin="round" d="M5 10l7-7m0 0l7 7m-7-7v18"></path></svg>
-                  12%
-                </span>
               </div>
               <p className="text-xs font-medium text-slate-500 dark:text-slate-400">Peningkatan dari bulan lalu</p>
             </div>
           </div>
 
           <div className="bg-white dark:bg-slate-900 p-8 rounded-[2rem] border border-slate-200 dark:border-slate-800 shadow-sm transition-all duration-300 hover:border-teal-500/30 group relative overflow-hidden">
-            <div className="absolute -right-6 -bottom-6 text-teal-500/10 group-hover:text-teal-500/20 transition-all duration-500 group-hover:scale-110 pointer-events-none">
-              <svg className="w-36 h-36" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="1.5">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 002-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
-              </svg>
-            </div>
-            
             <div className="relative z-10">
               <p className="text-[11px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest mb-3">Total Dokter</p>
               <div className="flex items-center gap-4 mb-2">
                 <h3 className="text-5xl font-black text-slate-900 dark:text-white">{stats.totalDoctors}</h3>
-                <span className="flex items-center gap-1.5 text-sm font-bold text-slate-700 dark:text-slate-300 bg-slate-100 dark:bg-slate-800 px-3 py-1.5 rounded-full border border-slate-300 dark:border-slate-600 shadow-sm">
-                  Tetap
-                </span>
               </div>
               <p className="text-xs font-medium text-slate-500 dark:text-slate-400">Tenaga medis aktif saat ini</p>
             </div>
           </div>
 
           <div className="bg-white dark:bg-slate-900 p-8 rounded-[2rem] border border-slate-200 dark:border-slate-800 shadow-sm transition-all duration-300 hover:border-rose-500/30 group relative overflow-hidden">
-            <div className="absolute -right-6 -bottom-6 text-rose-500/10 group-hover:text-rose-500/20 transition-all duration-500 group-hover:scale-110 pointer-events-none">
-              <svg className="w-36 h-36" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="1.5">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-              </svg>
-            </div>
-            
             <div className="relative z-10">
               <p className="text-[11px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest mb-3">Antrean Menunggu</p>
               <div className="flex items-center gap-4 mb-2">
                 <h3 className="text-5xl font-black text-slate-900 dark:text-white">{stats.waitingAppointments}</h3>
-                {stats.waitingAppointments > 0 ? (
-                  <span className="flex items-center gap-1.5 text-sm font-bold text-rose-700 dark:text-rose-400 bg-rose-100 dark:bg-rose-500/10 px-3 py-1.5 rounded-full border border-rose-300 dark:border-rose-500/20 shadow-sm animate-pulse">
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="3"><path strokeLinecap="round" strokeLinejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
-                    Perlu Tindakan
-                  </span>
-                ) : (
-                  <span className="flex items-center gap-1.5 text-sm font-bold text-emerald-700 dark:text-emerald-400 bg-emerald-100 dark:bg-emerald-500/10 px-3 py-1.5 rounded-full border border-emerald-300 dark:border-emerald-500/20 shadow-sm">
-                    Kondusif
-                  </span>
-                )}
               </div>
               <p className="text-xs font-medium text-slate-500 dark:text-slate-400">Pasien menunggu panggilan</p>
             </div>
           </div>
-
         </div>
 
         <div className="w-full min-h-[400px] mb-10">

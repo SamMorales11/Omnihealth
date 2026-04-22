@@ -3,6 +3,7 @@
 import { useState, useEffect, useMemo, useRef } from 'react';
 import toast from 'react-hot-toast';
 import Link from 'next/link';
+import Cookies from 'js-cookie'; // REVISI: Impor Cookies untuk mengambil token
 
 const specializationList = [
   { label: "Dokter Umum", prefix: "dr.", suffix: "" },
@@ -25,7 +26,7 @@ export default function DoctorsPage() {
   const [doctors, setDoctors] = useState<any[]>([]);
   const [name, setName] = useState('');
   const [specialist, setSpecialist] = useState('');
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSubmitting, setIsLoading] = useState(false); // Sesuai nama di DoctorsPage
 
   const [searchTerm, setSearchTerm] = useState('');
   const [filterSpecialty, setFilterSpecialty] = useState('Semua');
@@ -54,7 +55,14 @@ export default function DoctorsPage() {
 
   const fetchDoctors = async () => {
     try {
-      const res = await fetch('http://localhost:3001/api/doctors');
+      // REVISI: Ambil token dan sertakan di header Authorization
+      const token = Cookies.get('auth-token');
+      const res = await fetch('http://127.0.0.1:3001/api/doctors', {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+      
       const json = await res.json();
       const docsWithSchedule = (json.data || []).map((doc: any) => ({
         ...doc,
@@ -93,12 +101,17 @@ export default function DoctorsPage() {
   const handleAdd = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!specialist) return toast.error('Pilih spesialisasi terlebih dahulu');
-    setIsSubmitting(true);
+    setIsLoading(true);
     
     try {
-      await fetch('http://localhost:3001/api/doctors', {
+      // REVISI: Ambil token dan sertakan di header Authorization
+      const token = Cookies.get('auth-token');
+      await fetch('http://127.0.0.1:3001/api/doctors', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
         body: JSON.stringify({ name, specialist })
       });
       setName(''); setSpecialist('');
@@ -107,13 +120,20 @@ export default function DoctorsPage() {
     } catch (error) {
       toast.error('Gagal menghubungi server.');
     } finally {
-      setIsSubmitting(false);
+      setIsLoading(false);
     }
   };
 
   const handleDelete = async (id: number, docName: string) => {
     if (window.confirm(`Yakin ingin memberhentikan ${docName} dari sistem?`)) {
-      const deletePromise = fetch(`http://localhost:3001/api/doctors/${id}`, { method: 'DELETE' })
+      // REVISI: Ambil token dan sertakan di header Authorization
+      const token = Cookies.get('auth-token');
+      const deletePromise = fetch(`http://127.0.0.1:3001/api/doctors/${id}`, { 
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      })
         .then(async (res) => {
           if (!res.ok) throw new Error('Tertaut dengan jadwal');
           fetchDoctors();
@@ -184,9 +204,8 @@ export default function DoctorsPage() {
           </div>
         </div>
 
-        {/* FORM INPUT - FIX: Menghapus overflow-hidden dan menambahkan z-20 agar dropdown tidak terpotong */}
+        {/* FORM INPUT */}
         <form onSubmit={handleAdd} className="bg-white dark:bg-slate-800 p-6 md:p-8 rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] dark:shadow-lg dark:shadow-slate-900/20 border border-slate-100 dark:border-slate-700 mb-8 flex flex-col md:flex-row gap-6 items-end relative z-20 transition-colors duration-500">
-          {/* Green strip dengan rounded-l agar tetap rapi tanpa overflow-hidden */}
           <div className="absolute top-0 left-0 w-1 h-full bg-teal-500 rounded-l-2xl transition-colors duration-500"></div>
           
           <div className="flex-1 w-full" ref={formSpecRef}>
@@ -246,7 +265,7 @@ export default function DoctorsPage() {
           </button>
         </form>
 
-        {/* TOOLBAR SEARCH & FILTER - FIX: Menambahkan z-10 agar dropdown muncul di depan tabel */}
+        {/* TOOLBAR SEARCH & FILTER */}
         <div className="flex flex-col md:flex-row gap-4 mb-6 bg-white dark:bg-slate-800 p-4 rounded-2xl border border-slate-100 dark:border-slate-700 shadow-sm relative z-10 transition-colors duration-500">
           <input 
             type="text" 
