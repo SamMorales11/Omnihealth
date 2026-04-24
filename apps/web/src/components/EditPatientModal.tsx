@@ -4,8 +4,9 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Patient } from '@/types';
-import { PatientService, CreatePatientInput } from '@/services/patient.service';
+import { CreatePatientInput } from '@/services/patient.service';
 import toast from 'react-hot-toast';
+import Cookies from 'js-cookie'; // REVISI: Impor Cookies untuk mengambil token
 
 interface EditPatientModalProps {
   patient: Patient;
@@ -29,13 +30,25 @@ export default function EditPatientModal({ patient }: EditPatientModalProps) {
     setIsLoading(true);
     
     try {
-      const success = await PatientService.updatePatient(patient.id, formData);
+      // REVISI: Ambil token dari cookie 'auth-token' agar diizinkan oleh backend
+      const token = Cookies.get('auth-token');
+
+      // REVISI: Lakukan fetch langsung dengan menyertakan header Authorization
+      const res = await fetch(`http://127.0.0.1:3001/api/patients/${patient.id}`, {
+        method: 'PUT',
+        headers: { 
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify(formData)
+      });
       
-      if (success) {
+      if (res.ok) {
         toast.success('Data pasien berhasil diperbarui!');
         setIsOpen(false);
         router.refresh();
       } else {
+        // Ini adalah pesan yang muncul di gambar Anda
         toast.error('Gagal mengubah data pasien.');
       }
     } catch (error) {
@@ -61,7 +74,7 @@ export default function EditPatientModal({ patient }: EditPatientModalProps) {
           {/* MODAL BOX */}
           <div className="bg-white dark:bg-slate-900 rounded-3xl shadow-2xl dark:shadow-indigo-900/10 border border-transparent dark:border-slate-700 w-full max-w-lg overflow-hidden transform transition-all animate-in zoom-in-95 duration-300">
             
-            {/* HEADER MODAL - Diperbaiki rata kiri */}
+            {/* HEADER MODAL */}
             <div className="bg-slate-50 dark:bg-slate-800/50 px-8 py-6 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between transition-colors duration-500">
               <div className="flex items-center gap-3 text-left">
                 <div className="p-2 bg-blue-100 dark:bg-indigo-500/20 text-blue-600 dark:text-indigo-400 rounded-lg transition-colors duration-500">
@@ -79,7 +92,7 @@ export default function EditPatientModal({ patient }: EditPatientModalProps) {
               </button>
             </div>
             
-            {/* BODY MODAL (FORM) - Diperbaiki rata kiri */}
+            {/* BODY MODAL (FORM) */}
             <form onSubmit={handleSubmit} className="p-8 space-y-5 text-left">
               <div className="text-left">
                 <label className="text-xs font-bold text-slate-500 dark:text-slate-400 mb-2 block uppercase tracking-wider transition-colors duration-500 text-left">Nomor Induk Kependudukan (NIK)</label>
@@ -144,7 +157,7 @@ export default function EditPatientModal({ patient }: EditPatientModalProps) {
               </div>
 
               {/* FOOTER MODAL (TOMBOL) */}
-              <div className="pt-4 flex items-center justify-end gap-3 mt-6 border-t border-slate-100 dark:border-slate-800 transition-colors duration-500">
+              <div className="pt-4 flex items-center justify-end gap-3 mt-6 border-t border-slate-100 dark:border-slate-800 transition-colors duration-500 text-left">
                 <button 
                   type="button" 
                   onClick={() => setIsOpen(false)}

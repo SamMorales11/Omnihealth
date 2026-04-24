@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import toast from 'react-hot-toast';
+import Cookies from 'js-cookie'; // REVISI: Impor Cookies untuk mengambil token
 
 export default function AddPatientModal() {
   const [isOpen, setIsOpen] = useState(false);
@@ -27,9 +28,16 @@ export default function AddPatientModal() {
     setIsSubmitting(true);
 
     try {
-      const res = await fetch('http://localhost:3001/api/patients', {
+      // REVISI: Ambil token dari cookie 'auth-token' agar diizinkan oleh backend
+      const token = Cookies.get('auth-token');
+
+      // REVISI: Tambahkan header Authorization dan gunakan IP 127.0.0.1 agar lebih stabil
+      const res = await fetch('http://127.0.0.1:3001/api/patients', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}` 
+        },
         body: JSON.stringify(formData)
       });
 
@@ -44,6 +52,7 @@ export default function AddPatientModal() {
       // Refresh halaman agar data terbaru muncul di tabel
       router.refresh();
     } catch (error) {
+      // Pesan error yang muncul di gambar Anda
       toast.error('Terjadi kesalahan saat menyimpan data.');
     } finally {
       setIsSubmitting(false);
