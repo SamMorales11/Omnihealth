@@ -21,12 +21,13 @@ export function middleware(request: NextRequest) {
   return NextResponse.next();
 }
 
-// Daftarkan ruangan mana saja yang perlu dipantau Satpam
+// Daftarkan rute mana saja yang perlu dipantau sistem keamanan
 export const config = {
   matcher: [
-    '/dashboard',      // <-- Jaga rute baru ini
+    '/dashboard',
     '/doctors',        
-    '/appointments',   
+    '/appointments',
+    '/rme',            // REVISI: Menambahkan rute RME ke daftar perlindungan
     '/login'           
   ],
 };

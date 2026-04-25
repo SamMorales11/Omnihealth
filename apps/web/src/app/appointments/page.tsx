@@ -277,7 +277,8 @@ export default function AppointmentsPage() {
                     <td className="px-8 py-5 text-right whitespace-nowrap">
                       {a.status === 'Menunggu' ? (
                         <div className="flex justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-                          <Link href={`/rme`} className="px-3 py-1.5 bg-indigo-50 dark:bg-indigo-500/20 text-indigo-700 dark:text-indigo-400 hover:bg-indigo-100 dark:hover:bg-indigo-500/30 rounded-lg text-xs font-bold transition-colors">Isi RME</Link>
+                          {/* REVISI: Perbarui href agar menyertakan parameter id */}
+                          <Link href={`/rme?id=${a.id}`} className="px-3 py-1.5 bg-indigo-50 dark:bg-indigo-500/20 text-indigo-700 dark:text-indigo-400 hover:bg-indigo-100 dark:hover:bg-indigo-500/30 rounded-lg text-xs font-bold transition-colors">Isi RME</Link>
                           <button onClick={() => handleUpdateStatus(a.id, 'Selesai')} className="px-3 py-1.5 bg-emerald-50 dark:bg-emerald-500/20 text-emerald-700 dark:text-emerald-400 hover:bg-emerald-100 dark:hover:bg-emerald-500/30 rounded-lg text-xs font-bold transition-colors">Selesai</button>
                           <button onClick={() => handleUpdateStatus(a.id, 'Dibatalkan')} className="px-3 py-1.5 bg-rose-50 dark:bg-rose-500/20 text-rose-700 dark:text-rose-400 hover:bg-rose-100 dark:hover:bg-rose-500/30 rounded-lg text-xs font-bold transition-colors">Batal</button>
                         </div>
