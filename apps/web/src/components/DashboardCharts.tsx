@@ -4,13 +4,12 @@ import { useMemo, useEffect, useState } from 'react';
 import { useTheme } from 'next-themes';
 import { 
   LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, 
-  PieChart, Pie, Cell, Legend 
+  AreaChart, Area, PieChart, Pie, Cell, Legend 
 } from 'recharts';
 
 const COLORS = ['#4F46E5', '#0D9488', '#F59E0B', '#E11D48', '#8B5CF6', '#0284C7'];
 
 export default function DashboardCharts({ appointments = [] }: { appointments?: any[] }) {
-  // Setup pendeteksi Dark Mode untuk mewarnai SVG Chart
   const { theme, systemTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
 
@@ -19,79 +18,80 @@ export default function DashboardCharts({ appointments = [] }: { appointments?: 
   const currentTheme = theme === 'system' ? systemTheme : theme;
   const isDark = mounted && currentTheme === 'dark';
 
-  // Variabel Warna Dinamis (Terang vs Gelap)
-  const gridColor = isDark ? '#334155' : '#F1F5F9'; // Garis panduan
-  const axisColor = isDark ? '#94A3B8' : '#64748B'; // Teks tanggal/angka
-  const tooltipBg = isDark ? '#1E293B' : '#FFFFFF'; // Latar tooltip
-  const tooltipText = isDark ? '#F8FAFC' : '#1E293B'; // Teks tooltip
+  const gridColor = isDark ? '#1e293b' : '#f1f5f9';
+  const axisColor = isDark ? '#64748b' : '#94a3b8';
 
-  const lineData = useMemo(() => {
-    const counts: Record<string, number> = {};
-    const safeAppointments = appointments || [];
+  // REVISI: Logika tren kunjungan yang lebih cerdas (Grouping per Tanggal)
+  const trendData = useMemo(() => {
+    const dailyMap: Record<string, number> = {};
+    const today = new Date();
     
-    const sorted = [...safeAppointments]
-      .filter(a => a && a.date)
-      .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+    // Inisialisasi 7 hari terakhir agar grafik tidak kosong jika data sedikit
+    for (let i = 6; i >= 0; i--) {
+      const d = new Date(today);
+      d.setDate(d.getDate() - i);
+      dailyMap[d.toLocaleDateString('id-ID', { day: 'numeric', month: 'short' })] = 0;
+    }
 
-    sorted.forEach(app => {
-      const dateStr = new Date(app.date).toLocaleDateString('id-ID', { day: 'numeric', month: 'short' });
-      counts[dateStr] = (counts[dateStr] || 0) + 1;
+    appointments.forEach(app => {
+      const dateKey = new Date(app.date).toLocaleDateString('id-ID', { day: 'numeric', month: 'short' });
+      if (dailyMap[dateKey] !== undefined) {
+        dailyMap[dateKey]++;
+      }
     });
 
-    return Object.keys(counts).map(date => ({ date, Pasien: counts[date] }));
+    return Object.keys(dailyMap).map(date => ({ date, Pasien: dailyMap[date] }));
   }, [appointments]);
 
   const pieData = useMemo(() => {
     const counts: Record<string, number> = {};
-    const safeAppointments = appointments || [];
-    
-    safeAppointments.forEach(app => {
+    appointments.forEach(app => {
       const spec = app.specialist || 'Umum';
       counts[spec] = (counts[spec] || 0) + 1;
     });
     return Object.keys(counts).map(name => ({ name, value: counts[name] }));
   }, [appointments]);
 
-  if (!appointments || appointments.length === 0) {
-    return null; 
-  }
+  if (!mounted) return null;
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-10">
+    <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 text-left">
       
-      {/* KARTU CHART 1 (LINE CHART) */}
-      <div className="bg-white dark:bg-slate-800 p-6 md:p-8 rounded-2xl border border-slate-100 dark:border-slate-700 shadow-[0_8px_30px_rgb(0,0,0,0.04)] dark:shadow-lg dark:shadow-slate-900/20 transition-colors duration-500">
-        <h3 className="text-lg font-extrabold text-slate-800 dark:text-white mb-6 transition-colors duration-500">Tren Kunjungan Pasien</h3>
-        <div className="h-72 w-full">
-          <ResponsiveContainer width="100%" height="100%" minWidth={1} minHeight={1}>
-            <LineChart data={lineData} margin={{ top: 5, right: 20, bottom: 5, left: -20 }}>
+      {/* AREA CHART: Tren Kunjungan Pasien */}
+      <div className="bg-white dark:bg-slate-900 p-8 rounded-[2rem] border border-slate-200 dark:border-slate-800 shadow-sm text-left">
+        <h3 className="text-xl font-bold text-slate-800 dark:text-white mb-8 text-left">Tren Kunjungan (7 Hari)</h3>
+        <div className="h-80 w-full">
+          <ResponsiveContainer width="100%" height="100%">
+            <AreaChart data={trendData}>
+              <defs>
+                <linearGradient id="colorPasien" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="5%" stopColor="#4F46E5" stopOpacity={0.3}/>
+                  <stop offset="95%" stopColor="#4F46E5" stopOpacity={0}/>
+                </linearGradient>
+              </defs>
               <CartesianGrid strokeDasharray="3 3" vertical={false} stroke={gridColor} />
-              <XAxis dataKey="date" axisLine={false} tickLine={false} tick={{ fontSize: 12, fill: axisColor }} dy={10} />
-              <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 12, fill: axisColor }} allowDecimals={false} />
+              <XAxis dataKey="date" axisLine={false} tickLine={false} tick={{ fill: axisColor, fontSize: 12 }} dy={10} />
+              <YAxis axisLine={false} tickLine={false} tick={{ fill: axisColor, fontSize: 12 }} />
               <Tooltip 
-                contentStyle={{ backgroundColor: tooltipBg, borderRadius: '16px', border: 'none', color: tooltipText, boxShadow: '0 20px 25px -5px rgb(0 0 0 / 0.1)' }} 
-                itemStyle={{ color: tooltipText }}
+                contentStyle={{ backgroundColor: isDark ? '#0f172a' : '#fff', borderRadius: '12px', border: 'none', boxShadow: '0 10px 15px -3px rgba(0,0,0,0.1)' }}
               />
-              <Line type="monotone" dataKey="Pasien" stroke="#4F46E5" strokeWidth={4} dot={{ r: 4, strokeWidth: 2, fill: isDark ? '#1E293B' : '#fff' }} activeDot={{ r: 8, strokeWidth: 0 }} animationDuration={1500} />
-            </LineChart>
+              <Area type="monotone" dataKey="Pasien" stroke="#4F46E5" strokeWidth={3} fillOpacity={1} fill="url(#colorPasien)" animationDuration={2000} />
+            </AreaChart>
           </ResponsiveContainer>
         </div>
       </div>
 
-      {/* KARTU CHART 2 (PIE CHART) */}
-      <div className="bg-white dark:bg-slate-800 p-6 md:p-8 rounded-2xl border border-slate-100 dark:border-slate-700 shadow-[0_8px_30px_rgb(0,0,0,0.04)] dark:shadow-lg dark:shadow-slate-900/20 transition-colors duration-500">
-        <h3 className="text-lg font-extrabold text-slate-800 dark:text-white mb-6 transition-colors duration-500">Distribusi Spesialisasi</h3>
-        <div className="h-72 w-full">
-          <ResponsiveContainer width="100%" height="100%" minWidth={1} minHeight={1}>
+      {/* PIE CHART: Distribusi Spesialisasi */}
+      <div className="bg-white dark:bg-slate-900 p-8 rounded-[2rem] border border-slate-200 dark:border-slate-800 shadow-sm text-left">
+        <h3 className="text-xl font-bold text-slate-800 dark:text-white mb-8 text-left">Beban Kerja Spesialisasi</h3>
+        <div className="h-80 w-full">
+          <ResponsiveContainer width="100%" height="100%">
             <PieChart>
-              <Pie data={pieData} cx="50%" cy="50%" innerRadius={70} outerRadius={100} paddingAngle={5} dataKey="value" stroke="none" animationDuration={1500}>
-                {pieData.map((entry, index) => <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />)}
+              <Pie data={pieData} cx="50%" cy="50%" innerRadius={80} outerRadius={110} paddingAngle={8} dataKey="value" animationDuration={2000}>
+                {pieData.map((_, index) => <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} stroke="none" />)}
               </Pie>
-              <Tooltip 
-                contentStyle={{ backgroundColor: tooltipBg, borderRadius: '16px', border: 'none', color: tooltipText, boxShadow: '0 20px 25px -5px rgb(0 0 0 / 0.1)' }} 
-                itemStyle={{ fontWeight: 'bold' }} 
-              />
-              <Legend iconType="circle" wrapperStyle={{ fontSize: '13px', fontWeight: '500', color: axisColor, paddingTop: '20px' }} />
+              <Tooltip />
+              <Legend verticalAlign="bottom" iconType="circle" wrapperStyle={{ paddingTop: '20px' }} />
             </PieChart>
           </ResponsiveContainer>
         </div>

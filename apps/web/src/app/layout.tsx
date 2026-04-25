@@ -1,7 +1,8 @@
 // apps/web/src/app/layout.tsx
 import './globals.css';
 import { ThemeProvider } from '@/components/ThemeProvider';
-import { Toaster } from 'react-hot-toast'; // Impor Toaster
+import { Toaster } from 'react-hot-toast';
+import Sidebar from '@/components/Sidebar';
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -12,9 +13,16 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           defaultTheme="system" 
           enableSystem
         >
-          {/* Tambahkan Toaster di sini */}
           <Toaster position="top-center" reverseOrder={false} /> 
-          {children} 
+          
+          {/* Sidebar sekarang menangani UI-nya sendiri secara melayang */}
+          <Sidebar />
+
+          {/* Konten Utama: Sekarang Full Width (pl-0) agar terlihat Clean */}
+          <main className="min-h-screen transition-all duration-500">
+            {children}
+          </main>
+          
         </ThemeProvider>
       </body>
     </html>
