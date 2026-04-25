@@ -11,19 +11,23 @@ import { authMiddleware } from './middlewares/auth.js';
 import patientRoutes from './routes/patient.routes.js';
 import doctorRoutes from './routes/doctor.routes.js';
 import appointmentRoutes from './routes/appointment.routes.js';
-import medicineRoutes from './routes/medicine.routes.js';
+import medicineRoutes from './routes/medicine.routes.js'; // Impor rute medicine
 
 const app = new Hono();
 
 app.use('*', logger());
 app.use('/*', cors());
 
+// --- RUTE PUBLIK ---
 app.route('/api/auth', authRoutes);
 
+// --- PROTEKSI RUTE OTOMATIS (AUTH CHECK) ---
+// Menambahkan perlindungan token untuk semua rute operasional
 app.use('/api/patients/*', authMiddleware);
 app.use('/api/doctors/*', authMiddleware);
 app.use('/api/appointments/*', authMiddleware);
-app.use('/api/analytics', authMiddleware); // REVISI: Proteksi rute analitik
+app.use('/api/analytics', authMiddleware); 
+app.use('/api/medicines/*', authMiddleware); // REVISI: Tambahkan proteksi rute farmasi
 
 // REVISI: Endpoint khusus Analitik untuk Dashboard
 app.get('/api/analytics', async (c) => {
@@ -56,10 +60,11 @@ app.get('/api/analytics', async (c) => {
   });
 });
 
+// --- PENDAFTARAN RUTE BISNIS ---
 app.route('/api/patients', patientRoutes);
 app.route('/api/doctors', doctorRoutes); 
 app.route('/api/appointments', appointmentRoutes);
-app.route('/api/medicines', medicineRoutes);
+app.route('/api/medicines', medicineRoutes); // Mendaftarkan rute farmasi
 
 const port = 3001;
 serve({ fetch: app.fetch, port });

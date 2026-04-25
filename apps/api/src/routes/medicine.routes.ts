@@ -2,44 +2,41 @@
 import { Hono } from 'hono';
 import { db, schema } from '@omnihealth/db';
 import { eq, sql } from 'drizzle-orm';
-import { authMiddleware, roleMiddleware } from '../middlewares/auth.js';
 
-const medicines = new Hono();
+const medicineRoutes = new Hono();
 
-// 1. Ambil semua daftar obat (Bisa diakses semua staf yang login)
-medicines.get('/', authMiddleware, async (c) => {
-  const data = await db.query.medicines.findMany();
+// 1. Ambil semua daftar obat
+medicineRoutes.get('/', async (c) => {
+  const data = await db.select().from(schema.medicines).orderBy(schema.medicines.name);
   return c.json({ data });
 });
 
-// 2. Tambah obat baru (Hanya ADMIN atau APOTEKER)
-medicines.post('/', authMiddleware, roleMiddleware(['ADMIN', 'APOTEKER']), async (c) => {
+// 2. Tambah obat baru
+medicineRoutes.post('/', async (c) => {
   const body = await c.req.json();
-  const newMedicine = await db.insert(schema.medicines).values({
-    name: body.name,
-    stock: parseInt(body.stock),
-    unit: body.unit,
-    price: body.price,
-    threshold: body.threshold || 10
+  const newData = await db.insert(schema.medicines).values({
+    ...body,
+    price: body.price.toString() // Pastikan harga disimpan sebagai string/decimal
   }).returning();
-  
-  return c.json({ message: 'Obat berhasil ditambahkan', data: newMedicine[0] }, 201);
+  return c.json({ data: newData[0] }, 201);
 });
 
-// 3. Update Stok (Misal saat obat datang atau ada penyesuaian manual)
-medicines.patch('/:id/stock', authMiddleware, roleMiddleware(['ADMIN', 'APOTEKER']), async (c) => {
-  const id = parseInt(c.req.param('id') || '0');
-  const { amount } = await c.req.json(); // jumlah stok baru
-
+// 3. Update stok atau info obat
+medicineRoutes.put('/:id', async (c) => {
+  const id = parseInt(c.req.param('id'));
+  const body = await c.req.json();
   const updated = await db.update(schema.medicines)
-    .set({ 
-      stock: amount,
-      updatedAt: sql`CURRENT_TIMESTAMP`
-    })
+    .set({ ...body, updatedAt: new Date() })
     .where(eq(schema.medicines.id, id))
     .returning();
-
-  return c.json({ message: 'Stok berhasil diperbarui', data: updated[0] });
+  return c.json({ data: updated[0] });
 });
 
-export default medicines;
+// 4. Hapus obat
+medicineRoutes.delete('/:id', async (c) => {
+  const id = parseInt(c.req.param('id'));
+  const deleted = await db.delete(schema.medicines).where(eq(schema.medicines.id, id)).returning();
+  return c.json({ data: deleted[0] });
+});
+
+export default medicineRoutes;
