@@ -1,9 +1,11 @@
 // apps/web/src/app/pharmacy/page.tsx
 "use client";
-import { useState, useEffect } from 'react'; // REVISI: Tambah useEffect untuk ambil data asli
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import toast from 'react-hot-toast';
-import Cookies from 'js-cookie'; // REVISI: Tambah Cookies untuk token keamanan
+import Cookies from 'js-cookie';
+import AddMedicineModal from '@/components/AddMedicineModal'; // Impor Modal Tambah
+import ManageMedicineModal from '@/components/ManageMedicineModal'; // Impor Modal Manajemen
 
 // Data Simulasi Antrean Apotek (Tetap dipertahankan sesuai aslinya)
 const initialPrescriptions = [
@@ -33,10 +35,10 @@ const initialPrescriptions = [
 
 export default function PharmacyPage() {
   const [prescriptions, setPrescriptions] = useState(initialPrescriptions);
-  const [medicines, setMedicines] = useState<any[]>([]); // REVISI: State untuk data stok obat dari database
+  const [medicines, setMedicines] = useState<any[]>([]); 
   const [loading, setLoading] = useState(true);
 
-  // REVISI: Fungsi untuk mengambil data stok obat dari Backend
+  // Fungsi untuk mengambil data stok obat dari Backend
   const fetchMedicines = async () => {
     try {
       const token = Cookies.get('auth-token');
@@ -76,12 +78,11 @@ export default function PharmacyPage() {
               <p className="text-sm font-medium text-slate-500 dark:text-slate-400 mt-1 text-left">Kelola antrean resep dan inventaris obat klinik.</p>
             </div>
           </div>
-          <Link href="/dashboard" className="px-5 py-2 text-sm font-bold text-slate-600 dark:text-slate-300 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700 rounded-lg transition-all">
-            Kembali ke Dashboard
-          </Link>
+          
+          <AddMedicineModal onRefresh={fetchMedicines} />
         </div>
 
-        {/* BAGIAN 1: ANTREAN RESEP (LAYOUT ASLI ANDA) */}
+        {/* BAGIAN 1: ANTREAN RESEP */}
         <div className="mb-16 text-left">
           <h2 className="text-xl font-bold text-slate-800 dark:text-white mb-6 flex items-center gap-2 text-left">
             <div className="w-2 h-6 bg-emerald-500 rounded-full"></div>
@@ -137,14 +138,15 @@ export default function PharmacyPage() {
           )}
         </div>
 
-        {/* BAGIAN 2: GUDANG & STOK OBAT (TAMBAHAN REVISI) */}
+        {/* BAGIAN 2: GUDANG & STOK OBAT */}
         <div className="text-left">
           <div className="flex justify-between items-center mb-6 text-left">
             <h2 className="text-xl font-bold text-slate-800 dark:text-white flex items-center gap-2 text-left">
               <div className="w-2 h-6 bg-blue-500 rounded-full"></div>
               Inventaris & Stok Gudang
             </h2>
-            <button className="text-xs font-bold bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 px-4 py-2 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-50 transition-all">+ Tambah Stok Baru</button>
+            {/* REVISI: Penambahan tombol Tambah Obat Baru di fitur ini */}
+            <AddMedicineModal onRefresh={fetchMedicines} />
           </div>
 
           <div className="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden text-left">
@@ -165,7 +167,6 @@ export default function PharmacyPage() {
                   <tr key={m.id} className="hover:bg-slate-50/50 dark:hover:bg-slate-800/50 transition-colors text-left">
                     <td className="px-8 py-5 text-sm font-bold text-slate-900 dark:text-white text-left">{m.name}</td>
                     <td className="px-8 py-5 text-left">
-                      {/* REVISI: Indikator Warna Berdasarkan Threshold */}
                       <div className="flex items-center gap-3 text-left">
                         <span className={`px-3 py-1 rounded-full text-xs font-black ${m.stock <= m.threshold ? 'bg-rose-100 text-rose-600 border border-rose-200' : 'bg-emerald-100 text-emerald-600 border border-emerald-200'}`}>
                           {m.stock}
@@ -176,7 +177,8 @@ export default function PharmacyPage() {
                     <td className="px-8 py-5 text-sm text-slate-500 dark:text-slate-400 text-left">{m.unit}</td>
                     <td className="px-8 py-5 text-sm font-medium text-slate-700 dark:text-slate-300 text-left">Rp {parseInt(m.price).toLocaleString('id-ID')}</td>
                     <td className="px-8 py-5 text-right">
-                      <button className="text-indigo-600 dark:text-indigo-400 font-bold text-sm hover:underline transition-all">Manajemen</button>
+                      {/* REVISI: Memanggil Modal Manajemen (Butuh medicine & onRefresh) */}
+                      <ManageMedicineModal medicine={m} onRefresh={fetchMedicines} />
                     </td>
                   </tr>
                 ))}

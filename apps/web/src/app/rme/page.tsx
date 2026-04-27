@@ -46,7 +46,7 @@ export default function RMEPage() {
     }
   }, [appointmentId]);
 
-  // REVISI: Mengambil daftar obat dari inventaris farmasi
+  // Mengambil daftar obat dari inventaris farmasi
   useEffect(() => {
     const fetchMedicines = async () => {
       try {
@@ -63,7 +63,7 @@ export default function RMEPage() {
     fetchMedicines();
   }, []);
 
-  // REVISI: Fungsi menambahkan obat ke daftar resep
+  // Fungsi menambahkan obat ke daftar resep
   const addMedicineToPrescription = (medicineId: string) => {
     if (!medicineId) return;
     const med = availableMedicines.find(m => m.id.toString() === medicineId);
@@ -76,12 +76,53 @@ export default function RMEPage() {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+  // REVISI: Fungsi simpan data nyata ke database dan potong stok
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!appointmentData) return toast.error("Data antrean tidak ditemukan.");
+    
     setIsSubmitting(true);
-    await new Promise(resolve => setTimeout(resolve, 1500));
-    toast.success('Rekam Medis (SOAP) & Resep berhasil disimpan!');
-    setIsSubmitting(false);
+    try {
+      const token = Cookies.get('auth-token');
+
+      // 1. Simpan Data Resep & Potong Stok Obat
+      const rxRes = await fetch('http://127.0.0.1:3001/api/prescriptions', {
+        method: 'POST',
+        headers: { 
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({
+          appointmentId: parseInt(appointmentId || '0'),
+          patientId: appointmentData.patientId,
+          doctorId: appointmentData.doctorId,
+          items: selectedPrescription.map(item => ({
+            medicineId: item.id,
+            quantity: item.qty,
+            instruction: item.instruction
+          }))
+        })
+      });
+
+      if (!rxRes.ok) throw new Error();
+
+      // 2. Update Status Antrean menjadi 'Selesai'
+      await fetch(`http://127.0.0.1:3001/api/appointments/${appointmentId}/status`, {
+        method: 'PUT',
+        headers: { 
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({ status: 'Selesai' })
+      });
+
+      toast.success('Rekam Medis & Resep berhasil disimpan!');
+      window.location.href = '/appointments'; // Kembali ke daftar antrean
+    } catch (error) {
+      toast.error('Gagal menyimpan data medis. Periksa koneksi backend.');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -146,17 +187,17 @@ export default function RMEPage() {
               <svg className="w-5 h-5 text-rose-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg>
               Tanda Vital & Riwayat Alergi
             </h3>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-left text-left">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-left">
               <div className="md:col-span-1 text-left">
                 <label className="text-xs font-bold text-slate-500 dark:text-slate-400 mb-2 block uppercase tracking-wider transition-colors duration-500 text-left">Riwayat Alergi (Obat/Makanan)</label>
                 <input type="text" name="alergi" value={formData.alergi} onChange={handleChange} placeholder="Contoh: Amoxicillin, Seafood..." className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-slate-100 text-sm rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 block p-3 outline-none transition-colors duration-500" />
               </div>
               <div className="text-left">
-                <label className="text-xs font-bold text-slate-500 dark:text-slate-400 mb-2 block uppercase tracking-wider transition-colors duration-500 text-left text-left">Tekanan Darah (mmHg)</label>
+                <label className="text-xs font-bold text-slate-500 dark:text-slate-400 mb-2 block uppercase tracking-wider transition-colors duration-500 text-left">Tekanan Darah (mmHg)</label>
                 <input type="text" name="tekananDarah" value={formData.tekananDarah} onChange={handleChange} placeholder="120/80" className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-slate-100 text-sm rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 block p-3 outline-none transition-colors duration-500" />
               </div>
               <div className="text-left">
-                <label className="text-xs font-bold text-slate-500 dark:text-slate-400 mb-2 block uppercase tracking-wider transition-colors duration-500 text-left text-left">Suhu Tubuh (°C)</label>
+                <label className="text-xs font-bold text-slate-500 dark:text-slate-400 mb-2 block uppercase tracking-wider transition-colors duration-500 text-left">Suhu Tubuh (°C)</label>
                 <input type="text" name="suhu" value={formData.suhu} onChange={handleChange} placeholder="36.5" className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-slate-100 text-sm rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 block p-3 outline-none transition-colors duration-500" />
               </div>
             </div>
@@ -172,17 +213,17 @@ export default function RMEPage() {
             <div className="space-y-6 text-left">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-left">
                 <div className="text-left">
-                  <label className="text-xs font-bold text-indigo-600 dark:text-indigo-400 mb-2 block uppercase tracking-wider transition-colors duration-500 text-left text-left">Subjective (Keluhan Utama)</label>
+                  <label className="text-xs font-bold text-indigo-600 dark:text-indigo-400 mb-2 block uppercase tracking-wider transition-colors duration-500 text-left">Subjective (Keluhan Utama)</label>
                   <textarea required name="subjective" value={formData.subjective} onChange={handleChange} rows={4} placeholder="Keluhan yang dirasakan pasien..." className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-slate-100 text-sm rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 block p-3 outline-none resize-none transition-colors duration-500"></textarea>
                 </div>
                 <div className="text-left">
-                  <label className="text-xs font-bold text-teal-600 dark:text-teal-400 mb-2 block uppercase tracking-wider transition-colors duration-500 text-left text-left">Objective (Hasil Pemeriksaan Fisik)</label>
+                  <label className="text-xs font-bold text-teal-600 dark:text-teal-400 mb-2 block uppercase tracking-wider transition-colors duration-500 text-left">Objective (Hasil Pemeriksaan Fisik)</label>
                   <textarea required name="objective" value={formData.objective} onChange={handleChange} rows={4} placeholder="Hasil pemeriksaan fisik/lab oleh dokter..." className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-slate-100 text-sm rounded-xl focus:ring-2 focus:ring-teal-500 focus:border-teal-500 block p-3 outline-none resize-none transition-colors duration-500"></textarea>
                 </div>
               </div>
 
               <div className="bg-slate-50 dark:bg-slate-900/50 p-5 rounded-xl border border-slate-200 dark:border-slate-700 transition-colors duration-500 text-left">
-                <label className="text-xs font-bold text-amber-600 dark:text-amber-500 mb-3 block uppercase tracking-wider transition-colors duration-500 text-left text-left">Assessment (Diagnosis & ICD-10)</label>
+                <label className="text-xs font-bold text-amber-600 dark:text-amber-500 mb-3 block uppercase tracking-wider transition-colors duration-500 text-left">Assessment (Diagnosis & ICD-10)</label>
                 <div className="flex flex-col md:flex-row gap-4 text-left">
                   <div className="md:w-1/3 text-left">
                     <select required name="assessment_icd10" value={formData.assessment_icd10} onChange={handleChange} className="w-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-slate-100 text-sm rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 block p-3 outline-none cursor-pointer transition-colors duration-500 text-left">
@@ -201,13 +242,13 @@ export default function RMEPage() {
               </div>
 
               <div className="text-left">
-                <label className="text-xs font-bold text-emerald-600 dark:text-emerald-400 mb-2 block uppercase tracking-wider transition-colors duration-500 text-left text-left text-left">Plan (Tatalaksana & Tindakan Medis)</label>
+                <label className="text-xs font-bold text-emerald-600 dark:text-emerald-400 mb-2 block uppercase tracking-wider transition-colors duration-500 text-left">Plan (Tatalaksana & Tindakan Medis)</label>
                 <textarea required name="plan" value={formData.plan} onChange={handleChange} rows={4} placeholder="Rencana pengobatan, tindakan, atau anjuran medis..." className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-slate-100 text-sm rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 block p-3 outline-none resize-none transition-colors duration-500"></textarea>
               </div>
             </div>
           </div>
 
-          {/* REVISI: BAGIAN 3 - E-PRESCRIBING (INPUT RESEP) */}
+          {/* BAGIAN 3 - E-PRESCRIBING (INPUT RESEP) */}
           <div className="bg-white dark:bg-slate-800 rounded-2xl p-6 md:p-8 shadow-sm border border-slate-200 dark:border-slate-700 transition-colors duration-500 text-left">
             <h3 className="text-lg font-bold text-slate-800 dark:text-white mb-6 flex items-center gap-2 transition-colors duration-500 text-left">
               <svg className="w-5 h-5 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path></svg>

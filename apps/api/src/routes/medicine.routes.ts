@@ -16,26 +16,35 @@ medicineRoutes.post('/', async (c) => {
   const body = await c.req.json();
   const newData = await db.insert(schema.medicines).values({
     ...body,
-    price: body.price.toString() // Pastikan harga disimpan sebagai string/decimal
+    price: body.price.toString()
   }).returning();
   return c.json({ data: newData[0] }, 201);
 });
 
-// 3. Update stok atau info obat
+// 3. Update stok atau info obat (REVISI: Menambahkan updatedAt otomatis)
 medicineRoutes.put('/:id', async (c) => {
   const id = parseInt(c.req.param('id'));
   const body = await c.req.json();
+  
+  // Konversi price ke string jika ada di dalam body untuk menjaga konsistensi tipe data decimal
+  const updateData = { ...body, updatedAt: new Date() };
+  if (body.price) updateData.price = body.price.toString();
+
   const updated = await db.update(schema.medicines)
-    .set({ ...body, updatedAt: new Date() })
+    .set(updateData)
     .where(eq(schema.medicines.id, id))
     .returning();
+    
   return c.json({ data: updated[0] });
 });
 
 // 4. Hapus obat
 medicineRoutes.delete('/:id', async (c) => {
   const id = parseInt(c.req.param('id'));
-  const deleted = await db.delete(schema.medicines).where(eq(schema.medicines.id, id)).returning();
+  const deleted = await db.delete(schema.medicines)
+    .where(eq(schema.medicines.id, id))
+    .returning();
+    
   return c.json({ data: deleted[0] });
 });
 
