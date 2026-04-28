@@ -67,7 +67,7 @@ export default function PharmacyPage() {
     <main className="p-6 md:p-10 w-full min-h-screen bg-slate-50 dark:bg-slate-950 transition-colors duration-500 text-left">
       <div className="max-w-6xl mx-auto">
         
-        {/* HEADER */}
+        {/* HEADER UTAMA */}
         <div className="flex flex-col md:flex-row items-start md:items-center justify-between mb-10 gap-4 text-left">
           <div className="flex items-center gap-4 text-left">
             <div className="p-3 bg-emerald-600 dark:bg-emerald-500 text-white rounded-xl shadow-lg shadow-emerald-200 dark:shadow-emerald-900/40">
@@ -79,7 +79,9 @@ export default function PharmacyPage() {
             </div>
           </div>
           
-          <AddMedicineModal onRefresh={fetchMedicines} />
+          <Link href="/dashboard" className="px-5 py-2 text-sm font-bold text-slate-600 dark:text-slate-300 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700 rounded-lg transition-all">
+            Kembali ke Dashboard
+          </Link>
         </div>
 
         {/* BAGIAN 1: ANTREAN RESEP */}
@@ -97,7 +99,7 @@ export default function PharmacyPage() {
           ) : (
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 text-left">
               {prescriptions.map((rx) => (
-                <div key={rx.id} className="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm overflow-hidden flex flex-col transition-colors duration-500 text-left">
+                <div key={rx.id} className="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm overflow-hidden flex flex-col transition-colors duration-500 text-left text-left">
                   <div className="p-5 bg-slate-50 dark:bg-slate-900/50 border-b border-slate-100 dark:border-slate-700 flex justify-between items-start text-left">
                     <div className="text-left">
                       <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-amber-100 dark:bg-amber-500/20 text-amber-700 dark:text-amber-400 border border-amber-200 dark:border-amber-500/20 mb-2">
@@ -107,27 +109,27 @@ export default function PharmacyPage() {
                       <h3 className="text-lg font-bold text-slate-900 dark:text-white text-left">{rx.patientName}</h3>
                       <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 font-medium text-left">Dari: {rx.doctorName} • {rx.time}</p>
                     </div>
-                    <div className="text-right">
-                      <p className="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider">No. Resep</p>
-                      <p className="text-sm font-black text-emerald-600 dark:text-emerald-400">{rx.id}</p>
+                    <div className="text-right text-right">
+                      <p className="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider text-right">No. Resep</p>
+                      <p className="text-sm font-black text-emerald-600 dark:text-emerald-400 text-right">{rx.id}</p>
                     </div>
                   </div>
-                  <div className="p-5 flex-grow text-left">
+                  <div className="p-5 flex-grow text-left text-left">
                     <h4 className="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider mb-4 border-b border-slate-100 dark:border-slate-700 pb-2 text-left">Daftar Obat (R/)</h4>
                     <ul className="space-y-4 text-left">
                       {rx.medicines.map((med, idx) => (
-                        <li key={idx} className="flex justify-between items-center bg-slate-50 dark:bg-slate-900/50 p-3 rounded-xl border border-slate-100 dark:border-slate-700/50 text-left">
+                        <li key={idx} className="flex justify-between items-center bg-slate-50 dark:bg-slate-900/50 p-3 rounded-xl border border-slate-100 dark:border-slate-700/50 text-left text-left">
                           <div className="text-left">
                             <p className="font-bold text-slate-800 dark:text-slate-200 text-sm text-left">{med.name}</p>
                             <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5 italic text-left">{med.dosage}</p>
                           </div>
-                          <span className="font-black text-sm text-slate-700 dark:text-slate-300 bg-white dark:bg-slate-800 px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 shadow-sm">{med.qty}</span>
+                          <span className="font-black text-sm text-slate-700 dark:text-slate-300 bg-white dark:bg-slate-800 px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 shadow-sm text-left">{med.qty}</span>
                         </li>
                       ))}
                     </ul>
                   </div>
                   <div className="p-5 bg-slate-50 dark:bg-slate-900/50 border-t border-slate-100 dark:border-slate-700 mt-auto text-left">
-                    <button onClick={() => handleProcess(rx.id)} className="w-full py-3 bg-emerald-600 dark:bg-emerald-500 hover:bg-emerald-700 dark:hover:bg-emerald-600 text-white rounded-xl font-bold text-sm transition-all shadow-md flex justify-center items-center gap-2">
+                    <button onClick={() => handleProcess(rx.id)} className="w-full py-3 bg-emerald-600 dark:bg-emerald-500 hover:bg-emerald-700 dark:hover:bg-emerald-600 text-white rounded-xl font-bold text-sm transition-all shadow-md flex justify-center items-center gap-2 text-left">
                       <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path></svg>
                       Tandai Selesai & Serahkan Obat
                     </button>
@@ -145,39 +147,38 @@ export default function PharmacyPage() {
               <div className="w-2 h-6 bg-blue-500 rounded-full"></div>
               Inventaris & Stok Gudang
             </h2>
-            {/* REVISI: Penambahan tombol Tambah Obat Baru di fitur ini */}
+            {/* Tombol Tambah dipertahankan di bagian ini untuk manajemen stok */}
             <AddMedicineModal onRefresh={fetchMedicines} />
           </div>
 
           <div className="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden text-left">
-            <table className="w-full text-left">
+            <table className="w-full text-left text-left">
               <thead className="bg-slate-50 dark:bg-slate-800/50 text-left">
                 <tr>
                   <th className="px-8 py-5 text-xs font-bold text-slate-400 uppercase tracking-wider text-left">Nama Obat</th>
                   <th className="px-8 py-5 text-xs font-bold text-slate-400 uppercase tracking-wider text-left">Status Stok</th>
                   <th className="px-8 py-5 text-xs font-bold text-slate-400 uppercase tracking-wider text-left">Satuan</th>
                   <th className="px-8 py-5 text-xs font-bold text-slate-400 uppercase tracking-wider text-left">Harga Satuan</th>
-                  <th className="px-8 py-5 text-right text-xs font-bold text-slate-400 uppercase tracking-wider">Aksi</th>
+                  <th className="px-8 py-5 text-right text-xs font-bold text-slate-400 uppercase tracking-wider text-right">Aksi</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100 dark:divide-slate-800 text-left">
                 {medicines.length === 0 ? (
-                  <tr><td colSpan={5} className="px-8 py-10 text-center text-slate-400">Belum ada data obat di database.</td></tr>
+                  <tr className="text-left"><td colSpan={5} className="px-8 py-10 text-center text-slate-400 text-left">Belum ada data obat di database.</td></tr>
                 ) : medicines.map((m) => (
-                  <tr key={m.id} className="hover:bg-slate-50/50 dark:hover:bg-slate-800/50 transition-colors text-left">
+                  <tr key={m.id} className="hover:bg-slate-50/50 dark:hover:bg-slate-800/50 transition-colors text-left text-left">
                     <td className="px-8 py-5 text-sm font-bold text-slate-900 dark:text-white text-left">{m.name}</td>
-                    <td className="px-8 py-5 text-left">
+                    <td className="px-8 py-5 text-left text-left text-left text-left">
                       <div className="flex items-center gap-3 text-left">
-                        <span className={`px-3 py-1 rounded-full text-xs font-black ${m.stock <= m.threshold ? 'bg-rose-100 text-rose-600 border border-rose-200' : 'bg-emerald-100 text-emerald-600 border border-emerald-200'}`}>
+                        <span className={`px-3 py-1 rounded-full text-xs font-black ${m.stock <= m.threshold ? 'bg-rose-100 text-rose-600 border border-rose-200' : 'bg-emerald-100 text-emerald-600 border border-emerald-200'} text-left`}>
                           {m.stock}
                         </span>
-                        {m.stock <= m.threshold && <span className="text-[10px] font-bold text-rose-500 uppercase animate-pulse">Stok Menipis!</span>}
+                        {m.stock <= m.threshold && <span className="text-[10px] font-bold text-rose-500 uppercase animate-pulse text-left">Stok Menipis!</span>}
                       </div>
                     </td>
                     <td className="px-8 py-5 text-sm text-slate-500 dark:text-slate-400 text-left">{m.unit}</td>
                     <td className="px-8 py-5 text-sm font-medium text-slate-700 dark:text-slate-300 text-left">Rp {parseInt(m.price).toLocaleString('id-ID')}</td>
-                    <td className="px-8 py-5 text-right">
-                      {/* REVISI: Memanggil Modal Manajemen (Butuh medicine & onRefresh) */}
+                    <td className="px-8 py-5 text-right text-right">
                       <ManageMedicineModal medicine={m} onRefresh={fetchMedicines} />
                     </td>
                   </tr>
