@@ -8,6 +8,8 @@ import DashboardCharts from '@/components/DashboardCharts';
 import LogoutButton from '@/components/LogoutButton';
 import NotificationBell from '@/components/NotificationBell';
 import Cookies from 'js-cookie'; // REVISI: Menggunakan Client-side Cookies
+import { Users, Activity, Clock, ArrowUpRight, ArrowDownRight } from 'lucide-react';
+
 
 export default function DashboardPage() {
   const [data, setData] = useState<any>({
@@ -80,22 +82,71 @@ export default function DashboardPage() {
         <div className="h-14"></div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10 relative z-10 text-left">
-          <div className="bg-white dark:bg-slate-900 p-8 rounded-[2rem] border border-slate-200 dark:border-slate-800 shadow-sm transition-all hover:border-blue-500/30">
-            <p className="text-[11px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest mb-3 text-left">Total Pasien</p>
-            <h3 className="text-5xl font-black text-slate-900 dark:text-white text-left">{data.stats.totalPatients}</h3>
-            <p className="text-xs font-medium text-slate-500 dark:text-slate-400 mt-2 text-left">Terdaftar di sistem</p>
+          {/* CARD 1: TOTAL PASIEN */}
+          <div className="animate-in fade-in zoom-in-95 duration-500 bg-gradient-to-br from-slate-900 to-slate-950 p-8 rounded-[2.5rem] border-l-[4px] border-l-indigo-500 border border-slate-800 shadow-2xl relative overflow-hidden group">
+            <div className="absolute top-6 right-6 p-3 bg-white/5 backdrop-blur-md rounded-2xl border border-white/10 text-indigo-400 group-hover:scale-110 group-hover:rotate-3 transition-transform duration-500">
+              <Users size={24} />
+            </div>
+            
+            <p className="text-[11px] font-bold text-slate-500 uppercase tracking-[0.2em] mb-4">Total Pasien</p>
+            <div className="flex items-baseline gap-2">
+              <h3 className="text-5xl font-black text-white tracking-tight">{data.stats.totalPatients}</h3>
+              <span className="text-xs font-bold text-slate-500">Jiwa</span>
+            </div>
+            
+            <p className="text-sm font-medium text-slate-400 mt-2 mb-6">12 Pasien baru minggu ini</p>
+            
+            <div className="flex items-center gap-2 pt-4 border-t border-slate-800/50">
+              <div className="flex items-center gap-1 px-2 py-1 rounded-full bg-emerald-500/10 text-emerald-500 text-[10px] font-bold">
+                <ArrowUpRight size={12} />
+                +12%
+              </div>
+              <span className="text-[10px] font-medium text-slate-500 italic">from last month</span>
+            </div>
           </div>
 
-          <div className="bg-white dark:bg-slate-900 p-8 rounded-[2rem] border border-slate-200 dark:border-slate-800 shadow-sm transition-all hover:border-teal-500/30">
-            <p className="text-[11px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest mb-3 text-left">Efisiensi Klinik</p>
-            <h3 className="text-5xl font-black text-slate-900 dark:text-white text-left">{data.stats.completionRate}%</h3>
-            <p className="text-xs font-medium text-slate-500 dark:text-slate-400 mt-2 text-left">Penyelesaian antrean hari ini</p>
+          {/* CARD 2: EFISIENSI KLINIK */}
+          <div className="animate-in fade-in zoom-in-95 duration-700 bg-gradient-to-br from-slate-900 to-slate-950 p-8 rounded-[2.5rem] border-l-[4px] border-l-emerald-500 border border-slate-800 shadow-2xl relative overflow-hidden group">
+            <div className="absolute top-6 right-6 p-3 bg-white/5 backdrop-blur-md rounded-2xl border border-white/10 text-emerald-400 group-hover:scale-110 group-hover:rotate-3 transition-transform duration-500">
+              <Activity size={24} />
+            </div>
+            
+            <p className="text-[11px] font-bold text-slate-500 uppercase tracking-[0.2em] mb-4">Efisiensi Klinik</p>
+            <h3 className="text-5xl font-black text-white mb-4 tracking-tight">{data.stats.completionRate}%</h3>
+            
+            <div className="w-full h-2 bg-slate-800 rounded-full overflow-hidden mb-6">
+              <div 
+                className="h-full bg-emerald-500 rounded-full transition-all duration-1000 ease-out"
+                style={{ width: `${data.stats.completionRate}%` }}
+              ></div>
+            </div>
+            
+            <div className="flex items-center gap-2 pt-4 border-t border-slate-800/50">
+              <div className="flex items-center gap-1 px-2 py-1 rounded-full bg-emerald-500/10 text-emerald-500 text-[10px] font-bold">
+                <ArrowUpRight size={12} />
+                +2%
+              </div>
+              <span className="text-[10px] font-medium text-slate-500 italic">higher than yesterday</span>
+            </div>
           </div>
 
-          <div className="bg-white dark:bg-slate-900 p-8 rounded-[2rem] border border-slate-200 dark:border-slate-800 shadow-sm transition-all hover:border-rose-500/30">
-            <p className="text-[11px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest mb-3 text-left">Antrean Aktif</p>
-            <h3 className="text-5xl font-black text-slate-900 dark:text-white text-left">{data.stats.waitingAppointments}</h3>
-            <p className="text-xs font-medium text-slate-500 dark:text-slate-400 mt-2 text-left">Pasien dalam ruang tunggu</p>
+          {/* CARD 3: ANTREAN AKTIF */}
+          <div className="animate-in fade-in zoom-in-95 duration-1000 bg-gradient-to-br from-slate-900 to-slate-950 p-8 rounded-[2.5rem] border-l-[4px] border-l-amber-500 border border-slate-800 shadow-2xl relative overflow-hidden group">
+            <div className="absolute top-6 right-6 p-3 bg-white/5 backdrop-blur-md rounded-2xl border border-white/10 text-amber-400 group-hover:scale-110 group-hover:rotate-3 transition-transform duration-500">
+              <Clock size={24} />
+            </div>
+            
+            <p className="text-[11px] font-bold text-slate-500 uppercase tracking-[0.2em] mb-4">Antrean Aktif</p>
+            <h3 className="text-5xl font-black text-white tracking-tight">{data.stats.waitingAppointments}</h3>
+            <p className="text-xs font-bold text-amber-500 mt-2 mb-6">Estimasi waktu tunggu: 15 menit</p>
+            
+            <div className="flex items-center gap-2 pt-4 border-t border-slate-800/50">
+              <div className="flex items-center gap-1 px-2 py-1 rounded-full bg-rose-500/10 text-rose-500 text-[10px] font-bold">
+                <ArrowDownRight size={12} />
+                -3%
+              </div>
+              <span className="text-[10px] font-medium text-slate-500 italic">from peak hours</span>
+            </div>
           </div>
         </div>
 

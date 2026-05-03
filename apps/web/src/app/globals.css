@@ -3,3 +3,34 @@
 /* KUNCI UTAMA: Memaksa Tailwind v4 untuk patuh pada tombol kita (class 'dark'), 
 bukan patuh pada pengaturan laptop Anda! */
 @variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --animate-in: enter 0.3s ease-out;
+  --animate-out: exit 0.3s ease-in;
+}
+
+@keyframes enter {
+  from {
+    opacity: var(--tw-enter-opacity, 1);
+    transform: translate3d(var(--tw-enter-translate-x, 0), var(--tw-enter-translate-y, 0), 0)
+      scale3d(var(--tw-enter-scale, 1), var(--tw-enter-scale, 1), var(--tw-enter-scale, 1))
+      rotate(var(--tw-enter-rotate, 0));
+  }
+}
+
+.animate-in {
+  animation: var(--animate-in);
+  --tw-enter-opacity: 1;
+  --tw-enter-scale: 1;
+  --tw-enter-rotate: 0deg;
+  --tw-enter-translate-x: 0;
+  --tw-enter-translate-y: 0;
+}
+
+.fade-in {
+  --tw-enter-opacity: 0;
+}
+
+.zoom-in-95 {
+  --tw-enter-scale: 0.95;
+}
