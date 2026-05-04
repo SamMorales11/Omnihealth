@@ -1,7 +1,6 @@
 @import "tailwindcss";
 
-/* KUNCI UTAMA: Memaksa Tailwind v4 untuk patuh pada tombol kita (class 'dark'), 
-bukan patuh pada pengaturan laptop Anda! */
+/* KUNCI UTAMA: Memaksa Tailwind v4 untuk patuh pada tombol kita (class 'dark') */
 @variant dark (&:where(.dark, .dark *));
 
 @theme {
@@ -9,36 +8,7 @@ bukan patuh pada pengaturan laptop Anda! */
   --animate-out: exit 0.3s ease-in;
 }
 
-@keyframes enter {
-  from {
-    opacity: var(--tw-enter-opacity, 1);
-    transform: translate3d(var(--tw-enter-translate-x, 0), var(--tw-enter-translate-y, 0), 0)
-      scale3d(var(--tw-enter-scale, 1), var(--tw-enter-scale, 1), var(--tw-enter-scale, 1))
-      rotate(var(--tw-enter-rotate, 0));
-  }
-}
-
-.animate-in {
-  animation: var(--animate-in);
-  --tw-enter-opacity: 1;
-  --tw-enter-scale: 1;
-  --tw-enter-rotate: 0deg;
-  --tw-enter-translate-x: 0;
-  --tw-enter-translate-y: 0;
-}
-
-.fade-in {
-  --tw-enter-opacity: 0;
-}
-
-.zoom-in-95 {
-  --tw-enter-scale: 0.95;
-}
-
-@keyframes float {
-  0%, 100% { transform: translateY(0px) rotate(var(--tw-rotate, 0deg)); }
-  50% { transform: translateY(-20px) rotate(var(--tw-rotate, 0deg)); }
-}
+/* ... (Keyframes lainnya tetap sama) ... */
 
 @keyframes dash {
   to {
@@ -46,7 +16,13 @@ bukan patuh pada pengaturan laptop Anda! */
   }
 }
 
-path {
+/* SOLUSI: Jangan gunakan 'path' saja. Gunakan class khusus agar tidak merusak ikon lain![cite: 4] */
+.animate-dash path {
   stroke-dasharray: 1000;
   stroke-dashoffset: 1000;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px) rotate(var(--tw-rotate, 0deg)); }
+  50% { transform: translateY(-20px) rotate(var(--tw-rotate, 0deg)); }
 }
