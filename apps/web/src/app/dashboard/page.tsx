@@ -8,7 +8,8 @@ import DashboardCharts from '@/components/DashboardCharts';
 import LogoutButton from '@/components/LogoutButton';
 import NotificationBell from '@/components/NotificationBell';
 import Cookies from 'js-cookie'; // REVISI: Menggunakan Client-side Cookies
-import { Users, Activity, Clock, ArrowUpRight, ArrowDownRight } from 'lucide-react';
+import { Users, Activity, Clock, ArrowUpRight, ArrowDownRight, LayoutGrid } from 'lucide-react';
+
 
 
 export default function DashboardPage() {
@@ -65,7 +66,7 @@ export default function DashboardPage() {
           <div className="flex justify-between items-center">
             <div className="flex items-center gap-4">
               <div className="p-3.5 bg-blue-600 dark:bg-indigo-600 text-white rounded-2xl shadow-lg">
-                <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>
+                <LayoutGrid className="w-7 h-7" />
               </div>
               <div className="text-left">
                 <h1 className="text-3xl font-black text-slate-900 dark:text-white tracking-tight text-left">Dashboard Central</h1>

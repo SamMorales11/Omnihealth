@@ -11,8 +11,9 @@ export default function Page() {
 
   useEffect(() => setMounted(true), []);
 
-  // Menentukan tema yang sedang aktif
   const currentTheme = theme === 'system' ? systemTheme : theme;
+
+  if (!mounted) return null;
 
   return (
     <main className="min-h-screen overflow-hidden relative selection:bg-indigo-500 selection:text-white bg-slate-50 dark:bg-slate-950 transition-colors duration-500 flex flex-col">
@@ -26,27 +27,25 @@ export default function Page() {
       {/* NAVBAR */}
       <nav className="max-w-7xl mx-auto px-6 py-6 flex justify-between items-center relative z-20 w-full">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 bg-indigo-600 text-white rounded-xl flex items-center justify-center shadow-lg shadow-indigo-200 dark:shadow-indigo-900/50 transition-colors duration-500">
-            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
+          <div className="w-10 h-10 bg-slate-900 text-indigo-400 rounded-xl flex items-center justify-center shadow-lg shadow-indigo-500/20 border border-indigo-500/30 transition-colors duration-500">
+            {/* Ikon Activity (Raw SVG) */}
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-indigo-400 drop-shadow-[0_0_8px_rgba(129,140,248,0.8)]"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
           </div>
           <span className="text-xl font-black text-slate-900 dark:text-white tracking-tight transition-colors duration-500">OmniHealth</span>
         </div>
 
         <div className="flex items-center gap-4">
-          {/* TOMBOL TOGGLE THEME */}
-          {mounted && (
-            <button
-              onClick={() => setTheme(currentTheme === 'dark' ? 'light' : 'dark')}
-              className="p-2.5 rounded-full bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-300 dark:hover:bg-slate-700 transition-all duration-300 shadow-inner"
-              aria-label="Toggle Dark Mode"
-            >
-              {currentTheme === 'dark' ? (
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
-              ) : (
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
-              )}
-            </button>
-          )}
+          <button
+            onClick={() => setTheme(currentTheme === 'dark' ? 'light' : 'dark')}
+            className="p-2.5 rounded-full bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-300 dark:hover:bg-slate-700 transition-all duration-300 shadow-inner"
+            aria-label="Toggle Dark Mode"
+          >
+            {currentTheme === 'dark' ? (
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2"></path><path d="M12 20v2"></path><path d="m4.93 4.93 1.41 1.41"></path><path d="m17.66 17.66 1.41 1.41"></path><path d="M2 12h2"></path><path d="M20 12h2"></path><path d="m6.34 17.66-1.41 1.41"></path><path d="m19.07 4.93-1.41 1.41"></path></svg>
+            ) : (
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"></path></svg>
+            )}
+          </button>
 
           <Link href="/login" className="bg-white dark:bg-slate-900 text-indigo-600 dark:text-indigo-400 border border-slate-200 dark:border-slate-800 px-6 py-2.5 rounded-xl text-sm font-bold hover:bg-indigo-50 dark:hover:bg-slate-800 transition-all shadow-sm duration-300">
             Portal Admin
@@ -75,20 +74,16 @@ export default function Page() {
               Tinggalkan cara lama. OmniHealth mengintegrasikan pendaftaran pasien, jadwal dokter, dan analitik dalam satu platform cerdas yang aman dan secepat kilat.
             </p>
             
-            {/* PORTAL SELECTION */}
             <div className="grid grid-cols-2 gap-4 md:gap-6 mt-10 w-full max-w-2xl mx-auto lg:mx-0">
-              
               {/* Portal Pasien */}
               <Link href="/pendaftaran" className="group relative overflow-hidden bg-white dark:bg-slate-900/50 backdrop-blur-xl p-8 rounded-[2.5rem] border border-slate-200/60 dark:border-slate-800/60 shadow-md hover:shadow-[0_20px_50px_rgba(79,70,229,0.15)] hover:border-indigo-500/50 transition-all duration-500 flex flex-col justify-between h-full min-h-[280px] hover:-translate-y-1">
                 <div className="absolute top-0 right-0 -mr-16 -mt-16 w-32 h-32 bg-indigo-500/10 rounded-full blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                
                 <div>
                   <div className="flex items-start mb-8 relative z-10">
                     <div className="w-16 h-16 bg-gradient-to-br from-indigo-50 to-indigo-100/50 dark:from-indigo-500/10 dark:to-indigo-500/5 text-indigo-600 dark:text-indigo-400 rounded-2xl flex items-center justify-center shrink-0 border border-indigo-100/50 dark:border-indigo-500/20 shadow-sm group-hover:scale-110 group-hover:rotate-3 transition-transform duration-500">
-                      <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg>
+                      <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-8 h-8"><rect width="14" height="20" x="5" y="2" rx="2" ry="2"></rect><path d="M12 18h.01"></path></svg>
                     </div>
                   </div>
-                  
                   <h3 className="text-2xl font-black text-slate-900 dark:text-white mb-3 relative z-10 tracking-tight">Portal Pasien</h3>
                   <p className="text-sm font-medium text-slate-500 dark:text-slate-400 mb-6 leading-relaxed relative z-10">
                     Ambil antrean mandiri secara online langsung dari HP Anda. Cepat dan tanpa kertas.
@@ -96,21 +91,19 @@ export default function Page() {
                 </div>
                 <div className="pt-6 border-t border-slate-100 dark:border-slate-800/50 w-full flex items-center text-sm font-bold text-indigo-600 dark:text-indigo-400 group-hover:gap-2 transition-all relative z-10">
                   Daftar Sekarang
-                  <svg className="w-5 h-5 ml-1 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5 ml-1 transform group-hover:translate-x-1 transition-transform"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
                 </div>
               </Link>
 
               {/* Portal Staf */}
               <Link href="/dashboard" className="group relative overflow-hidden bg-white dark:bg-slate-900/50 backdrop-blur-xl p-8 rounded-[2.5rem] border border-slate-200/60 dark:border-slate-800/60 shadow-md hover:shadow-[0_20px_50px_rgba(20,184,166,0.15)] hover:border-teal-500/50 transition-all duration-500 flex flex-col justify-between h-full min-h-[280px] hover:-translate-y-1">
                 <div className="absolute top-0 right-0 -mr-16 -mt-16 w-32 h-32 bg-teal-500/10 rounded-full blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-
                 <div>
                   <div className="flex items-start mb-8 relative z-10">
                     <div className="w-16 h-16 bg-gradient-to-br from-teal-50 to-teal-100/50 dark:from-teal-500/10 dark:to-teal-500/5 text-teal-600 dark:text-teal-400 rounded-2xl flex items-center justify-center shrink-0 border border-teal-100/50 dark:border-teal-500/20 shadow-sm group-hover:scale-110 group-hover:rotate-3 transition-transform duration-500">
-                      <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 17V7m0 10a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h2a2 2 0 012 2m0 10a2 2 0 002 2h2a2 2 0 002-2M9 7a2 2 0 012-2h2a2 2 0 012 2m0 10V7m0 10a2 2 0 002 2h2a2 2 0 002-2V7a2 2 0 00-2-2h-2a2 2 0 00-2 2"></path></svg>
+                      <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-8 h-8"><path d="m12 14 4-4"></path><path d="m3.34 19 8.66-8.66"></path><path d="m3.34 19 8.66-8.66"></path><circle cx="14.5" cy="9.5" r="4.5"></circle><path d="m19 14.5-4.5-4.5"></path><path d="m18.42 15.61-3-3"></path><path d="M10 18H5a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v2"></path></svg>
                     </div>
                   </div>
-                  
                   <h3 className="text-2xl font-black text-slate-900 dark:text-white mb-3 relative z-10 tracking-tight">Portal Staf</h3>
                   <p className="text-sm font-medium text-slate-500 dark:text-slate-400 mb-6 leading-relaxed relative z-10">
                     Akses sistem khusus untuk operasional internal klinik. Kelola data pasien secara real-time.
@@ -118,65 +111,99 @@ export default function Page() {
                 </div>
                 <div className="pt-6 border-t border-slate-100 dark:border-slate-800/50 w-full flex items-center text-sm font-bold text-teal-600 dark:text-teal-400 group-hover:gap-2 transition-all relative z-10">
                   Masuk Sistem
-                  <svg className="w-5 h-5 ml-1 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5 ml-1 transform group-hover:translate-x-1 transition-transform"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
                 </div>
               </Link>
-
             </div>
           </div>
 
-          {/* BAGIAN GAMBAR / MOCKUP */}
+          {/* FLOATING BENTO UI */}
           <div className="relative w-full flex justify-center lg:justify-end lg:pt-20">
-            <div className="relative w-full max-w-2xl">
-              <div className="absolute -inset-4 bg-gradient-to-br from-indigo-500/30 to-teal-400/30 dark:from-indigo-600/20 dark:to-teal-500/20 rounded-[2.5rem] blur-2xl opacity-70 transition-colors duration-500"></div>
-              
-              <div className="relative bg-white/60 dark:bg-slate-900/60 backdrop-blur-xl rounded-2xl shadow-2xl border border-slate-200/50 dark:border-slate-800/50 overflow-hidden transform hover:scale-[1.02] transition-all duration-500">
-                
-                <div className="bg-slate-100/80 dark:bg-slate-950/80 px-4 py-3 flex items-center gap-2 border-b border-slate-200/50 dark:border-slate-800/50 transition-colors duration-500">
-                  <div className="w-3 h-3 rounded-full bg-rose-400 dark:bg-rose-500/80"></div>
-                  <div className="w-3 h-3 rounded-full bg-amber-400 dark:bg-amber-500/80"></div>
-                  <div className="w-3 h-3 rounded-full bg-emerald-400 dark:bg-emerald-500/80"></div>
-                  <div className="ml-4 flex-1 flex justify-center">
-                    <div className="bg-white/50 dark:bg-slate-800/50 px-4 py-1 rounded-md text-[10px] font-bold text-slate-400 dark:text-slate-400 border border-slate-200/50 dark:border-slate-700/50 shadow-sm transition-colors duration-500">
-                      app.omnihealth.com
-                    </div>
+            <div className="relative w-full max-w-2xl h-[450px]">
+              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[120%] bg-indigo-500/10 dark:bg-indigo-600/5 rounded-full blur-[120px] pointer-events-none"></div>
+
+              {/* CARD 1: ANALYTICS */}
+              <div className="absolute top-0 right-0 w-[90%] bg-slate-900/40 backdrop-blur-xl border border-slate-700/50 rounded-[2.5rem] p-8 shadow-2xl shadow-indigo-500/15 -rotate-2 hover:rotate-0 hover:scale-[1.02] transition-all duration-700 group cursor-default animate-[float_6s_ease-in-out_infinite]">
+                <div className="flex justify-between items-center mb-8">
+                  <div>
+                    <p className="text-[10px] font-bold text-slate-500 uppercase tracking-[0.2em] mb-1">Analytics Central</p>
+                    <h4 className="text-xl font-black text-white tracking-tight">Patient Trends</h4>
+                  </div>
+                  <div className="p-3 bg-indigo-500/10 text-indigo-400 rounded-2xl border border-indigo-500/20">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="drop-shadow-[0_0_5px_rgba(129,140,248,0.5)]"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"></polyline><polyline points="16 7 22 7 22 13"></polyline></svg>
                   </div>
                 </div>
+                <svg className="w-full h-36 overflow-visible" viewBox="0 0 400 100">
+                  <defs>
+                    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="3" result="blur" /><feComposite in="SourceGraphic" in2="blur" operator="over" /></filter>
+                    <linearGradient id="line-grad" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stopColor="#6366f1" /><stop offset="100%" stopColor="#22d3ee" /></linearGradient>
+                  </defs>
+                  <path d="M0,80 C50,85 80,40 120,55 C160,70 200,20 250,45 C300,70 350,15 400,30" fill="none" stroke="url(#line-grad)" strokeWidth="5" strokeLinecap="round" filter="url(#glow)" className="animate-[dash_4s_ease-in-out_infinite]" />
+                  <circle cx="120" cy="55" r="5" fill="#6366f1" className="animate-pulse" />
+                  <circle cx="250" cy="45" r="5" fill="#22d3ee" className="animate-pulse" />
+                </svg>
+                <div className="flex gap-6 mt-8">
+                  <div className="flex-1 p-4 bg-white/5 rounded-2xl border border-white/10"><p className="text-[10px] text-slate-500 font-bold mb-1 uppercase tracking-wider">Avg. Visitors</p><p className="text-2xl font-black text-white">1,284</p></div>
+                  <div className="flex-1 p-4 bg-white/5 rounded-2xl border border-white/10"><p className="text-[10px] text-slate-500 font-bold mb-1 uppercase tracking-wider">Growth</p><p className="text-2xl font-black text-emerald-400">+24%</p></div>
+                </div>
+              </div>
 
-                <img 
-                 src="/dashboard.jpeg" 
-                 alt="OmniHealth Dashboard Preview" 
-                 className="w-full h-auto object-cover dark:opacity-90 transition-opacity duration-500"
-                />     
+              {/* CARD 2: PHARMACY */}
+              <div className="absolute bottom-4 left-[-20px] w-[58%] bg-slate-950/80 backdrop-blur-2xl border border-slate-700/50 rounded-[2rem] p-7 shadow-2xl shadow-teal-500/10 hover:translate-y-[-12px] transition-all duration-500 z-20 group cursor-default animate-[float_8s_ease-in-out_infinite_1s]">
+                <div className="flex items-center gap-4 mb-6">
+                  <div className="p-3 bg-teal-500/15 text-teal-400 rounded-2xl border border-teal-500/20">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="drop-shadow-[0_0_5px_rgba(20,184,166,0.5)]"><path d="m10.5 20.5 10-10a4.95 4.95 0 1 0-7-7l-10 10a4.95 4.95 0 1 0 7 7Z"></path><path d="m8.5 8.5 7 7"></path></svg>
+                  </div>
+                  <h4 className="text-lg font-bold text-white tracking-tight">Pharmacy Stock</h4>
+                </div>
+                <div className="space-y-5">
+                  <div>
+                    <div className="flex justify-between text-xs font-bold text-slate-400 mb-2.5"><span>Paracetamol</span><span className="text-emerald-400">85%</span></div>
+                    <div className="h-2 w-full bg-slate-800 rounded-full overflow-hidden"><div className="h-full bg-emerald-500 rounded-full w-[85%] group-hover:w-[92%] transition-all duration-1000 shadow-[0_0_10px_#10b981]"></div></div>
+                  </div>
+                  <div>
+                    <div className="flex justify-between text-xs font-bold text-slate-400 mb-2.5"><span>Amoxicillin</span><span className="text-amber-400">42%</span></div>
+                    <div className="h-2 w-full bg-slate-800 rounded-full overflow-hidden"><div className="h-full bg-amber-500 rounded-full w-[42%] group-hover:w-[55%] transition-all duration-1000 shadow-[0_0_10px_#f59e0b]"></div></div>
+                  </div>
+                </div>
+              </div>
+
+              {/* CARD 3: PATIENT PROFILE */}
+              <div className="absolute top-[40%] right-[-30px] w-[48%] bg-slate-900/90 backdrop-blur-3xl border border-slate-700/50 rounded-[2.5rem] p-6 shadow-2xl shadow-indigo-500/20 hover:translate-y-[-15px] transition-all duration-500 z-30 cursor-default animate-[float_7s_ease-in-out_infinite_0.5s]">
+                <div className="flex flex-col items-center text-center">
+                  <div className="relative mb-5">
+                    <div className="w-20 h-20 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center border-4 border-slate-900 shadow-2xl overflow-hidden">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-white mt-1"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="10" r="3"></circle><path d="M7 20.662V19a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v1.662"></path></svg>
+                    </div>
+                    <div className="absolute bottom-1 right-1 w-5 h-5 bg-emerald-500 border-4 border-slate-900 rounded-full shadow-lg"></div>
+                  </div>
+                  <h4 className="font-black text-white text-xl tracking-tight mb-1">Andi Simon</h4>
+                  <p className="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] mb-6">Patient ID: #8201</p>
+                  <div className="w-full py-3.5 px-4 bg-indigo-500/10 border border-indigo-500/20 rounded-2xl flex items-center justify-center gap-2.5 shadow-[0_0_20px_rgba(79,70,229,0.1)] group-hover:shadow-indigo-500/30 transition-all">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-indigo-400 drop-shadow-[0_0_5px_rgba(129,140,248,0.5)]"><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"></path><path d="m9 12 2 2 4-4"></path></svg>
+                    <span className="text-xs font-black text-indigo-300 uppercase tracking-widest">In Consultation</span>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
-
         </div>
       </div>
 
-      {/* FOOTER - FIXED: LOGO KIRI, LINKS KANAN */}
       <footer className="relative z-20 border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 transition-colors duration-500 mt-auto w-full">
         <div className="max-w-7xl mx-auto px-6 py-12 md:py-16">
           <div className="flex flex-col md:flex-row justify-between items-start gap-12">
-            
-            {/* Bagian Kiri: Logo & Copyright */}
             <div className="flex flex-col items-start text-left">
               <div className="flex items-center gap-3 mb-4">
-                <div className="w-10 h-10 bg-indigo-600 text-white rounded-xl flex items-center justify-center shadow-md">
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
+                <div className="w-10 h-10 bg-slate-900 text-indigo-400 rounded-xl flex items-center justify-center shadow-md border border-indigo-500/20">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
                 </div>
                 <span className="text-2xl font-black text-slate-900 dark:text-white tracking-tight">OmniHealth</span>
               </div>
-              <p className="text-sm font-medium text-slate-500 dark:text-slate-400">
-                Sistem Manajemen Klinik Terpadu.
-              </p>
-              <p className="text-sm font-medium text-slate-400 dark:text-slate-500 mt-1">
-                &copy; 2026 OmniHealth Systems. Hak Cipta Dilindungi.
-              </p>
+              <p className="text-sm font-medium text-slate-500 dark:text-slate-400">Sistem Manajemen Klinik Terpadu.</p>
+              <p className="text-sm font-medium text-slate-400 dark:text-slate-500 mt-1">&copy; 2026 OmniHealth Systems. Hak Cipta Dilindungi.</p>
             </div>
 
-            {/* Bagian Kanan: Links & Socials (Rata Kanan di layar Desktop) */}
             <div className="flex flex-col items-start md:items-end gap-8 w-full md:w-auto">
               <div className="flex flex-wrap items-center justify-start md:justify-end gap-6 sm:gap-8">
                 <Link href="#" className="text-sm font-bold text-slate-600 hover:text-indigo-600 dark:text-slate-300 dark:hover:text-indigo-400 transition-colors">Kebijakan Privasi</Link>
@@ -195,11 +222,9 @@ export default function Page() {
                 </Link>
               </div>
             </div>
-
           </div>
         </div>
       </footer>
-
     </main>
   );
 }

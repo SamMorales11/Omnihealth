@@ -2,6 +2,8 @@
 "use client";
 
 import { useState } from 'react';
+import { Smartphone, CheckCircle2, Building2 } from 'lucide-react';
+
 
 export default function PendaftaranMandiriPage() {
   const [step, setStep] = useState(1);
@@ -30,8 +32,8 @@ export default function PendaftaranMandiriPage() {
         
         {/* Header App */}
         <div className="bg-indigo-600 p-8 text-center rounded-b-[2rem] shadow-lg relative z-10">
-          <div className="w-16 h-16 bg-white/20 backdrop-blur-md rounded-2xl mx-auto flex items-center justify-center mb-4">
-             <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg>
+          <div className="w-16 h-16 bg-white/20 backdrop-blur-md rounded-2xl mx-auto flex items-center justify-center mb-4 border border-white/30">
+             <Building2 size={32} className="text-white drop-shadow-[0_0_8px_rgba(255,255,255,0.5)]" />
           </div>
           <h1 className="text-2xl font-black text-white tracking-tight">OmniHealth Portal</h1>
           <p className="text-indigo-200 text-sm font-medium mt-1">Pendaftaran Antrean Mandiri</p>
@@ -75,8 +77,8 @@ export default function PendaftaranMandiriPage() {
           ) : (
             /* STEP 2: TIKET QR CODE */
             <div className="text-center animate-in zoom-in-95 duration-500 py-4">
-              <div className="inline-flex items-center justify-center w-16 h-16 bg-emerald-500/10 text-emerald-500 rounded-full mb-4">
-                <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7"></path></svg>
+              <div className="inline-flex items-center justify-center w-16 h-16 bg-emerald-500/10 text-emerald-500 rounded-full mb-4 border border-emerald-500/20 shadow-[0_0_15px_rgba(16,185,129,0.2)]">
+                <CheckCircle2 size={32} strokeWidth={3} />
               </div>
               <h2 className="text-2xl font-black text-slate-900 dark:text-white mb-2">Pendaftaran Sukses!</h2>
               <p className="text-sm text-slate-500 dark:text-slate-400 mb-8">Tunjukkan QR Code ini kepada resepsionis klinik saat Anda tiba.</p>
