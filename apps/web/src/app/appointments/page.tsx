@@ -4,7 +4,8 @@ import { useState, useEffect, useRef } from 'react';
 import toast from 'react-hot-toast';
 import Link from 'next/link';
 import Cookies from 'js-cookie'; 
-import { Calendar, ChevronDown, Plus, Stethoscope } from 'lucide-react';
+import { Plus, Stethoscope, Calendar } from 'lucide-react';
+import { UserIcon, HeartIcon, CalendarIcon, ChevronDownIcon } from '@heroicons/react/24/outline';
 
 export default function AppointmentsPage() {
   const [appointments, setAppointments] = useState<any[]>([]);
@@ -163,40 +164,40 @@ export default function AppointmentsPage() {
           </div>
         </div>
 
-        {/* FORM AREA */}
-        <form onSubmit={handleAdd} className="bg-white dark:bg-slate-800 p-6 md:p-8 rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] dark:shadow-lg dark:shadow-slate-900/20 border border-slate-100 dark:border-slate-700 mb-8 flex flex-col md:flex-row gap-6 items-end relative z-20 transition-colors duration-500">
-          <div className="absolute top-0 left-0 w-1 h-full bg-indigo-600 dark:bg-indigo-500 rounded-l-2xl transition-colors duration-500"></div>
+        {/* FORM AREA - PREMIUM SCHEDULING BAR */}
+        <form onSubmit={handleAdd} className="bg-slate-900/40 backdrop-blur-xl p-6 md:p-8 rounded-[2rem] border border-white/5 mb-10 flex flex-col md:flex-row gap-6 items-end relative z-20 transition-all duration-500 shadow-2xl">
           
           <div className="flex-1 w-full" ref={patientRef}>
-            <label className="text-xs font-bold text-slate-500 dark:text-slate-400 mb-2 block uppercase tracking-wider transition-colors duration-500">Pilih Pasien</label>
-            <div className="relative">
+            <label className="text-[10px] font-extrabold text-slate-400 uppercase tracking-[0.2em] mb-2.5 block ml-1 transition-colors">Pilih Pasien</label>
+            <div className="relative group">
+              <UserIcon className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-500 group-focus-within:text-indigo-400 transition-colors" />
               <button 
                 type="button"
                 onClick={() => setIsPatientOpen(!isPatientOpen)}
-                className="w-full flex items-center justify-between bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-slate-100 text-sm rounded-xl p-3 transition-all font-medium outline-none focus:ring-4 focus:ring-indigo-500/10"
+                className="w-full flex items-center justify-between bg-slate-950/50 border border-white/5 text-slate-100 text-sm rounded-2xl pl-12 pr-4 py-3.5 transition-all font-medium outline-none focus:ring-2 focus:ring-indigo-500/30 focus:border-indigo-500/50"
               >
-                <span className={patientId ? 'text-slate-900 dark:text-slate-100' : 'text-slate-400'}>
-                  {patients.find(p => p.id.toString() === patientId)?.name || '-- Pilih Pasien --'}
+                <span className={patientId ? 'text-slate-100' : 'text-slate-500'}>
+                  {patients.find(p => p.id.toString() === patientId)?.name || 'Cari Nama Pasien...'}
                 </span>
-                <ChevronDown className={`w-4 h-4 text-slate-400 transition-transform duration-200 ${isPatientOpen ? 'rotate-180' : ''}`} />
+                <ChevronDownIcon className={`w-4 h-4 text-slate-500 transition-transform duration-300 ${isPatientOpen ? 'rotate-180' : ''}`} />
               </button>
 
               {isPatientOpen && (
-                <div className="absolute left-0 right-0 mt-2 bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-2xl shadow-2xl z-[120] overflow-hidden animate-in zoom-in-95 duration-200 origin-top">
+                <div className="absolute left-0 right-0 mt-3 bg-slate-900/90 backdrop-blur-2xl border border-white/10 rounded-2xl shadow-2xl z-[120] overflow-hidden animate-in zoom-in-95 duration-200 origin-top">
                   <div className="max-h-60 overflow-y-auto py-2">
                     {patients.map(p => (
                       <button
                         key={p.id}
                         type="button"
                         onClick={() => { setPatientId(p.id.toString()); setIsPatientOpen(false); }}
-                        className={`w-full text-left px-5 py-3 text-sm font-bold transition-all flex items-center justify-between
+                        className={`w-full text-left px-5 py-3.5 text-sm font-bold transition-all flex items-center justify-between
                           ${patientId === p.id.toString() 
-                            ? 'text-indigo-600 dark:text-indigo-400 bg-indigo-50/50 dark:bg-indigo-500/10' 
-                            : 'text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white'
+                            ? 'text-indigo-400 bg-indigo-500/10' 
+                            : 'text-slate-400 hover:bg-white/5 hover:text-white'
                           }`}
                       >
                         <span>{p.name}</span>
-                        {patientId === p.id.toString() && <div className="w-1.5 h-1.5 rounded-full bg-indigo-600 dark:bg-indigo-400 shadow-[0_0_8px_rgba(79,70,229,0.6)]"></div>}
+                        {patientId === p.id.toString() && <div className="w-1.5 h-1.5 rounded-full bg-indigo-500 shadow-[0_0_10px_#6366f1]"></div>}
                       </button>
                     ))}
                   </div>
@@ -206,37 +207,41 @@ export default function AppointmentsPage() {
           </div>
 
           <div className="flex-1 w-full" ref={doctorRef}>
-            <label className="text-xs font-bold text-slate-500 dark:text-slate-400 mb-2 block uppercase tracking-wider transition-colors duration-500">Dokter Pemeriksa</label>
-            <div className="relative">
+            <label className="text-[10px] font-extrabold text-slate-400 uppercase tracking-[0.2em] mb-2.5 block ml-1 transition-colors">Dokter Pemeriksa</label>
+            <div className="relative group">
+              <HeartIcon className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-500 group-focus-within:text-indigo-400 transition-colors" />
               <button 
                 type="button"
                 onClick={() => setIsDoctorOpen(!isDoctorOpen)}
-                className="w-full flex items-center justify-between bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-slate-100 text-sm rounded-xl p-3 transition-all font-medium outline-none focus:ring-4 focus:ring-indigo-500/10"
+                className="w-full flex items-center justify-between bg-slate-950/50 border border-white/5 text-slate-100 text-sm rounded-2xl pl-12 pr-4 py-3.5 transition-all font-medium outline-none focus:ring-2 focus:ring-indigo-500/30 focus:border-indigo-500/50"
               >
-                <span className={doctorId ? 'text-slate-900 dark:text-slate-100' : 'text-slate-400'}>
+                <span className={doctorId ? 'text-slate-100' : 'text-slate-500'}>
                   {doctors.find(d => d.id.toString() === doctorId) 
-                    ? `${doctors.find(d => d.id.toString() === doctorId).name} (${doctors.find(d => d.id.toString() === doctorId).specialist})` 
-                    : '-- Pilih Dokter --'}
+                    ? `${doctors.find(d => d.id.toString() === doctorId).name}` 
+                    : 'Pilih Tenaga Medis...'}
                 </span>
-                <ChevronDown className={`w-4 h-4 text-slate-400 transition-transform duration-200 ${isDoctorOpen ? 'rotate-180' : ''}`} />
+                <ChevronDownIcon className={`w-4 h-4 text-slate-500 transition-transform duration-300 ${isDoctorOpen ? 'rotate-180' : ''}`} />
               </button>
 
               {isDoctorOpen && (
-                <div className="absolute left-0 right-0 mt-2 bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-2xl shadow-2xl z-[120] overflow-hidden animate-in zoom-in-95 duration-200 origin-top">
+                <div className="absolute left-0 right-0 mt-3 bg-slate-900/90 backdrop-blur-2xl border border-white/10 rounded-2xl shadow-2xl z-[120] overflow-hidden animate-in zoom-in-95 duration-200 origin-top">
                   <div className="max-h-60 overflow-y-auto py-2">
                     {doctors.map(d => (
                       <button
                         key={d.id}
                         type="button"
                         onClick={() => { setDoctorId(d.id.toString()); setIsDoctorOpen(false); }}
-                        className={`w-full text-left px-5 py-3 text-sm font-bold transition-all flex items-center justify-between
+                        className={`w-full text-left px-5 py-3.5 text-sm font-bold transition-all flex items-center justify-between
                           ${doctorId === d.id.toString() 
-                            ? 'text-indigo-600 dark:text-indigo-400 bg-indigo-50/50 dark:bg-indigo-500/10' 
-                            : 'text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white'
+                            ? 'text-indigo-400 bg-indigo-500/10' 
+                            : 'text-slate-400 hover:bg-white/5 hover:text-white'
                           }`}
                       >
-                        <span>{d.name} ({d.specialist})</span>
-                        {doctorId === d.id.toString() && <div className="w-1.5 h-1.5 rounded-full bg-indigo-600 dark:bg-indigo-400 shadow-[0_0_8px_rgba(79,70,229,0.6)]"></div>}
+                        <div>
+                          <p className="font-bold">{d.name}</p>
+                          <p className="text-[10px] uppercase tracking-wider opacity-60">{d.specialist}</p>
+                        </div>
+                        {doctorId === d.id.toString() && <div className="w-1.5 h-1.5 rounded-full bg-indigo-500 shadow-[0_0_10px_#6366f1]"></div>}
                       </button>
                     ))}
                   </div>
@@ -246,18 +251,28 @@ export default function AppointmentsPage() {
           </div>
 
           <div className="flex-1 w-full">
-            <label className="text-xs font-bold text-slate-500 dark:text-slate-400 mb-2 block uppercase tracking-wider transition-colors duration-500">Tanggal</label>
-            <input 
-              required 
-              type="date" 
-              value={date} 
-              onChange={e => setDate(e.target.value)} 
-              className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-slate-100 text-sm rounded-xl focus:ring-4 focus:ring-indigo-500/10 dark:focus:ring-indigo-500/20 focus:border-indigo-500 block p-3 transition-all cursor-pointer outline-none [color-scheme:light] dark:[color-scheme:dark]" 
-            />
+            <label className="text-[10px] font-extrabold text-slate-400 uppercase tracking-[0.2em] mb-2.5 block ml-1 transition-colors">Tanggal Pemeriksaan</label>
+            <div className="relative group">
+              <CalendarIcon className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-500 group-focus-within:text-indigo-400 transition-colors pointer-events-none" />
+              <input 
+                required 
+                type="date" 
+                value={date} 
+                onChange={e => setDate(e.target.value)} 
+                className="w-full bg-slate-950/50 border border-white/5 text-slate-100 text-sm rounded-2xl pl-12 pr-4 py-3.5 transition-all cursor-pointer outline-none focus:ring-2 focus:ring-indigo-500/30 focus:border-indigo-500/50 [color-scheme:dark]" 
+              />
+            </div>
           </div>
           
-          <button type="submit" disabled={isSubmitting} className="w-full md:w-auto bg-indigo-600 dark:bg-indigo-500 text-white px-8 py-3 rounded-xl font-semibold hover:bg-indigo-700 dark:hover:bg-indigo-600 hover:shadow-lg hover:shadow-indigo-200 dark:hover:shadow-indigo-900/30 transition-all disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center gap-2 duration-300">
-            {isSubmitting ? <span className="animate-pulse">Memproses...</span> : <><Plus className="w-5 h-5" />Buat Jadwal</>}
+          <button type="submit" disabled={isSubmitting} className="w-full md:w-auto bg-indigo-600 text-white px-10 py-4 rounded-2xl font-black text-sm uppercase tracking-widest hover:bg-indigo-500 shadow-[0_0_20px_rgba(79,70,229,0.3)] hover:shadow-[0_0_25px_rgba(79,70,229,0.5)] transition-all duration-300 hover:scale-[1.03] active:scale-95 disabled:opacity-50 flex items-center justify-center gap-3">
+            {isSubmitting ? (
+              <span className="animate-pulse">Processing...</span>
+            ) : (
+              <>
+                <Plus className="w-5 h-5 stroke-[3]" />
+                Confirm Schedule
+              </>
+            )}
           </button>
         </form>
 

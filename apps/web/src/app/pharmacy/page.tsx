@@ -19,7 +19,6 @@ import {
   HashtagIcon
 } from '@heroicons/react/24/outline';
 
-// Data Simulasi Antrean Apotek
 const initialPrescriptions = [
   {
     id: "RXP-001",
@@ -96,7 +95,7 @@ export default function PharmacyPage() {
           </Link>
         </div>
 
-        {/* BAGIAN 1: ANTREAN RESEP */}
+        {/* ANTREAN RESEP */}
         <div className="mb-20">
           <div className="flex items-center justify-between mb-8">
             <h2 className="text-2xl font-black text-slate-800 dark:text-white flex items-center gap-3">
@@ -118,7 +117,6 @@ export default function PharmacyPage() {
             <div className="grid grid-cols-1 xl:grid-cols-2 gap-8">
               {prescriptions.map((rx) => (
                 <div key={rx.id} className="bg-slate-900/60 backdrop-blur-xl rounded-[2.5rem] border border-white/5 shadow-2xl overflow-hidden flex flex-col group transition-all hover:border-white/10">
-                  {/* Patient Header */}
                   <div className="p-8 pb-6 flex justify-between items-start border-b border-white/5">
                     <div className="flex gap-5">
                       <div className="p-4 bg-indigo-500/10 rounded-2xl">
@@ -145,7 +143,6 @@ export default function PharmacyPage() {
                     </div>
                   </div>
 
-                  {/* Medicines List */}
                   <div className="p-8 pt-6 flex-grow">
                     <h4 className="text-[10px] font-bold text-slate-500 uppercase tracking-[0.2em] mb-6 flex items-center gap-2">
                       <BeakerIcon className="w-3 h-3" />
@@ -173,7 +170,6 @@ export default function PharmacyPage() {
                     </div>
                   </div>
 
-                  {/* Action Footer */}
                   <div className="p-8 bg-white/[0.02] border-t border-white/5 mt-auto">
                     <button 
                       onClick={() => handleProcess(rx.id)} 
@@ -189,7 +185,7 @@ export default function PharmacyPage() {
           )}
         </div>
 
-        {/* BAGIAN 2: GUDANG & STOK OBAT */}
+        {/* INVENTORI OBAT */}
         <div>
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-10 gap-6">
             <div className="flex items-center gap-4">
@@ -257,6 +253,7 @@ export default function PharmacyPage() {
                         </div>
                       </td>
                       <td className="px-10 py-6 text-right">
+                        {/* KOMPONEN MANAJEMEN */}
                         <ManageMedicineModal medicine={m} onRefresh={fetchMedicines} />
                       </td>
                     </tr>

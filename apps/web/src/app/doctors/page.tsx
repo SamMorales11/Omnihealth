@@ -3,6 +3,7 @@
 import { useState, useEffect, useMemo, useRef } from 'react';
 import toast from 'react-hot-toast';
 import Link from 'next/link';
+import { CalendarIcon, ClockIcon } from '@heroicons/react/24/outline';
 import Cookies from 'js-cookie'; // REVISI: Impor Cookies untuk mengambil token
 
 const specializationList = [
@@ -374,29 +375,80 @@ export default function DoctorsPage() {
 
         {/* MODAL ATUR JADWAL */}
         {isScheduleModalOpen && selectedDoctor && (
-          <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
-            <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 p-8 rounded-[2rem] max-w-md w-full shadow-2xl animate-in zoom-in-95 duration-200">
-              <h3 className="text-xl font-black text-slate-900 dark:text-white mb-1">Atur Jadwal Praktek</h3>
-              <p className="text-sm font-bold text-teal-600 dark:text-teal-400 mb-6">{selectedDoctor.name}</p>
-              <div className="space-y-5 mb-8">
-                <div>
-                  <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2">Hari Praktek</label>
-                  <input type="text" placeholder="Misal: Senin - Rabu" defaultValue={selectedDoctor.schedule?.split(' (')[0]} className="w-full px-5 py-4 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl text-slate-900 dark:text-white outline-none focus:ring-4 focus:ring-teal-500/10 focus:border-teal-500 font-medium transition-all" />
+          <div className="fixed inset-0 z-[999] flex items-center justify-center bg-slate-950/60 backdrop-blur-md p-4">
+            <div className="bg-slate-900/80 backdrop-blur-2xl border border-white/10 p-8 rounded-[2.5rem] max-w-md w-full shadow-2xl animate-in zoom-in-95 duration-300 relative overflow-hidden">
+              {/* Subtle Decorative Gradient */}
+              <div className="absolute -top-24 -right-24 w-48 h-48 bg-teal-500/10 blur-[80px] rounded-full"></div>
+              
+              <div className="relative z-10">
+                <h3 className="text-2xl font-black text-white tracking-tight mb-1">Atur Jadwal Praktek</h3>
+                <div className="inline-flex items-center px-3 py-1 rounded-full bg-teal-500/10 border border-teal-500/20 mb-8">
+                  <span className="text-xs font-extrabold text-teal-400 uppercase tracking-wider">{selectedDoctor.name}</span>
                 </div>
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2">Jam Mulai</label>
-                    <input type="time" defaultValue="08:00" className="w-full px-5 py-4 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl text-slate-900 dark:text-white outline-none focus:ring-4 focus:ring-teal-500/10 focus:border-teal-500 font-medium transition-all" />
+
+                <div className="space-y-6 mb-10">
+                  <div className="space-y-2">
+                    <label className="flex items-center gap-2 text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em] ml-1">
+                      <CalendarIcon className="w-3 h-3" />
+                      Hari Praktek
+                    </label>
+                    <div className="relative group">
+                      <CalendarIcon className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-500 group-focus-within:text-teal-400 transition-colors" />
+                      <input 
+                        type="text" 
+                        placeholder="Misal: Senin - Rabu" 
+                        defaultValue={selectedDoctor.schedule?.split(' (')[0]} 
+                        className="w-full pl-12 pr-5 py-4 bg-slate-950/50 border border-white/5 rounded-2xl text-white outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500/50 font-medium transition-all placeholder:text-slate-600" 
+                      />
+                    </div>
                   </div>
-                  <div>
-                    <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2">Jam Selesai</label>
-                    <input type="time" defaultValue="14:00" className="w-full px-5 py-4 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl text-slate-900 dark:text-white outline-none focus:ring-4 focus:ring-teal-500/10 focus:border-teal-500 font-medium transition-all" />
+
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <label className="flex items-center gap-2 text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em] ml-1">
+                        <ClockIcon className="w-3 h-3" />
+                        Jam Mulai
+                      </label>
+                      <div className="relative group">
+                        <ClockIcon className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-500 group-focus-within:text-teal-400 transition-colors" />
+                        <input 
+                          type="time" 
+                          defaultValue="08:00" 
+                          className="w-full pl-12 pr-4 py-4 bg-slate-950/50 border border-white/5 rounded-2xl text-white outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500/50 font-medium transition-all" 
+                        />
+                      </div>
+                    </div>
+                    <div className="space-y-2">
+                      <label className="flex items-center gap-2 text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em] ml-1">
+                        <ClockIcon className="w-3 h-3" />
+                        Jam Selesai
+                      </label>
+                      <div className="relative group">
+                        <ClockIcon className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-500 group-focus-within:text-teal-400 transition-colors" />
+                        <input 
+                          type="time" 
+                          defaultValue="14:00" 
+                          className="w-full pl-12 pr-4 py-4 bg-slate-950/50 border border-white/5 rounded-2xl text-white outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500/50 font-medium transition-all" 
+                        />
+                      </div>
+                    </div>
                   </div>
                 </div>
-              </div>
-              <div className="flex gap-4">
-                <button onClick={() => setIsScheduleModalOpen(false)} className="flex-1 px-6 py-4 text-sm font-bold text-slate-600 dark:text-white bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 rounded-2xl transition-all">Batal</button>
-                <button onClick={() => { toast.success('Jadwal disimpan!'); setIsScheduleModalOpen(false); }} className="flex-1 px-6 py-4 text-sm font-bold text-white bg-teal-600 hover:bg-teal-500 rounded-2xl transition-all shadow-lg shadow-teal-900/20">Simpan</button>
+
+                <div className="flex items-center gap-6">
+                  <button 
+                    onClick={() => setIsScheduleModalOpen(false)} 
+                    className="text-sm font-bold text-slate-500 hover:text-slate-300 transition-colors px-2"
+                  >
+                    Batal
+                  </button>
+                  <button 
+                    onClick={() => { toast.success('Jadwal disimpan!'); setIsScheduleModalOpen(false); }} 
+                    className="flex-1 px-8 py-4 text-sm font-black text-white bg-teal-500 hover:bg-teal-400 rounded-2xl transition-all shadow-[0_0_20px_rgba(20,184,166,0.3)] hover:shadow-[0_0_25px_rgba(20,184,166,0.5)] hover:scale-[1.02] active:scale-95"
+                  >
+                    Simpan Jadwal
+                  </button>
+                </div>
               </div>
             </div>
           </div>

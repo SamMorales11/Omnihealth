@@ -84,69 +84,69 @@ export default function DashboardPage() {
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10 relative z-10 text-left">
           {/* CARD 1: TOTAL PASIEN */}
-          <div className="animate-in fade-in zoom-in-95 duration-500 bg-gradient-to-br from-slate-900 to-slate-950 p-8 rounded-[2.5rem] border-l-[4px] border-l-indigo-500 border border-slate-800 shadow-2xl relative overflow-hidden group">
-            <div className="absolute top-6 right-6 p-3 bg-white/5 backdrop-blur-md rounded-2xl border border-white/10 text-indigo-400 group-hover:scale-110 group-hover:rotate-3 transition-transform duration-500">
+          <div className="animate-in fade-in zoom-in-95 duration-500 bg-slate-900 p-8 rounded-[2.5rem] border border-slate-700 shadow-2xl relative overflow-hidden group">
+            <div className="absolute top-6 right-6 p-3 bg-slate-800 rounded-2xl border border-slate-700 text-slate-400 group-hover:scale-110 transition-transform duration-500">
               <Users size={24} />
             </div>
             
-            <p className="text-[11px] font-bold text-slate-500 uppercase tracking-[0.2em] mb-4">Total Pasien</p>
+            <p className="text-[11px] font-extrabold text-slate-500 uppercase tracking-[0.2em] mb-4">Total Pasien</p>
             <div className="flex items-baseline gap-2">
-              <h3 className="text-5xl font-black text-white tracking-tight">{data.stats.totalPatients}</h3>
-              <span className="text-xs font-bold text-slate-500">Jiwa</span>
+              <h3 className="text-5xl font-black text-slate-50 tracking-tight">{data.stats.totalPatients}</h3>
+              <span className="text-xs font-extrabold text-slate-500">Jiwa</span>
             </div>
             
-            <p className="text-sm font-medium text-slate-400 mt-2 mb-6">12 Pasien baru minggu ini</p>
+            <p className="text-sm font-black text-slate-400 mt-2 mb-6">12 Pasien baru minggu ini</p>
             
-            <div className="flex items-center gap-2 pt-4 border-t border-slate-800/50">
-              <div className="flex items-center gap-1 px-2 py-1 rounded-full bg-emerald-500/10 text-emerald-500 text-[10px] font-bold">
+            <div className="flex items-center gap-2 pt-4 border-t border-slate-800">
+              <div className="flex items-center gap-1 px-2 py-1 rounded-full bg-emerald-500/10 text-emerald-500 text-[10px] font-extrabold">
                 <ArrowUpRight size={12} />
                 +12%
               </div>
-              <span className="text-[10px] font-medium text-slate-500 italic">from last month</span>
+              <span className="text-[10px] font-extrabold text-slate-600 uppercase tracking-widest">from last month</span>
             </div>
           </div>
 
           {/* CARD 2: EFISIENSI KLINIK */}
-          <div className="animate-in fade-in zoom-in-95 duration-700 bg-gradient-to-br from-slate-900 to-slate-950 p-8 rounded-[2.5rem] border-l-[4px] border-l-emerald-500 border border-slate-800 shadow-2xl relative overflow-hidden group">
-            <div className="absolute top-6 right-6 p-3 bg-white/5 backdrop-blur-md rounded-2xl border border-white/10 text-emerald-400 group-hover:scale-110 group-hover:rotate-3 transition-transform duration-500">
+          <div className="animate-in fade-in zoom-in-95 duration-700 bg-slate-900 p-8 rounded-[2.5rem] border border-slate-700 shadow-2xl relative overflow-hidden group">
+            <div className="absolute top-6 right-6 p-3 bg-slate-800 rounded-2xl border border-slate-700 text-slate-400 group-hover:scale-110 transition-transform duration-500">
               <Activity size={24} />
             </div>
             
-            <p className="text-[11px] font-bold text-slate-500 uppercase tracking-[0.2em] mb-4">Efisiensi Klinik</p>
-            <h3 className="text-5xl font-black text-white mb-4 tracking-tight">{data.stats.completionRate}%</h3>
+            <p className="text-[11px] font-extrabold text-slate-500 uppercase tracking-[0.2em] mb-4">Efisiensi Klinik</p>
+            <h3 className="text-5xl font-black text-slate-50 mb-4 tracking-tight">{data.stats.completionRate}%</h3>
             
-            <div className="w-full h-2 bg-slate-800 rounded-full overflow-hidden mb-6">
+            <div className="w-full h-2 bg-slate-950 rounded-full overflow-hidden mb-6 border border-slate-800">
               <div 
-                className="h-full bg-emerald-500 rounded-full transition-all duration-1000 ease-out"
+                className="h-full bg-slate-200 rounded-full transition-all duration-1000 ease-out"
                 style={{ width: `${data.stats.completionRate}%` }}
               ></div>
             </div>
             
-            <div className="flex items-center gap-2 pt-4 border-t border-slate-800/50">
-              <div className="flex items-center gap-1 px-2 py-1 rounded-full bg-emerald-500/10 text-emerald-500 text-[10px] font-bold">
+            <div className="flex items-center gap-2 pt-4 border-t border-slate-800">
+              <div className="flex items-center gap-1 px-2 py-1 rounded-full bg-emerald-500/10 text-emerald-500 text-[10px] font-extrabold">
                 <ArrowUpRight size={12} />
                 +2%
               </div>
-              <span className="text-[10px] font-medium text-slate-500 italic">higher than yesterday</span>
+              <span className="text-[10px] font-extrabold text-slate-600 uppercase tracking-widest">higher than yesterday</span>
             </div>
           </div>
 
           {/* CARD 3: ANTREAN AKTIF */}
-          <div className="animate-in fade-in zoom-in-95 duration-1000 bg-gradient-to-br from-slate-900 to-slate-950 p-8 rounded-[2.5rem] border-l-[4px] border-l-amber-500 border border-slate-800 shadow-2xl relative overflow-hidden group">
-            <div className="absolute top-6 right-6 p-3 bg-white/5 backdrop-blur-md rounded-2xl border border-white/10 text-amber-400 group-hover:scale-110 group-hover:rotate-3 transition-transform duration-500">
+          <div className="animate-in fade-in zoom-in-95 duration-1000 bg-slate-900 p-8 rounded-[2.5rem] border border-slate-700 shadow-2xl relative overflow-hidden group">
+            <div className="absolute top-6 right-6 p-3 bg-slate-800 rounded-2xl border border-slate-700 text-slate-400 group-hover:scale-110 transition-transform duration-500">
               <Clock size={24} />
             </div>
             
-            <p className="text-[11px] font-bold text-slate-500 uppercase tracking-[0.2em] mb-4">Antrean Aktif</p>
-            <h3 className="text-5xl font-black text-white tracking-tight">{data.stats.waitingAppointments}</h3>
-            <p className="text-xs font-bold text-amber-500 mt-2 mb-6">Estimasi waktu tunggu: 15 menit</p>
+            <p className="text-[11px] font-extrabold text-slate-500 uppercase tracking-[0.2em] mb-4">Antrean Aktif</p>
+            <h3 className="text-5xl font-black text-slate-50 tracking-tight">{data.stats.waitingAppointments}</h3>
+            <p className="text-xs font-extrabold text-amber-500 mt-2 mb-6">Estimasi waktu tunggu: 15 menit</p>
             
-            <div className="flex items-center gap-2 pt-4 border-t border-slate-800/50">
-              <div className="flex items-center gap-1 px-2 py-1 rounded-full bg-rose-500/10 text-rose-500 text-[10px] font-bold">
+            <div className="flex items-center gap-2 pt-4 border-t border-slate-800">
+              <div className="flex items-center gap-1 px-2 py-1 rounded-full bg-rose-500/10 text-rose-500 text-[10px] font-extrabold">
                 <ArrowDownRight size={12} />
                 -3%
               </div>
-              <span className="text-[10px] font-medium text-slate-500 italic">from peak hours</span>
+              <span className="text-[10px] font-extrabold text-slate-600 uppercase tracking-widest">from peak hours</span>
             </div>
           </div>
         </div>
@@ -155,11 +155,11 @@ export default function DashboardPage() {
           <DashboardCharts appointments={data.appointments} />
         </div>
 
-        <div className="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 p-8 shadow-sm text-left">
-          <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4 border-b border-slate-100 dark:border-slate-800 pb-6 text-left">
+        <div className="bg-slate-900 rounded-[2.5rem] border border-slate-700 p-8 shadow-2xl text-left">
+          <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4 border-b border-slate-800 pb-6 text-left">
             <div className="text-left">
-              <h2 className="text-2xl font-bold text-slate-900 dark:text-white text-left">Direktori Pasien</h2>
-              <p className="text-sm text-slate-500 dark:text-slate-400 mt-1 text-left">Kelola informasi personal pasien.</p>
+              <h2 className="text-2xl font-black text-slate-50 text-left">Direktori Pasien</h2>
+              <p className="text-sm font-extrabold text-slate-500 mt-1 text-left uppercase tracking-widest">Kelola informasi personal pasien.</p>
             </div>
             <AddPatientModal />
           </div>

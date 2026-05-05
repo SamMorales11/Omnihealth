@@ -5,6 +5,28 @@ import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import toast from 'react-hot-toast';
 import Cookies from 'js-cookie';
+import { motion, AnimatePresence } from 'framer-motion';
+import { 
+  ArrowLeftIcon, 
+  HeartIcon, 
+  UserCircleIcon,
+  DocumentTextIcon,
+  BeakerIcon,
+  IdentificationIcon,
+  ChevronDownIcon,
+  PlusIcon,
+  TrashIcon,
+  ClockIcon,
+  CalendarIcon,
+  QueueListIcon,
+  UserIcon
+} from '@heroicons/react/24/outline';
+
+const ThermometerIcon = ({ className }: { className?: string }) => (
+  <svg className={className} fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+    <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75V4.5a3 3 0 116 0v8.25m-3 0v4.5m0 0a2.25 2.25 0 100 4.5 2.25 2.25 0 000-4.5z" />
+  </svg>
+);
 
 export default function RMEPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -126,205 +148,339 @@ export default function RMEPage() {
   };
 
   return (
-    <main className="p-6 md:p-10 w-full min-h-screen bg-slate-50 dark:bg-slate-950 transition-colors duration-500 text-left">
-      <div className="max-w-5xl mx-auto">
+    <main className="p-6 md:p-10 w-full min-h-screen bg-slate-950 text-slate-50 selection:bg-indigo-500/30">
+      <div className="max-w-6xl mx-auto space-y-10">
         
         {/* HEADER & NAVIGASI KEMBALI */}
-        <div className="flex items-center justify-between mb-8">
-          <div className="flex items-center gap-4 text-left">
-            <Link href="/appointments" className="p-2.5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-500 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 hover:shadow-md transition-all">
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+        <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+          <div className="flex items-center gap-6">
+            <Link href="/appointments" className="group p-4 bg-slate-900 border border-slate-700 rounded-2xl hover:bg-slate-800 transition-all duration-300">
+              <ArrowLeftIcon className="w-6 h-6 text-slate-400 group-hover:text-slate-100 transition-colors" />
             </Link>
-            <div className="text-left">
-              <h1 className="text-2xl font-black text-slate-900 dark:text-white tracking-tight transition-colors duration-500 text-left">Rekam Medis Elektronik</h1>
-              <p className="text-sm font-medium text-slate-500 dark:text-slate-400 transition-colors duration-500 text-left">Formulir SOAP & Tindakan Medis</p>
+            <div>
+              <h1 className="text-3xl md:text-4xl font-black tracking-tight text-slate-50">
+                Clinical Examination
+              </h1>
+              <p className="text-slate-500 font-extrabold tracking-widest uppercase text-xs mt-1">Electronic Medical Record • SOAP System</p>
             </div>
           </div>
-          <div className="hidden md:flex items-center gap-2 px-4 py-2 bg-indigo-50 dark:bg-indigo-500/10 text-indigo-700 dark:text-indigo-400 rounded-lg border border-indigo-100 dark:border-indigo-500/20 font-bold text-sm transition-colors duration-500 text-left">
-            <span className="relative flex h-2.5 w-2.5">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-indigo-500"></span>
+          <div className="flex items-center gap-3 px-5 py-2.5 bg-emerald-500/10 text-emerald-400 rounded-full border border-emerald-500/20 font-black text-xs tracking-widest">
+            <span className="relative flex h-2 w-2">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
             </span>
-            Sesi Pemeriksaan Aktif
+            ACTIVE SESSION
           </div>
         </div>
+
 
         {/* KARTU INFO PASIEN (Patient Banner) */}
-        <div className="bg-white dark:bg-slate-800 rounded-2xl p-6 mb-6 shadow-sm border border-slate-200 dark:border-slate-700 flex flex-col md:flex-row items-start md:items-center justify-between gap-6 transition-colors duration-500 text-left">
-          <div className="flex items-center gap-5 text-left">
-            <div className="w-16 h-16 bg-blue-100 dark:bg-blue-500/20 text-blue-600 dark:text-blue-400 font-black text-2xl rounded-2xl flex items-center justify-center transition-colors duration-500">
-              {appointmentData?.patientName?.charAt(0) || 'P'}
-            </div>
-            <div className="text-left">
-              <h2 className="text-xl font-bold text-slate-900 dark:text-white transition-colors duration-500 text-left">
-                {appointmentData?.patientName || 'Memuat data...'}
-              </h2>
-              <div className="flex items-center gap-3 mt-1 text-sm font-medium text-slate-500 dark:text-slate-400 transition-colors duration-500 text-left">
-                <span>{appointmentData?.doctorName || 'Dokter Pemeriksa'}</span>
-                <span className="w-1 h-1 bg-slate-300 dark:bg-slate-600 rounded-full"></span>
-                <span>{appointmentData?.specialist || '-'}</span>
+        <div className="relative group overflow-hidden bg-slate-900 border border-slate-700 rounded-[2.5rem] p-8 md:p-10 transition-all duration-500 shadow-2xl">
+          <div className="absolute top-0 right-0 w-64 h-64 bg-slate-800/20 blur-[100px] -mr-32 -mt-32 rounded-full"></div>
+          
+          <div className="relative flex flex-col lg:flex-row items-center justify-between gap-10">
+            <div className="flex flex-col md:flex-row items-center gap-8">
+              <div className="relative">
+                <div className="w-24 h-24 bg-slate-800 rounded-3xl flex items-center justify-center text-4xl font-black text-slate-200 border border-slate-700 shadow-xl">
+                  {appointmentData?.patientName?.charAt(0) || 'P'}
+                </div>
+                <div className="absolute -bottom-2 -right-2 p-2 bg-slate-950 rounded-xl border border-slate-700 shadow-lg">
+                  <UserCircleIcon className="w-6 h-6 text-slate-400" />
+                </div>
+              </div>
+              <div className="text-center md:text-left space-y-2">
+                <h2 className="text-3xl font-black tracking-tight text-slate-50">{appointmentData?.patientName || 'Loading...'}</h2>
+                <div className="flex flex-wrap items-center justify-center md:justify-start gap-3">
+                  <span className="px-3 py-1 bg-slate-950/60 rounded-lg text-slate-400 text-xs font-extrabold tracking-widest uppercase border border-slate-800">
+                    {appointmentData?.doctorName || 'Attending Physician'}
+                  </span>
+                  <span className="w-1 h-1 bg-slate-700 rounded-full"></span>
+                  <span className="text-slate-300 text-sm font-black tracking-wide">{appointmentData?.specialist || '-'}</span>
+                </div>
               </div>
             </div>
-          </div>
-          <div className="flex gap-4 w-full md:w-auto text-left">
-            <div className="bg-slate-50 dark:bg-slate-900/50 px-4 py-2.5 rounded-xl border border-slate-100 dark:border-slate-700 flex-1 md:flex-none transition-colors duration-500 text-left">
-              <p className="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider text-left">Antrean</p>
-              <p className="text-sm font-black text-slate-800 dark:text-slate-200 text-left">#{appointmentId?.padStart(3, '0') || '---'}</p>
-            </div>
-            <div className="bg-slate-50 dark:bg-slate-900/50 px-4 py-2.5 rounded-xl border border-slate-100 dark:border-slate-700 flex-1 md:flex-none transition-colors duration-500 text-left">
-              <p className="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider text-left">Tanggal</p>
-              <p className="text-sm font-black text-slate-800 dark:text-slate-200 text-left">Hari Ini</p>
+
+            <div className="flex gap-4 w-full md:w-auto">
+              <div className="flex-1 md:flex-none p-5 bg-slate-950/60 rounded-3xl border border-slate-800 text-center min-w-[120px]">
+                <p className="text-[10px] font-extrabold text-slate-500 uppercase tracking-[0.2em] mb-1">Queue No</p>
+                <p className="text-2xl font-black text-slate-200 italic">#{appointmentId?.padStart(3, '0') || '---'}</p>
+              </div>
+              <div className="flex-1 md:flex-none p-5 bg-slate-950/60 rounded-3xl border border-slate-800 text-center min-w-[120px]">
+                <p className="text-[10px] font-extrabold text-slate-500 uppercase tracking-[0.2em] mb-1">Visit Date</p>
+                <div className="flex items-center justify-center gap-2">
+                  <CalendarIcon className="w-4 h-4 text-slate-400" />
+                  <p className="text-sm font-black text-slate-200">{new Date().toLocaleDateString('en-US', { day: '2-digit', month: 'short' })}</p>
+                </div>
+              </div>
             </div>
           </div>
         </div>
 
-        {/* FORMULIR UTAMA */}
-        <form onSubmit={handleSubmit} className="space-y-6 text-left">
+        {/* BAGIAN 1: VITAL SIGN & ALERGI */}
+        <div className="bg-slate-900 border border-slate-700 rounded-[2.5rem] p-8 md:p-10">
+          <div className="flex items-center gap-3 mb-10">
+            <div className="p-3 bg-slate-800 rounded-2xl border border-slate-700">
+              <HeartIcon className="w-6 h-6 text-slate-400" />
+            </div>
+            <div>
+              <h3 className="text-xl font-black tracking-tight text-slate-50">Clinical Vitals</h3>
+              <p className="text-slate-500 text-[10px] font-extrabold uppercase tracking-widest">Baseline health metrics</p>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+            <div className="relative pt-3">
+              <label className="absolute -top-1 left-4 px-2 bg-slate-900 text-[10px] font-extrabold text-slate-500 uppercase tracking-[0.2em] z-10">Allergies</label>
+              <div className="flex items-center gap-3 bg-slate-950/60 border border-slate-800 rounded-2xl p-4 focus-within:border-indigo-500/50 transition-all">
+                <IdentificationIcon className="w-5 h-5 text-slate-600" />
+                <input type="text" name="alergi" value={formData.alergi} onChange={handleChange} placeholder="None recorded" className="w-full bg-transparent text-sm font-bold text-slate-200 outline-none placeholder:text-slate-800" />
+              </div>
+            </div>
+            <div className="relative pt-3">
+              <label className="absolute -top-1 left-4 px-2 bg-slate-900 text-[10px] font-extrabold text-slate-500 uppercase tracking-[0.2em] z-10">Blood Pressure</label>
+              <div className="flex items-center gap-3 bg-slate-950/60 border border-slate-800 rounded-2xl p-4 focus-within:border-emerald-500/50 transition-all">
+                <HeartIcon className="w-5 h-5 text-slate-600" />
+                <input type="text" name="tekananDarah" value={formData.tekananDarah} onChange={handleChange} placeholder="120/80" className="w-full bg-transparent text-sm font-bold text-slate-200 outline-none placeholder:text-slate-800" />
+                <span className="text-[10px] font-black text-slate-700">mmHg</span>
+              </div>
+            </div>
+            <div className="relative pt-3">
+              <label className="absolute -top-1 left-4 px-2 bg-slate-900 text-[10px] font-extrabold text-slate-500 uppercase tracking-[0.2em] z-10">Temperature</label>
+              <div className="flex items-center gap-3 bg-slate-950/60 border border-slate-800 rounded-2xl p-4 focus-within:border-emerald-500/50 transition-all">
+                <ThermometerIcon className="w-5 h-5 text-slate-600" />
+                <input type="text" name="suhu" value={formData.suhu} onChange={handleChange} placeholder="36.5" className="w-full bg-transparent text-sm font-bold text-slate-200 outline-none placeholder:text-slate-800" />
+                <span className="text-[10px] font-black text-slate-700">°C</span>
+              </div>
+            </div>
+            <div className="relative pt-3 text-left">
+              <label className="absolute -top-1 left-4 px-2 bg-slate-900 text-[10px] font-extrabold text-slate-500 uppercase tracking-[0.2em] z-10">Heart Rate</label>
+              <div className="flex items-center gap-3 bg-slate-950/60 border border-slate-800 rounded-2xl p-4 focus-within:border-emerald-500/50 transition-all">
+                <ClockIcon className="w-5 h-5 text-slate-600" />
+                <input type="text" placeholder="80" className="w-full bg-transparent text-sm font-bold text-slate-200 outline-none placeholder:text-slate-800" />
+                <span className="text-[10px] font-black text-slate-700">BPM</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        {/* FORMULIR UTAMA */}
+        <form onSubmit={handleSubmit} className="space-y-10">
           
-          {/* BAGIAN 1: VITAL SIGN & ALERGI */}
-          <div className="bg-white dark:bg-slate-800 rounded-2xl p-6 md:p-8 shadow-sm border border-slate-200 dark:border-slate-700 transition-colors duration-500 text-left">
-            <h3 className="text-lg font-bold text-slate-800 dark:text-white mb-6 flex items-center gap-2 transition-colors duration-500 text-left">
-              <svg className="w-5 h-5 text-rose-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg>
-              Tanda Vital & Riwayat Alergi
-            </h3>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-left">
-              <div className="md:col-span-1 text-left">
-                <label className="text-xs font-bold text-slate-500 dark:text-slate-400 mb-2 block uppercase tracking-wider transition-colors duration-500 text-left">Riwayat Alergi (Obat/Makanan)</label>
-                <input type="text" name="alergi" value={formData.alergi} onChange={handleChange} placeholder="Contoh: Amoxicillin, Seafood..." className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-slate-100 text-sm rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 block p-3 outline-none transition-colors duration-500" />
-              </div>
-              <div className="text-left">
-                <label className="text-xs font-bold text-slate-500 dark:text-slate-400 mb-2 block uppercase tracking-wider transition-colors duration-500 text-left">Tekanan Darah (mmHg)</label>
-                <input type="text" name="tekananDarah" value={formData.tekananDarah} onChange={handleChange} placeholder="120/80" className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-slate-100 text-sm rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 block p-3 outline-none transition-colors duration-500" />
-              </div>
-              <div className="text-left">
-                <label className="text-xs font-bold text-slate-500 dark:text-slate-400 mb-2 block uppercase tracking-wider transition-colors duration-500 text-left">Suhu Tubuh (°C)</label>
-                <input type="text" name="suhu" value={formData.suhu} onChange={handleChange} placeholder="36.5" className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-slate-100 text-sm rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 block p-3 outline-none transition-colors duration-500" />
-              </div>
-            </div>
-          </div>
-
           {/* BAGIAN 2: SOAP */}
-          <div className="bg-white dark:bg-slate-800 rounded-2xl p-6 md:p-8 shadow-sm border border-slate-200 dark:border-slate-700 transition-colors duration-500 text-left">
-            <h3 className="text-lg font-bold text-slate-800 dark:text-white mb-6 flex items-center gap-2 transition-colors duration-500 text-left">
-              <svg className="w-5 h-5 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
-              Pemeriksaan Klinis (SOAP)
-            </h3>
-            
-            <div className="space-y-6 text-left">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-left">
-                <div className="text-left">
-                  <label className="text-xs font-bold text-indigo-600 dark:text-indigo-400 mb-2 block uppercase tracking-wider transition-colors duration-500 text-left">Subjective (Keluhan Utama)</label>
-                  <textarea required name="subjective" value={formData.subjective} onChange={handleChange} rows={4} placeholder="Keluhan yang dirasakan pasien..." className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-slate-100 text-sm rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 block p-3 outline-none resize-none transition-colors duration-500"></textarea>
+          <div className="bg-slate-900 border border-slate-700 rounded-[2.5rem] p-8 md:p-10 space-y-10 shadow-2xl">
+            <div className="flex items-center gap-3">
+              <div className="p-3 bg-slate-800 rounded-2xl border border-slate-700">
+                <DocumentTextIcon className="w-6 h-6 text-slate-400" />
+              </div>
+              <div>
+                <h3 className="text-xl font-black tracking-tight text-slate-50">Clinical Documentation</h3>
+                <p className="text-slate-500 text-[10px] font-extrabold uppercase tracking-widest">SOAP Methodology</p>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+              {/* Subjective */}
+              <div className="space-y-4">
+                <div className="flex items-center gap-2">
+                  <span className="w-8 h-8 bg-slate-800 text-slate-400 border border-slate-700 rounded-lg flex items-center justify-center font-black text-xs">S</span>
+                  <label className="text-[10px] font-extrabold text-slate-500 uppercase tracking-[0.2em]">Subjective</label>
                 </div>
-                <div className="text-left">
-                  <label className="text-xs font-bold text-teal-600 dark:text-teal-400 mb-2 block uppercase tracking-wider transition-colors duration-500 text-left">Objective (Hasil Pemeriksaan Fisik)</label>
-                  <textarea required name="objective" value={formData.objective} onChange={handleChange} rows={4} placeholder="Hasil pemeriksaan fisik/lab oleh dokter..." className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-slate-100 text-sm rounded-xl focus:ring-2 focus:ring-teal-500 focus:border-teal-500 block p-3 outline-none resize-none transition-colors duration-500"></textarea>
+                <div className="relative group">
+                  <textarea
+                    required
+                    name="subjective"
+                    value={formData.subjective}
+                    onChange={handleChange}
+                    rows={5}
+                    placeholder="Describe patient's symptoms and complaints..."
+                    className="w-full bg-slate-950/60 border border-slate-800 rounded-[2rem] p-6 text-sm font-bold text-slate-200 outline-none focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500/50 transition-all resize-none placeholder:text-slate-900"
+                  ></textarea>
                 </div>
               </div>
 
-              <div className="bg-slate-50 dark:bg-slate-900/50 p-5 rounded-xl border border-slate-200 dark:border-slate-700 transition-colors duration-500 text-left">
-                <label className="text-xs font-bold text-amber-600 dark:text-amber-500 mb-3 block uppercase tracking-wider transition-colors duration-500 text-left">Assessment (Diagnosis & ICD-10)</label>
-                <div className="flex flex-col md:flex-row gap-4 text-left">
-                  <div className="md:w-1/3 text-left">
-                    <select required name="assessment_icd10" value={formData.assessment_icd10} onChange={handleChange} className="w-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-slate-100 text-sm rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 block p-3 outline-none cursor-pointer transition-colors duration-500 text-left">
-                      <option value="">Pilih Kode ICD-10</option>
-                      <option value="J00">J00 - Nasofaringitis akut (Common Cold)</option>
-                      <option value="A09">A09 - Diare dan gastroenteritis</option>
-                      <option value="I10">I10 - Hipertensi esensial (primer)</option>
-                      <option value="E11">E11 - Diabetes mellitus tipe 2</option>
-                      <option value="K30">K30 - Dispepsia</option>
-                    </select>
-                  </div>
-                  <div className="md:w-2/3 text-left">
-                    <input type="text" placeholder="Catatan tambahan diagnosis..." className="w-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-slate-100 text-sm rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 block p-3 outline-none transition-colors duration-500" />
-                  </div>
+              {/* Objective */}
+              <div className="space-y-4">
+                <div className="flex items-center gap-2">
+                  <span className="w-8 h-8 bg-slate-800 text-slate-400 border border-slate-700 rounded-lg flex items-center justify-center font-black text-xs">O</span>
+                  <label className="text-[10px] font-extrabold text-slate-500 uppercase tracking-[0.2em]">Objective</label>
+                </div>
+                <div className="relative group">
+                  <textarea
+                    required
+                    name="objective"
+                    value={formData.objective}
+                    onChange={handleChange}
+                    rows={5}
+                    placeholder="Physical findings, lab results, and observations..."
+                    className="w-full bg-slate-950/60 border border-slate-800 rounded-[2rem] p-6 text-sm font-bold text-slate-200 outline-none focus:ring-4 focus:ring-emerald-500/10 focus:border-emerald-500/50 transition-all resize-none placeholder:text-slate-900"
+                  ></textarea>
                 </div>
               </div>
+            </div>
 
-              <div className="text-left">
-                <label className="text-xs font-bold text-emerald-600 dark:text-emerald-400 mb-2 block uppercase tracking-wider transition-colors duration-500 text-left">Plan (Tatalaksana & Tindakan Medis)</label>
-                <textarea required name="plan" value={formData.plan} onChange={handleChange} rows={4} placeholder="Rencana pengobatan, tindakan, atau anjuran medis..." className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-slate-100 text-sm rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 block p-3 outline-none resize-none transition-colors duration-500"></textarea>
+            {/* Assessment (ICD-10) */}
+            <div className="space-y-6">
+              <div className="flex items-center gap-2">
+                <span className="w-8 h-8 bg-slate-800 text-slate-400 border border-slate-700 rounded-lg flex items-center justify-center font-black text-xs">A</span>
+                <label className="text-[10px] font-extrabold text-slate-500 uppercase tracking-[0.2em]">Assessment & Diagnosis</label>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div className="relative group">
+                  <select
+                    required
+                    name="assessment_icd10"
+                    value={formData.assessment_icd10}
+                    onChange={handleChange}
+                    className="w-full appearance-none bg-slate-950/60 border border-slate-800 rounded-2xl p-4 text-sm font-black text-slate-200 outline-none focus:ring-4 focus:ring-amber-500/10 focus:border-amber-500/50 transition-all cursor-pointer"
+                  >
+                    <option value="" className="bg-slate-900">Select ICD-10 Code</option>
+                    <option value="J00" className="bg-slate-900">J00 - Acute Nasopharyngitis</option>
+                    <option value="A09" className="bg-slate-900">A09 - Gastroenteritis</option>
+                    <option value="I10" className="bg-slate-900">I10 - Essential Hypertension</option>
+                    <option value="E11" className="bg-slate-900">E11 - Type 2 Diabetes</option>
+                    <option value="K30" className="bg-slate-900">K30 - Dyspepsia</option>
+                  </select>
+                  <ChevronDownIcon className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500 pointer-events-none" />
+                </div>
+                <div className="md:col-span-2 relative group">
+                  <input
+                    type="text"
+                    placeholder="Additional diagnostic notes..."
+                    className="w-full bg-slate-950/60 border border-slate-800 rounded-2xl p-4 text-sm font-black text-slate-200 outline-none focus:ring-4 focus:ring-amber-500/10 focus:border-amber-500/50 transition-all placeholder:text-slate-900"
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* Plan */}
+            <div className="space-y-4">
+              <div className="flex items-center gap-2">
+                <span className="w-8 h-8 bg-slate-800 text-slate-400 border border-slate-700 rounded-lg flex items-center justify-center font-black text-xs">P</span>
+                <label className="text-[10px] font-extrabold text-slate-500 uppercase tracking-[0.2em]">Plan</label>
+              </div>
+              <div className="relative group">
+                <textarea
+                  required
+                  name="plan"
+                  value={formData.plan}
+                  onChange={handleChange}
+                  rows={4}
+                  placeholder="Treatment plan, procedures, and patient instructions..."
+                  className="w-full bg-slate-950/60 border border-slate-800 rounded-[2rem] p-6 text-sm font-bold text-slate-200 outline-none focus:ring-4 focus:ring-rose-500/10 focus:border-rose-500/50 transition-all resize-none placeholder:text-slate-900"
+                ></textarea>
               </div>
             </div>
           </div>
 
-          {/* BAGIAN 3 - E-PRESCRIBING (INPUT RESEP) */}
-          <div className="bg-white dark:bg-slate-800 rounded-2xl p-6 md:p-8 shadow-sm border border-slate-200 dark:border-slate-700 transition-colors duration-500 text-left">
-            <h3 className="text-lg font-bold text-slate-800 dark:text-white mb-6 flex items-center gap-2 transition-colors duration-500 text-left">
-              <svg className="w-5 h-5 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path></svg>
-              E-Prescribing (Input Resep Obat)
-            </h3>
-
-            <div className="flex flex-col md:flex-row gap-4 mb-8 text-left">
-              <div className="flex-1 text-left">
-                <label className="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest mb-2 block text-left">Cari Obat di Inventaris Farmasi</label>
-                <select
-                  onChange={(e) => addMedicineToPrescription(e.target.value)}
-                  value=""
-                  className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-slate-100 text-sm rounded-xl p-3 outline-none focus:ring-2 focus:ring-emerald-500 transition-all cursor-pointer text-left"
-                >
-                  <option value="">-- Klik untuk memilih obat --</option>
-                  {availableMedicines.map(m => (
-                    <option key={m.id} value={m.id} disabled={m.stock <= 0}>
-                      {m.name} ({m.unit}) - Stok: {m.stock}
-                    </option>
-                  ))}
-                </select>
+          {/* BAGIAN 3 - E-PRESCRIBING */}
+          <div className="bg-slate-900 border border-slate-700 rounded-[2.5rem] p-8 md:p-10 space-y-8 shadow-2xl">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className="p-3 bg-slate-800 rounded-2xl border border-slate-700">
+                  <BeakerIcon className="w-6 h-6 text-slate-400" />
+                </div>
+                <div>
+                  <h3 className="text-xl font-black tracking-tight text-slate-50">E-Prescribing</h3>
+                  <p className="text-slate-500 text-[10px] font-extrabold uppercase tracking-widest">Pharmacy Integration</p>
+                </div>
               </div>
             </div>
 
-            <div className="space-y-4 text-left">
-              {selectedPrescription.length === 0 ? (
-                <p className="text-sm text-slate-400 italic text-center py-6 bg-slate-50 dark:bg-slate-900/50 rounded-xl border border-dashed border-slate-200 dark:border-slate-700">Belum ada obat yang dipilih dalam resep.</p>
-              ) : (
-                selectedPrescription.map((item, idx) => (
-                  <div key={item.id} className="flex flex-col md:flex-row items-start md:items-center gap-4 p-4 bg-slate-50 dark:bg-slate-900/50 rounded-xl border border-slate-100 dark:border-slate-800 animate-in fade-in slide-in-from-left-2 duration-300 text-left">
-                    <div className="flex-1 text-left">
-                      <p className="text-sm font-bold text-slate-900 dark:text-white text-left">{item.name}</p>
-                      <p className="text-[10px] text-slate-500 uppercase font-black text-left">{item.unit}</p>
-                    </div>
-                    <div className="w-full md:w-24 text-left">
-                      <input
-                        type="number"
-                        min="1"
-                        value={item.qty}
-                        onChange={(e) => {
-                          const newVal = parseInt(e.target.value);
-                          setSelectedPrescription(selectedPrescription.map((p, i) => i === idx ? { ...p, qty: newVal } : p));
-                        }}
-                        className="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg p-2 text-sm text-center outline-none focus:ring-2 focus:ring-emerald-500 transition-colors"
-                        placeholder="Qty"
-                      />
-                    </div>
-                    <div className="flex-1 w-full text-left">
-                      <input
-                        type="text"
-                        value={item.instruction}
-                        onChange={(e) => setSelectedPrescription(selectedPrescription.map((p, i) => i === idx ? { ...p, instruction: e.target.value } : p))}
-                        className="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg p-2 text-sm outline-none focus:ring-2 focus:ring-emerald-500 transition-colors"
-                        placeholder="Aturan Pakai (misal: 3x1 sehari sesudah makan)"
-                      />
-                    </div>
-                    <button
-                      type="button"
-                      onClick={() => setSelectedPrescription(selectedPrescription.filter((_, i) => i !== idx))}
-                      className="p-2 text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-500/10 rounded-lg transition-colors group"
+            <div className="relative group">
+              <select
+                onChange={(e) => addMedicineToPrescription(e.target.value)}
+                value=""
+                className="w-full appearance-none bg-slate-950/60 border border-slate-800 rounded-[2rem] p-6 text-sm font-black text-slate-200 outline-none focus:ring-4 focus:ring-emerald-500/10 focus:border-emerald-500/50 transition-all cursor-pointer"
+              >
+                <option value="">Search Pharmacy Inventory...</option>
+                {availableMedicines.map(m => (
+                  <option key={m.id} value={m.id} disabled={m.stock <= 0} className="bg-slate-900">
+                    {m.name} ({m.unit}) - Stock: {m.stock}
+                  </option>
+                ))}
+              </select>
+              <PlusIcon className="absolute right-6 top-1/2 -translate-y-1/2 w-6 h-6 text-slate-600 pointer-events-none" />
+            </div>
+
+            <div className="space-y-4">
+              <AnimatePresence mode="popLayout">
+                {selectedPrescription.length === 0 ? (
+                  <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    className="text-center py-12 bg-slate-950/40 rounded-[2rem] border border-dashed border-slate-800"
+                  >
+                    <p className="text-sm text-slate-700 italic font-black uppercase tracking-widest">No medications added</p>
+                  </motion.div>
+                ) : (
+                  selectedPrescription.map((item, idx) => (
+                    <motion.div
+                      key={item.id}
+                      initial={{ opacity: 0, x: -20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      exit={{ opacity: 0, scale: 0.95 }}
+                      className="flex flex-col md:flex-row items-center gap-6 p-6 bg-slate-950/60 border border-slate-800 rounded-[2rem] hover:border-slate-700 transition-all"
                     >
-                      <svg className="w-5 h-5 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
-                    </button>
-                  </div>
-                ))
-              )}
+                      <div className="flex-1 min-w-0">
+                        <p className="text-lg font-black text-slate-100 truncate">{item.name}</p>
+                        <p className="text-[10px] text-slate-500 font-extrabold tracking-widest uppercase">{item.unit}</p>
+                      </div>
+                      <div className="w-full md:w-28">
+                        <div className="relative">
+                          <label className="absolute -top-2 left-3 px-1 bg-slate-900 text-[8px] font-extrabold text-slate-500 uppercase">Qty</label>
+                          <input
+                            type="number"
+                            min="1"
+                            value={item.qty}
+                            onChange={(e) => {
+                              const newVal = parseInt(e.target.value);
+                              setSelectedPrescription(selectedPrescription.map((p, i) => i === idx ? { ...p, qty: newVal } : p));
+                            }}
+                            className="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm font-black text-slate-200 text-center outline-none focus:border-emerald-500/50 transition-all"
+                          />
+                        </div>
+                      </div>
+                      <div className="flex-[2] w-full">
+                        <div className="relative">
+                          <label className="absolute -top-2 left-3 px-1 bg-slate-900 text-[8px] font-extrabold text-slate-500 uppercase">Instructions</label>
+                          <input
+                            type="text"
+                            value={item.instruction}
+                            onChange={(e) => setSelectedPrescription(selectedPrescription.map((p, i) => i === idx ? { ...p, instruction: e.target.value } : p))}
+                            placeholder="e.g. 3x1 after meal"
+                            className="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm font-black text-slate-200 outline-none focus:border-emerald-500/50 transition-all placeholder:text-slate-900"
+                          />
+                        </div>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => setSelectedPrescription(selectedPrescription.filter((_, i) => i !== idx))}
+                        className="p-4 text-slate-600 hover:text-rose-500 hover:bg-rose-500/10 rounded-2xl transition-all"
+                      >
+                        <TrashIcon className="w-5 h-5" />
+                      </button>
+                    </motion.div>
+                  ))
+                )}
+              </AnimatePresence>
             </div>
           </div>
 
-          {/* TOMBOL SIMPAN */}
-          <div className="flex justify-end gap-4 pb-10 text-left">
-            <Link href="/appointments" className="px-6 py-3 text-sm font-bold text-slate-600 dark:text-slate-300 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700 rounded-xl transition-all">
-              Batal
+          {/* FOOTER ACTIONS */}
+          <div className="flex flex-col md:flex-row justify-end items-center gap-6 pb-20">
+            <Link href="/appointments" className="text-sm font-extrabold text-slate-500 hover:text-slate-300 transition-colors tracking-widest uppercase">
+              Discard Changes
             </Link>
-            <button type="submit" disabled={isSubmitting} className="px-8 py-3 text-sm font-bold text-white bg-indigo-600 dark:bg-indigo-500 rounded-xl shadow-md hover:bg-indigo-700 dark:hover:bg-indigo-600 hover:shadow-lg hover:shadow-indigo-200 dark:hover:shadow-indigo-900/30 transition-all disabled:opacity-50 flex items-center gap-2">
-              {isSubmitting ? 'Menyimpan Data...' : 'Simpan Rekam Medis & Resep'}
+            <button
+              type="submit"
+              disabled={isSubmitting}
+              className="w-full md:w-auto px-10 py-5 bg-slate-100 text-slate-950 rounded-3xl font-black text-sm tracking-widest uppercase shadow-2xl hover:scale-[1.02] active:scale-[0.98] transition-all disabled:opacity-50 flex items-center justify-center gap-3"
+            >
+              {isSubmitting ? (
+                <div className="w-5 h-5 border-2 border-slate-950/30 border-t-slate-950 rounded-full animate-spin"></div>
+              ) : (
+                <IdentificationIcon className="w-5 h-5" />
+              )}
+              {isSubmitting ? 'Processing...' : 'Finalize Medical Record'}
             </button>
           </div>
 
