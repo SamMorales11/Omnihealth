@@ -28,6 +28,33 @@ const ThermometerIcon = ({ className }: { className?: string }) => (
   </svg>
 );
 
+const MedicalIcon = ({ 
+  icon: Icon, 
+  color = "indigo", 
+  className = "w-5 h-5",
+  label
+}: { 
+  icon?: any, 
+  color?: "rose" | "amber" | "emerald" | "indigo" | "cyan" | "violet",
+  className?: string,
+  label?: string
+}) => {
+  const colorMap = {
+    rose: "bg-rose-500/20 border-rose-500/30 text-rose-400 drop-shadow-[0_0_8px_rgba(244,63,94,0.4)]",
+    amber: "bg-amber-500/20 border-amber-500/30 text-amber-400 drop-shadow-[0_0_8px_rgba(245,158,11,0.4)]",
+    emerald: "bg-emerald-500/20 border-emerald-500/30 text-emerald-400 drop-shadow-[0_0_8px_rgba(16,185,129,0.4)]",
+    indigo: "bg-indigo-500/20 border-indigo-500/30 text-indigo-400 drop-shadow-[0_0_8px_rgba(99,102,241,0.4)]",
+    cyan: "bg-cyan-500/20 border-cyan-500/30 text-cyan-400 drop-shadow-[0_0_8px_rgba(6,182,212,0.4)]",
+    violet: "bg-violet-500/20 border-violet-500/30 text-violet-400 drop-shadow-[0_0_8px_rgba(139,92,246,0.4)]",
+  };
+
+  return (
+    <div className={`flex items-center justify-center p-2 rounded-xl border transition-all duration-500 group-hover:scale-110 group-hover:saturate-150 group-focus-within:scale-110 group-focus-within:saturate-150 ${colorMap[color]}`}>
+      {Icon ? <Icon className={className} /> : <span className="font-black text-[10px] uppercase tracking-tighter">{label}</span>}
+    </div>
+  );
+};
+
 export default function RMEPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const searchParams = useSearchParams();
@@ -184,8 +211,8 @@ export default function RMEPage() {
                 <div className="w-24 h-24 bg-slate-800 rounded-3xl flex items-center justify-center text-4xl font-black text-slate-200 border border-slate-700 shadow-xl">
                   {appointmentData?.patientName?.charAt(0) || 'P'}
                 </div>
-                <div className="absolute -bottom-2 -right-2 p-2 bg-slate-950 rounded-xl border border-slate-700 shadow-lg">
-                  <UserCircleIcon className="w-6 h-6 text-slate-400" />
+                <div className="absolute -bottom-2 -right-2">
+                  <MedicalIcon icon={IdentificationIcon} color="violet" className="w-5 h-5" />
                 </div>
               </div>
               <div className="text-center md:text-left space-y-2">
@@ -202,13 +229,13 @@ export default function RMEPage() {
 
             <div className="flex gap-4 w-full md:w-auto">
               <div className="flex-1 md:flex-none p-5 bg-slate-950/60 rounded-3xl border border-slate-800 text-center min-w-[120px]">
-                <p className="text-[10px] font-extrabold text-slate-500 uppercase tracking-[0.2em] mb-1">Queue No</p>
+                <p className="text-[10px] font-extrabold text-slate-300 uppercase tracking-[0.2em] mb-1">Queue No</p>
                 <p className="text-2xl font-black text-slate-200 italic">#{appointmentId?.padStart(3, '0') || '---'}</p>
               </div>
               <div className="flex-1 md:flex-none p-5 bg-slate-950/60 rounded-3xl border border-slate-800 text-center min-w-[120px]">
-                <p className="text-[10px] font-extrabold text-slate-500 uppercase tracking-[0.2em] mb-1">Visit Date</p>
-                <div className="flex items-center justify-center gap-2">
-                  <CalendarIcon className="w-4 h-4 text-slate-400" />
+                <p className="text-[10px] font-extrabold text-slate-300 uppercase tracking-[0.2em] mb-1">Visit Date</p>
+                <div className="flex items-center justify-center gap-3">
+                  <MedicalIcon icon={CalendarIcon} color="amber" className="w-4 h-4" />
                   <p className="text-sm font-black text-slate-200">{new Date().toLocaleDateString('en-US', { day: '2-digit', month: 'short' })}</p>
                 </div>
               </div>
@@ -219,45 +246,43 @@ export default function RMEPage() {
         {/* BAGIAN 1: VITAL SIGN & ALERGI */}
         <div className="bg-slate-900 border border-slate-700 rounded-[2.5rem] p-8 md:p-10">
           <div className="flex items-center gap-3 mb-10">
-            <div className="p-3 bg-slate-800 rounded-2xl border border-slate-700">
-              <HeartIcon className="w-6 h-6 text-slate-400" />
-            </div>
+            <MedicalIcon icon={HeartIcon} color="rose" className="w-6 h-6" />
             <div>
               <h3 className="text-xl font-black tracking-tight text-slate-50">Clinical Vitals</h3>
-              <p className="text-slate-500 text-[10px] font-extrabold uppercase tracking-widest">Baseline health metrics</p>
+              <p className="text-slate-300 text-[10px] font-extrabold uppercase tracking-[0.2em]">Baseline health metrics</p>
             </div>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
             <div className="relative pt-3">
-              <label className="absolute -top-1 left-4 px-2 bg-slate-900 text-[10px] font-extrabold text-slate-500 uppercase tracking-[0.2em] z-10">Allergies</label>
-              <div className="flex items-center gap-3 bg-slate-950/60 border border-slate-800 rounded-2xl p-4 focus-within:border-indigo-500/50 transition-all">
-                <IdentificationIcon className="w-5 h-5 text-slate-600" />
-                <input type="text" name="alergi" value={formData.alergi} onChange={handleChange} placeholder="None recorded" className="w-full bg-transparent text-sm font-bold text-slate-200 outline-none placeholder:text-slate-800" />
+              <label className="absolute -top-1 left-4 px-2 bg-slate-900 text-[10px] font-extrabold text-slate-300 uppercase tracking-[0.2em] z-10">Allergies</label>
+              <div className="group flex items-center gap-3 bg-slate-950/60 border border-slate-800 rounded-2xl p-3 focus-within:border-violet-500/50 transition-all">
+                <MedicalIcon icon={IdentificationIcon} color="violet" className="w-4 h-4" />
+                <input type="text" name="alergi" value={formData.alergi} onChange={handleChange} placeholder="None recorded" className="w-full bg-transparent text-sm font-bold text-white outline-none placeholder:text-slate-500 focus:placeholder:text-slate-300" />
               </div>
             </div>
             <div className="relative pt-3">
-              <label className="absolute -top-1 left-4 px-2 bg-slate-900 text-[10px] font-extrabold text-slate-500 uppercase tracking-[0.2em] z-10">Blood Pressure</label>
-              <div className="flex items-center gap-3 bg-slate-950/60 border border-slate-800 rounded-2xl p-4 focus-within:border-emerald-500/50 transition-all">
-                <HeartIcon className="w-5 h-5 text-slate-600" />
-                <input type="text" name="tekananDarah" value={formData.tekananDarah} onChange={handleChange} placeholder="120/80" className="w-full bg-transparent text-sm font-bold text-slate-200 outline-none placeholder:text-slate-800" />
-                <span className="text-[10px] font-black text-slate-700">mmHg</span>
+              <label className="absolute -top-1 left-4 px-2 bg-slate-900 text-[10px] font-extrabold text-slate-300 uppercase tracking-[0.2em] z-10">Blood Pressure</label>
+              <div className="group flex items-center gap-3 bg-slate-950/60 border border-slate-800 rounded-2xl p-3 focus-within:border-rose-500/50 transition-all">
+                <MedicalIcon icon={HeartIcon} color="rose" className="w-4 h-4" />
+                <input type="text" name="tekananDarah" value={formData.tekananDarah} onChange={handleChange} placeholder="120/80" className="w-full bg-transparent text-sm font-bold text-white outline-none placeholder:text-slate-500 focus:placeholder:text-slate-300" />
+                <span className="text-[10px] font-black text-slate-500">mmHg</span>
               </div>
             </div>
             <div className="relative pt-3">
-              <label className="absolute -top-1 left-4 px-2 bg-slate-900 text-[10px] font-extrabold text-slate-500 uppercase tracking-[0.2em] z-10">Temperature</label>
-              <div className="flex items-center gap-3 bg-slate-950/60 border border-slate-800 rounded-2xl p-4 focus-within:border-emerald-500/50 transition-all">
-                <ThermometerIcon className="w-5 h-5 text-slate-600" />
-                <input type="text" name="suhu" value={formData.suhu} onChange={handleChange} placeholder="36.5" className="w-full bg-transparent text-sm font-bold text-slate-200 outline-none placeholder:text-slate-800" />
-                <span className="text-[10px] font-black text-slate-700">°C</span>
+              <label className="absolute -top-1 left-4 px-2 bg-slate-900 text-[10px] font-extrabold text-slate-300 uppercase tracking-[0.2em] z-10">Temperature</label>
+              <div className="group flex items-center gap-3 bg-slate-950/60 border border-slate-800 rounded-2xl p-3 focus-within:border-amber-500/50 transition-all">
+                <MedicalIcon icon={ThermometerIcon} color="amber" className="w-4 h-4" />
+                <input type="text" name="suhu" value={formData.suhu} onChange={handleChange} placeholder="36.5" className="w-full bg-transparent text-sm font-bold text-white outline-none placeholder:text-slate-500 focus:placeholder:text-slate-300" />
+                <span className="text-[10px] font-black text-slate-500">°C</span>
               </div>
             </div>
             <div className="relative pt-3 text-left">
-              <label className="absolute -top-1 left-4 px-2 bg-slate-900 text-[10px] font-extrabold text-slate-500 uppercase tracking-[0.2em] z-10">Heart Rate</label>
-              <div className="flex items-center gap-3 bg-slate-950/60 border border-slate-800 rounded-2xl p-4 focus-within:border-emerald-500/50 transition-all">
-                <ClockIcon className="w-5 h-5 text-slate-600" />
-                <input type="text" placeholder="80" className="w-full bg-transparent text-sm font-bold text-slate-200 outline-none placeholder:text-slate-800" />
-                <span className="text-[10px] font-black text-slate-700">BPM</span>
+              <label className="absolute -top-1 left-4 px-2 bg-slate-900 text-[10px] font-extrabold text-slate-300 uppercase tracking-[0.2em] z-10">Heart Rate</label>
+              <div className="group flex items-center gap-3 bg-slate-950/60 border border-slate-800 rounded-2xl p-3 focus-within:border-emerald-500/50 transition-all">
+                <MedicalIcon icon={ClockIcon} color="emerald" className="w-4 h-4" />
+                <input type="text" placeholder="80" className="w-full bg-transparent text-sm font-bold text-white outline-none placeholder:text-slate-500 focus:placeholder:text-slate-300" />
+                <span className="text-[10px] font-black text-slate-500">BPM</span>
               </div>
             </div>
           </div>
@@ -268,21 +293,19 @@ export default function RMEPage() {
           {/* BAGIAN 2: SOAP */}
           <div className="bg-slate-900 border border-slate-700 rounded-[2.5rem] p-8 md:p-10 space-y-10 shadow-2xl">
             <div className="flex items-center gap-3">
-              <div className="p-3 bg-slate-800 rounded-2xl border border-slate-700">
-                <DocumentTextIcon className="w-6 h-6 text-slate-400" />
-              </div>
+              <MedicalIcon icon={DocumentTextIcon} color="indigo" className="w-6 h-6" />
               <div>
                 <h3 className="text-xl font-black tracking-tight text-slate-50">Clinical Documentation</h3>
-                <p className="text-slate-500 text-[10px] font-extrabold uppercase tracking-widest">SOAP Methodology</p>
+                <p className="text-slate-300 text-[10px] font-extrabold uppercase tracking-[0.2em]">SOAP Methodology</p>
               </div>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
               {/* Subjective */}
               <div className="space-y-4">
-                <div className="flex items-center gap-2">
-                  <span className="w-8 h-8 bg-slate-800 text-slate-400 border border-slate-700 rounded-lg flex items-center justify-center font-black text-xs">S</span>
-                  <label className="text-[10px] font-extrabold text-slate-500 uppercase tracking-[0.2em]">Subjective</label>
+                <div className="group flex items-center gap-3">
+                  <MedicalIcon label="S" color="indigo" />
+                  <label className="text-[10px] font-extrabold text-slate-300 uppercase tracking-[0.2em]">Subjective</label>
                 </div>
                 <div className="relative group">
                   <textarea
@@ -292,16 +315,16 @@ export default function RMEPage() {
                     onChange={handleChange}
                     rows={5}
                     placeholder="Describe patient's symptoms and complaints..."
-                    className="w-full bg-slate-950/60 border border-slate-800 rounded-[2rem] p-6 text-sm font-bold text-slate-200 outline-none focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500/50 transition-all resize-none placeholder:text-slate-900"
+                    className="w-full bg-slate-950/60 border border-slate-800 rounded-[2rem] p-6 text-sm font-bold text-white outline-none focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500/50 transition-all resize-none placeholder:text-slate-500 focus:placeholder:text-slate-300"
                   ></textarea>
                 </div>
               </div>
 
               {/* Objective */}
               <div className="space-y-4">
-                <div className="flex items-center gap-2">
-                  <span className="w-8 h-8 bg-slate-800 text-slate-400 border border-slate-700 rounded-lg flex items-center justify-center font-black text-xs">O</span>
-                  <label className="text-[10px] font-extrabold text-slate-500 uppercase tracking-[0.2em]">Objective</label>
+                <div className="group flex items-center gap-3">
+                  <MedicalIcon label="O" color="cyan" />
+                  <label className="text-[10px] font-extrabold text-slate-300 uppercase tracking-[0.2em]">Objective</label>
                 </div>
                 <div className="relative group">
                   <textarea
@@ -311,7 +334,7 @@ export default function RMEPage() {
                     onChange={handleChange}
                     rows={5}
                     placeholder="Physical findings, lab results, and observations..."
-                    className="w-full bg-slate-950/60 border border-slate-800 rounded-[2rem] p-6 text-sm font-bold text-slate-200 outline-none focus:ring-4 focus:ring-emerald-500/10 focus:border-emerald-500/50 transition-all resize-none placeholder:text-slate-900"
+                    className="w-full bg-slate-950/60 border border-slate-800 rounded-[2rem] p-6 text-sm font-bold text-white outline-none focus:ring-4 focus:ring-emerald-500/10 focus:border-emerald-500/50 transition-all resize-none placeholder:text-slate-500 focus:placeholder:text-slate-300"
                   ></textarea>
                 </div>
               </div>
@@ -319,9 +342,9 @@ export default function RMEPage() {
 
             {/* Assessment (ICD-10) */}
             <div className="space-y-6">
-              <div className="flex items-center gap-2">
-                <span className="w-8 h-8 bg-slate-800 text-slate-400 border border-slate-700 rounded-lg flex items-center justify-center font-black text-xs">A</span>
-                <label className="text-[10px] font-extrabold text-slate-500 uppercase tracking-[0.2em]">Assessment & Diagnosis</label>
+              <div className="group flex items-center gap-3">
+                <MedicalIcon label="A" color="amber" />
+                <label className="text-[10px] font-extrabold text-slate-300 uppercase tracking-[0.2em]">Assessment & Diagnosis</label>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <div className="relative group">
@@ -345,7 +368,7 @@ export default function RMEPage() {
                   <input
                     type="text"
                     placeholder="Additional diagnostic notes..."
-                    className="w-full bg-slate-950/60 border border-slate-800 rounded-2xl p-4 text-sm font-black text-slate-200 outline-none focus:ring-4 focus:ring-amber-500/10 focus:border-amber-500/50 transition-all placeholder:text-slate-900"
+                    className="w-full bg-slate-950/60 border border-slate-800 rounded-2xl p-4 text-sm font-black text-white outline-none focus:ring-4 focus:ring-amber-500/10 focus:border-amber-500/50 transition-all placeholder:text-slate-500 focus:placeholder:text-slate-300"
                   />
                 </div>
               </div>
@@ -353,9 +376,9 @@ export default function RMEPage() {
 
             {/* Plan */}
             <div className="space-y-4">
-              <div className="flex items-center gap-2">
-                <span className="w-8 h-8 bg-slate-800 text-slate-400 border border-slate-700 rounded-lg flex items-center justify-center font-black text-xs">P</span>
-                <label className="text-[10px] font-extrabold text-slate-500 uppercase tracking-[0.2em]">Plan</label>
+              <div className="group flex items-center gap-3">
+                <MedicalIcon label="P" color="rose" />
+                <label className="text-[10px] font-extrabold text-slate-300 uppercase tracking-[0.2em]">Plan</label>
               </div>
               <div className="relative group">
                 <textarea
@@ -365,7 +388,7 @@ export default function RMEPage() {
                   onChange={handleChange}
                   rows={4}
                   placeholder="Treatment plan, procedures, and patient instructions..."
-                  className="w-full bg-slate-950/60 border border-slate-800 rounded-[2rem] p-6 text-sm font-bold text-slate-200 outline-none focus:ring-4 focus:ring-rose-500/10 focus:border-rose-500/50 transition-all resize-none placeholder:text-slate-900"
+                  className="w-full bg-slate-950/60 border border-slate-800 rounded-[2rem] p-6 text-sm font-bold text-white outline-none focus:ring-4 focus:ring-rose-500/10 focus:border-rose-500/50 transition-all resize-none placeholder:text-slate-500 focus:placeholder:text-slate-300"
                 ></textarea>
               </div>
             </div>
@@ -375,12 +398,10 @@ export default function RMEPage() {
           <div className="bg-slate-900 border border-slate-700 rounded-[2.5rem] p-8 md:p-10 space-y-8 shadow-2xl">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <div className="p-3 bg-slate-800 rounded-2xl border border-slate-700">
-                  <BeakerIcon className="w-6 h-6 text-slate-400" />
-                </div>
+                <MedicalIcon icon={BeakerIcon} color="cyan" className="w-6 h-6" />
                 <div>
                   <h3 className="text-xl font-black tracking-tight text-slate-50">E-Prescribing</h3>
-                  <p className="text-slate-500 text-[10px] font-extrabold uppercase tracking-widest">Pharmacy Integration</p>
+                  <p className="text-slate-300 text-[10px] font-extrabold uppercase tracking-[0.2em]">Pharmacy Integration</p>
                 </div>
               </div>
             </div>
@@ -426,7 +447,7 @@ export default function RMEPage() {
                       </div>
                       <div className="w-full md:w-28">
                         <div className="relative">
-                          <label className="absolute -top-2 left-3 px-1 bg-slate-900 text-[8px] font-extrabold text-slate-500 uppercase">Qty</label>
+                          <label className="absolute -top-2 left-3 px-1 bg-slate-900 text-[8px] font-extrabold text-slate-300 uppercase tracking-[0.1em]">Qty</label>
                           <input
                             type="number"
                             min="1"
@@ -435,19 +456,19 @@ export default function RMEPage() {
                               const newVal = parseInt(e.target.value);
                               setSelectedPrescription(selectedPrescription.map((p, i) => i === idx ? { ...p, qty: newVal } : p));
                             }}
-                            className="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm font-black text-slate-200 text-center outline-none focus:border-emerald-500/50 transition-all"
+                            className="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm font-black text-white text-center outline-none focus:border-emerald-500/50 transition-all placeholder:text-slate-500"
                           />
                         </div>
                       </div>
                       <div className="flex-[2] w-full">
                         <div className="relative">
-                          <label className="absolute -top-2 left-3 px-1 bg-slate-900 text-[8px] font-extrabold text-slate-500 uppercase">Instructions</label>
+                          <label className="absolute -top-2 left-3 px-1 bg-slate-900 text-[8px] font-extrabold text-slate-300 uppercase tracking-[0.1em]">Instructions</label>
                           <input
                             type="text"
                             value={item.instruction}
                             onChange={(e) => setSelectedPrescription(selectedPrescription.map((p, i) => i === idx ? { ...p, instruction: e.target.value } : p))}
                             placeholder="e.g. 3x1 after meal"
-                            className="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm font-black text-slate-200 outline-none focus:border-emerald-500/50 transition-all placeholder:text-slate-900"
+                            className="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm font-black text-white outline-none focus:border-emerald-500/50 transition-all placeholder:text-slate-500 focus:placeholder:text-slate-300"
                           />
                         </div>
                       </div>

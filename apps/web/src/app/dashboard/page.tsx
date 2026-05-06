@@ -84,12 +84,12 @@ export default function DashboardPage() {
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10 relative z-10 text-left">
           {/* CARD 1: TOTAL PASIEN */}
-          <div className="animate-in fade-in zoom-in-95 duration-500 bg-slate-900 p-8 rounded-[2.5rem] border border-slate-700 shadow-2xl relative overflow-hidden group">
-            <div className="absolute top-6 right-6 p-3 bg-slate-800 rounded-2xl border border-slate-700 text-slate-400 group-hover:scale-110 transition-transform duration-500">
+          <div className="animate-in fade-in zoom-in-95 duration-500 bg-[#1e293b]/60 backdrop-blur-xl p-8 rounded-[2.5rem] border border-slate-700/50 shadow-2xl relative overflow-hidden group transition-all hover:border-indigo-500/30">
+            <div className="absolute top-6 right-6 p-3 bg-indigo-500/20 rounded-2xl border border-indigo-500/30 text-indigo-400 drop-shadow-[0_0_8px_rgba(99,102,241,0.4)] group-hover:scale-110 group-hover:saturate-150 transition-all duration-500">
               <Users size={24} />
             </div>
             
-            <p className="text-[11px] font-extrabold text-slate-500 uppercase tracking-[0.2em] mb-4">Total Pasien</p>
+            <p className="text-[11px] font-extrabold text-slate-300 uppercase tracking-widest mb-4">Total Pasien</p>
             <div className="flex items-baseline gap-2">
               <h3 className="text-5xl font-black text-slate-50 tracking-tight">{data.stats.totalPatients}</h3>
               <span className="text-xs font-extrabold text-slate-500">Jiwa</span>
@@ -98,7 +98,7 @@ export default function DashboardPage() {
             <p className="text-sm font-black text-slate-400 mt-2 mb-6">12 Pasien baru minggu ini</p>
             
             <div className="flex items-center gap-2 pt-4 border-t border-slate-800">
-              <div className="flex items-center gap-1 px-2 py-1 rounded-full bg-emerald-500/10 text-emerald-500 text-[10px] font-extrabold">
+              <div className="flex items-center gap-1 px-2 py-1 rounded-full bg-emerald-500/10 text-emerald-400 text-[10px] font-extrabold">
                 <ArrowUpRight size={12} />
                 +12%
               </div>
@@ -107,23 +107,23 @@ export default function DashboardPage() {
           </div>
 
           {/* CARD 2: EFISIENSI KLINIK */}
-          <div className="animate-in fade-in zoom-in-95 duration-700 bg-slate-900 p-8 rounded-[2.5rem] border border-slate-700 shadow-2xl relative overflow-hidden group">
-            <div className="absolute top-6 right-6 p-3 bg-slate-800 rounded-2xl border border-slate-700 text-slate-400 group-hover:scale-110 transition-transform duration-500">
+          <div className="animate-in fade-in zoom-in-95 duration-700 bg-[#1e293b]/60 backdrop-blur-xl p-8 rounded-[2.5rem] border border-slate-700/50 shadow-2xl relative overflow-hidden group transition-all hover:border-emerald-500/30">
+            <div className="absolute top-6 right-6 p-3 bg-emerald-500/20 rounded-2xl border border-emerald-500/30 text-emerald-400 drop-shadow-[0_0_8px_rgba(16,185,129,0.4)] group-hover:scale-110 group-hover:saturate-150 transition-all duration-500">
               <Activity size={24} />
             </div>
             
-            <p className="text-[11px] font-extrabold text-slate-500 uppercase tracking-[0.2em] mb-4">Efisiensi Klinik</p>
+            <p className="text-[11px] font-extrabold text-slate-300 uppercase tracking-widest mb-4">Efisiensi Klinik</p>
             <h3 className="text-5xl font-black text-slate-50 mb-4 tracking-tight">{data.stats.completionRate}%</h3>
             
             <div className="w-full h-2 bg-slate-950 rounded-full overflow-hidden mb-6 border border-slate-800">
               <div 
-                className="h-full bg-slate-200 rounded-full transition-all duration-1000 ease-out"
+                className="h-full bg-emerald-500 rounded-full transition-all duration-1000 ease-out drop-shadow-[0_0_8px_rgba(16,185,129,0.5)]"
                 style={{ width: `${data.stats.completionRate}%` }}
               ></div>
             </div>
             
             <div className="flex items-center gap-2 pt-4 border-t border-slate-800">
-              <div className="flex items-center gap-1 px-2 py-1 rounded-full bg-emerald-500/10 text-emerald-500 text-[10px] font-extrabold">
+              <div className="flex items-center gap-1 px-2 py-1 rounded-full bg-emerald-500/10 text-emerald-400 text-[10px] font-extrabold">
                 <ArrowUpRight size={12} />
                 +2%
               </div>
@@ -132,17 +132,17 @@ export default function DashboardPage() {
           </div>
 
           {/* CARD 3: ANTREAN AKTIF */}
-          <div className="animate-in fade-in zoom-in-95 duration-1000 bg-slate-900 p-8 rounded-[2.5rem] border border-slate-700 shadow-2xl relative overflow-hidden group">
-            <div className="absolute top-6 right-6 p-3 bg-slate-800 rounded-2xl border border-slate-700 text-slate-400 group-hover:scale-110 transition-transform duration-500">
+          <div className="animate-in fade-in zoom-in-95 duration-1000 bg-[#1e293b]/60 backdrop-blur-xl p-8 rounded-[2.5rem] border border-slate-700/50 shadow-2xl relative overflow-hidden group transition-all hover:border-amber-500/30">
+            <div className="absolute top-6 right-6 p-3 bg-amber-500/20 rounded-2xl border border-amber-500/30 text-amber-400 drop-shadow-[0_0_8px_rgba(245,158,11,0.4)] group-hover:scale-110 group-hover:saturate-150 transition-all duration-500">
               <Clock size={24} />
             </div>
             
-            <p className="text-[11px] font-extrabold text-slate-500 uppercase tracking-[0.2em] mb-4">Antrean Aktif</p>
+            <p className="text-[11px] font-extrabold text-slate-300 uppercase tracking-widest mb-4">Antrean Aktif</p>
             <h3 className="text-5xl font-black text-slate-50 tracking-tight">{data.stats.waitingAppointments}</h3>
-            <p className="text-xs font-extrabold text-amber-500 mt-2 mb-6">Estimasi waktu tunggu: 15 menit</p>
+            <p className="text-xs font-extrabold text-amber-400 mt-2 mb-6">Estimasi waktu tunggu: 15 menit</p>
             
             <div className="flex items-center gap-2 pt-4 border-t border-slate-800">
-              <div className="flex items-center gap-1 px-2 py-1 rounded-full bg-rose-500/10 text-rose-500 text-[10px] font-extrabold">
+              <div className="flex items-center gap-1 px-2 py-1 rounded-full bg-rose-500/10 text-rose-400 text-[10px] font-extrabold">
                 <ArrowDownRight size={12} />
                 -3%
               </div>

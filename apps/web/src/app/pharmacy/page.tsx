@@ -84,8 +84,8 @@ export default function PharmacyPage() {
               <CheckBadgeIcon className="w-8 h-8" />
             </div>
             <div>
-              <h1 className="text-4xl font-black text-slate-900 dark:text-white tracking-tight">Pharmacy & Dispensary</h1>
-              <p className="text-sm font-medium text-slate-500 dark:text-slate-400 mt-1 uppercase tracking-[0.2em]">Queue Management & Inventory</p>
+              <h1 className="text-2xl font-black text-slate-900 dark:text-white tracking-tighter">Pharmacy & Dispensary</h1>
+              <p className="text-xs font-medium text-slate-500 dark:text-slate-400 mt-1 uppercase tracking-[0.2em]">Queue Management & Inventory</p>
             </div>
           </div>
           
@@ -98,8 +98,8 @@ export default function PharmacyPage() {
         {/* ANTREAN RESEP */}
         <div className="mb-20">
           <div className="flex items-center justify-between mb-8">
-            <h2 className="text-2xl font-black text-slate-800 dark:text-white flex items-center gap-3">
-              <div className="w-3 h-8 bg-emerald-500 rounded-full"></div>
+            <h2 className="text-xl font-black text-slate-800 dark:text-white flex items-center gap-3">
+              <div className="w-2.5 h-7 bg-emerald-500 rounded-full"></div>
               Prescription Preparation Queue
             </h2>
             <div className="px-4 py-2 bg-emerald-500/10 text-emerald-500 rounded-full text-xs font-bold border border-emerald-500/20">
@@ -123,7 +123,7 @@ export default function PharmacyPage() {
                         <UserIcon className="w-8 h-8 text-indigo-400" />
                       </div>
                       <div>
-                        <h3 className="text-2xl font-black text-white leading-tight">{rx.patientName}</h3>
+                        <h3 className="text-lg font-black text-white leading-tight">{rx.patientName}</h3>
                         <div className="flex items-center gap-3 mt-2">
                           <p className="text-xs font-medium text-slate-400">Dr. {rx.doctorName.replace('dr. ', '')}</p>
                           <div className="w-1 h-1 bg-slate-600 rounded-full"></div>
@@ -189,10 +189,10 @@ export default function PharmacyPage() {
         <div>
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-10 gap-6">
             <div className="flex items-center gap-4">
-              <div className="w-3 h-8 bg-indigo-500 rounded-full"></div>
+              <div className="w-2.5 h-7 bg-indigo-500 rounded-full"></div>
               <div>
-                <h2 className="text-2xl font-black text-slate-800 dark:text-white">Pharmacy Inventory</h2>
-                <p className="text-xs font-medium text-slate-500 mt-1 uppercase tracking-widest">Real-time Stock Monitoring</p>
+                <h2 className="text-xl font-black text-slate-800 dark:text-white">Pharmacy Inventory</h2>
+                <p className="text-[10px] font-medium text-slate-500 mt-1 uppercase tracking-widest">Real-time Stock Monitoring</p>
               </div>
             </div>
             <AddMedicineModal onRefresh={fetchMedicines} />
