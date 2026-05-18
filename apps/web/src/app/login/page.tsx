@@ -17,8 +17,10 @@ export default function LoginPage() {
     setIsLoading(true);
 
     try {
-      // Menggunakan 127.0.0.1 untuk stabilitas koneksi lokal
-      const res = await fetch('http://127.0.0.1:3001/api/auth/login', {
+      // REVISI: Menggunakan environment variable dinamis dari Vercel dengan fallback localhost
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:3001';
+      
+      const res = await fetch(`${apiUrl}/api/auth/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username, password })
@@ -106,4 +108,4 @@ export default function LoginPage() {
       </div>
     </main>
   );
-} 
+}
