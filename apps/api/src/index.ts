@@ -17,7 +17,13 @@ import prescriptionRoutes from './routes/prescription.routes.js'; // REVISI: Imp
 const app = new Hono();
 
 app.use('*', logger());
-app.use('/*', cors());
+
+// REVISI: Mengubah '/*' menjadi '*' dan menambahkan opsi header eksplisit untuk stabilitas CORS
+app.use('*', cors({
+  origin: '*', 
+  allowMethods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowHeaders: ['Content-Type', 'Authorization'],
+}));
 
 // --- RUTE PUBLIK ---
 app.route('/api/auth', authRoutes);
