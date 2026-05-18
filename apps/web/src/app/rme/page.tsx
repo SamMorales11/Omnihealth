@@ -1,6 +1,6 @@
 // apps/web/src/app/rme/page.tsx
 "use client";
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation'; 
 import Link from 'next/link';
 import toast from 'react-hot-toast';
@@ -55,7 +55,7 @@ const MedicalIcon = ({
   );
 };
 
-export default function RMEPage() {
+function RMEPageContent() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const searchParams = useSearchParams();
   const appointmentId = searchParams.get('id'); 
@@ -287,7 +287,7 @@ export default function RMEPage() {
             </div>
           </div>
         </div>
-        {/* FORMULIR UTAMA */}
+        {/* FORMULIR UTAMA */}
         <form onSubmit={handleSubmit} className="space-y-10">
           
           {/* BAGIAN 2: SOAP */}
@@ -508,5 +508,19 @@ export default function RMEPage() {
         </form>
       </div>
     </main>
+  );
+}
+
+export default function RMEPage() {
+  return (
+    <Suspense 
+      fallback={
+        <div className="min-h-screen bg-slate-950 flex items-center justify-center text-slate-400 font-bold uppercase tracking-widest text-xs">
+          Loading OmniHealth Console...
+        </div>
+      }
+    >
+      <RMEPageContent />
+    </Suspense>
   );
 }
