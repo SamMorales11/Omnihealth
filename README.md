@@ -20,7 +20,7 @@ Proyek ini menggunakan *cutting-edge stack* untuk memastikan skalabilitas dan ke
 ### 1. Manajemen Farmasi & Inventaris
 Sistem pengelolaan obat yang komprehensif untuk memastikan ketersediaan stok secara *real-time*.
 - **Antrean Persiapan Obat:** Visualisasi antrean resep masuk dengan status progresif.
-- **Monitoring Stok:** Dashboard inventaris dengan indikator stok rendah (*low-stock alert*).
+- **Monitoring Stok:** Dashboard inventaris dengan indikator stok rendah (*low stock alert*).
 - **Manajemen Obat:** CRUD data obat, penyesuaian stok (*Stock Adjustment*), dan pengaturan harga satuan.
 
 ### 2. Rekam Medis Elektronik (EMR/RME)
